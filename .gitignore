@@ -1,0 +1,12 @@
+Temp
+Build
+*log
+*cache*
+*Cache*
+Artifacts
+*Assemblies
+*-lock
+*report*
+workspace.xml
+contentModel.xml
+indexLayout.xml

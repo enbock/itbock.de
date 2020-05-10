@@ -1,0 +1,35 @@
+<svg class="global logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="300px" height="350px" fill="rgb(40%, 40%, 40%)" preserveAspectRatio="none">
+	<path d="
+		M 20 60 
+		l 0 235 
+		q 0 20 20 20
+		l 170 0
+		q 20 0 20 -20
+		q 0 -20 -20 -20
+		l -130 0
+		q -20 0 -20 -20
+		l 0 -40
+		q 0 -20 20 -20
+		l 50 0
+		q 20 0 20 -20
+		q 0 -20 -20 -20
+		l -50 0
+		q -20 0 -20 -20
+		l 0 -35
+		q 0 -20 20 -20
+		l 35 0
+		q 20 0 20 -20
+		q 0 -20 -20 -20
+		l -75 0
+		q -20 0 -20 20
+		Z
+	" />
+	<path transform="translate(42 -23) rotate(8)" d="
+		M -30 90
+		c 70 -100 210 -30 170 80
+		c 100 -30 170 120 30 180
+		c 195 -50 100 -240 0 -210
+		c 30 -110 -140 -190 -200 -50
+		Z
+	" />
+</svg>
