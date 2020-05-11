@@ -1,0 +1,10 @@
+{
+  "name": "weather-system",
+  "version": "1.0.0",
+  "description": "Take weather information from open weather map and geo ip services.",
+  "author": "Endre Bock",
+  "license": "MIT",
+  "scripts": {
+    "build": "npx tsc"
+  }
+}
