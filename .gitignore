@@ -11,3 +11,4 @@ workspace.xml
 contentModel.xml
 indexLayout.xml
 Library
+node_modules
