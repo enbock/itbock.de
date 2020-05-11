@@ -1,0 +1,9 @@
+export default class Config {
+    public readonly geoIpApiAccessKey: string;
+    public readonly weatherApiAccessKey: string;
+
+    constructor() {
+        this.geoIpApiAccessKey = '';
+        this.weatherApiAccessKey = '';
+    }
+}
