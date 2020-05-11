@@ -1,5 +1,5 @@
 import Position from "./GeoApi/Position";
 
 export interface GeoApi {
-    getGeoData(lookupAddress): Position
+    getGeoData(lookupAddress): Promise<Position>
 }

@@ -1,9 +1,9 @@
 export default class Position {
-    public lat: number;
-    public lon: number;
+    public latitude: number;
+    public longitude: number;
 
-	constructor(lat: number = 0, lon:number = 0) {
-        this.lat = lat;
-        this.lon = lon;
+	constructor(latitude: number = 0, longitude:number = 0) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

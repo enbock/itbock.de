@@ -9,9 +9,10 @@
     "deploy": "node scripts/deploy.js"
   },
   "dependencies": {
-    "typescript": "^3.8.3"
+    "axios": "^0.19.2"
   },
   "devDependencies": {
+    "typescript": "^3.8.3",
     "aws-sdk": "^2.673.0",
     "@types/aws-sdk": "^2.7.0",
     "@types/node": "^13.13.5",
