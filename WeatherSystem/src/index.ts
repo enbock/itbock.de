@@ -44,7 +44,9 @@ exports.handler = async function (event/*, context*/) {
 
     return {
         statusCode: 200,
-        headers: {},
+        headers: {
+            'Access-Control-Allow-Origin' : 'https://www.itbock.de'
+        },
         body: JSON.stringify(data)
     };
 };

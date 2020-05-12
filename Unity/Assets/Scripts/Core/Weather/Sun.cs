@@ -1,9 +1,151 @@
+using System;
+using UnityEngine;
+
 namespace Core.Weather
 {
     [System.Serializable]
-    public class Sun
+    public class ColorSetup
     {
-        public uint Rise;
-        public uint Set;
+        public double SunRise = 3000D;
+        public double MidDay = 5600D;
+        public double SunSet = 6500D;
+        public double MidNight = 20000D;
+        public double CouldOffset = 2000D;
+        public double WarmOffset = -1000D;
+
+        public double[] DayRange = new double[2] {30D, 60D};
+        public double[] NightRange = new double[2] {25D, 75D};
+
+        public double Intensity = 2f;
+        public double[] IntensityNightRange = new double[2] {5D, 95D}; // Sun off, between 5% and 95% of night
+    }
+
+    public class Sun : MonoBehaviour
+    {
+        public Light GlobalLight;
+        public ColorSetup ColorSetup = new ColorSetup();
+        public double AirTemperatur;
+
+        public double SunColorTemperatur;
+        public Color SunColor;
+        public double SunIntensity = 2f;
+        public bool IsDay = true;
+        public float TimePercent = 0f;
+        private float LastAngle = 0f;
+
+        void Update()
+        {
+            UpdateSunPosition();
+            UpdateSunColor();
+        }
+
+        private void UpdateSunPosition()
+        {
+            Quaternion rotation = GlobalLight.transform.rotation;
+            float calculatedSunAngle = CalculateAngle();
+
+            // Slerp
+            float step = Time.deltaTime * 3f;
+            float sunAngle = (LastAngle * (1f - step)) + (calculatedSunAngle * step);
+
+            Quaternion target = Quaternion.Euler(
+                sunAngle,
+                130f,
+                90f
+            );
+            LastAngle = sunAngle;
+            GlobalLight.transform.rotation = target; //Quaternion.Slerp(transform.rotation, target, 1f);
+            GlobalLight.color = SunColor;
+            GlobalLight.intensity = (float) SunIntensity;
+        }
+
+        private void UpdateSunColor()
+        {
+            double[] range = IsDay ? ColorSetup.DayRange : ColorSetup.NightRange;
+            double startColor = IsDay ? ColorSetup.SunRise : ColorSetup.SunSet;
+            double midColor = IsDay ? ColorSetup.MidDay : ColorSetup.MidNight;
+            double endColor = IsDay ? ColorSetup.SunSet : ColorSetup.SunRise;
+
+            bool isStart = TimePercent < 50D;
+            double reachedAt = range[0];
+            double reachedUntil = range[1];
+            double domain = isStart ? reachedAt : 100D - reachedUntil;
+            double cursor = (isStart ? TimePercent : TimePercent - reachedUntil);
+            cursor = cursor >= domain ? domain : (cursor < 0 ? 0 : cursor); // clamp
+            double domainPercent = 1D / domain * cursor;
+
+            double sunColorTemperatur = isStart
+                    ? (
+                        TimePercent < reachedAt
+                            ? (startColor * (1D - domainPercent) + midColor * domainPercent)
+                            : midColor
+                    )
+                    : (
+                        TimePercent <= reachedUntil
+                            ? midColor
+                            : (midColor * (1D - domainPercent) + endColor * domainPercent)
+                    )
+                ;
+
+            double temperaturOffset = 0D;
+            if (AirTemperatur < -10D) temperaturOffset = ColorSetup.CouldOffset;
+            else if (AirTemperatur > 25D) temperaturOffset = ColorSetup.WarmOffset;
+            else
+            {
+                if (AirTemperatur < 5D)
+                {
+                    domain = 15D;
+                    cursor = AirTemperatur + 10D;
+                    domainPercent = 1D / domain * cursor;
+                    temperaturOffset = ColorSetup.CouldOffset * (1D - domainPercent);
+                }
+                else
+                {
+                    domain = 20D;
+                    cursor = AirTemperatur - 5D;
+                    domainPercent = 1D / domain * cursor;
+                    temperaturOffset = ColorSetup.WarmOffset * domainPercent;
+                }
+            }
+
+            sunColorTemperatur += temperaturOffset;
+            SunColorTemperatur = sunColorTemperatur;
+            SunColor = ColorHelper.ConvertColorTemperatureToColor(sunColorTemperatur);
+
+            SunIntensity = ColorSetup.Intensity;
+            if (IsDay == false)
+            {
+                reachedAt = ColorSetup.IntensityNightRange[0];
+                reachedUntil = ColorSetup.IntensityNightRange[1];
+                domain = isStart ? reachedAt : 100D - reachedUntil;
+                cursor = (isStart ? TimePercent : TimePercent - reachedUntil);
+                cursor = cursor >= domain ? domain : (cursor < 0 ? 0 : cursor); // clamp
+                domainPercent = 1D / domain * cursor;
+
+                SunIntensity = isStart
+                        ? (
+                            TimePercent < reachedAt
+                                ? ColorSetup.Intensity * (1D - domainPercent)
+                                : 0D
+                        )
+                        : (
+                            TimePercent <= reachedUntil
+                                ? 0D
+                                : ColorSetup.Intensity * domainPercent
+                        )
+                    ;
+            }
+        }
+
+        private float CalculateAngle()
+        {
+            float angleRange = 180f;
+            float anglePercent = angleRange / 100f;
+
+            float angleOffset = IsDay ? 0f : 180f;
+            float angle = (anglePercent * TimePercent) - angleOffset;
+
+            return angle < 0f ? angle + 360f : (angle > 360f ? angle - 360f : angle);
+        }
     }
 }

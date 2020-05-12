@@ -12,10 +12,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{CD8C9303-404B-FB8D-6B9B-21988D5CAC0A}</ProjectGuid>
+    <ProjectGuid>{E2950E71-B84F-0FFD-FB2E-F0C16D4D8F18}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>itbock-assembly</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -58,90 +58,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Core\ColorHelper.cs" />
      <Compile Include="Assets\Scripts\Core\DateTime.cs" />
      <Compile Include="Assets\Scripts\Core\Environment\LoadSubModules.cs" />
-     <Compile Include="Assets\Scripts\Core\Weather\Data\Cloud.cs" />
-     <Compile Include="Assets\Scripts\Core\Weather\Data\Data.cs" />
-     <Compile Include="Assets\Scripts\Core\Weather\Data\Position.cs" />
-     <Compile Include="Assets\Scripts\Core\Weather\Data\Sun.cs" />
-     <Compile Include="Assets\Scripts\Core\Weather\Data\Wind.cs" />
+     <Compile Include="Assets\Scripts\Core\Weather.cs" />
+     <Compile Include="Assets\Scripts\Core\Weather\Cloud.cs" />
+     <Compile Include="Assets\Scripts\Core\Weather\Data.cs" />
+     <Compile Include="Assets\Scripts\Core\Weather\Position.cs" />
      <Compile Include="Assets\Scripts\Core\Weather\Sun.cs" />
-     <Compile Include="Assets\Scripts\Core\Weather\Weather.cs" />
+     <Compile Include="Assets\Scripts\Core\Weather\Wind.cs" />
      <Compile Include="Assets\Scripts\Loader\AssetContent.cs" />
      <Compile Include="Assets\Scripts\Loader\FileIndex.cs" />
      <Compile Include="Assets\Scripts\Loader\LoadManager.cs" />
      <Compile Include="Assets\Scripts\Loader\ProjectSettings.cs" />
      <Compile Include="Assets\Scripts\Loader\SharedContent.cs" />
      <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
- <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Timeline.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.RenderPipelines.Universal.Shaders">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
- </Reference>
- <Reference Include="Unity.VSCode.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.RenderPipelines.Core.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.VectorGraphics">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.VectorGraphics.dll</HintPath>
- </Reference>
- <Reference Include="Unity.RenderPipelines.Core.Runtime">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="Unity.InternalAPIEditorBridge.003">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.003.dll</HintPath>
- </Reference>
- <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.RenderPipelines.Universal.Runtime">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="Unity.RenderPipelines.Universal.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+     <None Include="Assets\Scripts\itbock-assembly.asmdef" />
+ <Reference Include="UnityEditor.UI">
+ <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Timeline">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
- </Reference>
- <Reference Include="Unity.CollabProxy.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Rider.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.VectorGraphics.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.VectorGraphics.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Sprite.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.ShaderGraph.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.InternalAPIEngineBridge.003">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.003.dll</HintPath>
- </Reference>
- <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
- </Reference>
- <Reference Include="Unity.TextMeshPro">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor.UI">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -313,6 +249,24 @@
  </Reference>
  <Reference Include="UnityEngine.XRModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.VR">
+ <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+ <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.WebGL.Extensions">
+ <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.UWP.Extensions">
+ <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/PlaybackEngines/MetroSupport/UnityEditor.UWP.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="ICSharpCode.NRefactory">
+ <HintPath>D:/Homepage 2020/Unity/Library/PackageCache/com.unity.render-pipelines.core@7.3.1/Editor/ShaderGenerator/ICSharpCode.NRefactory.dll</HintPath>
  </Reference>
  <Reference Include="Newtonsoft.Json">
  <HintPath>D:/Homepage 2020/Unity/Assets/JsonDotNet/Assemblies/Standalone/Newtonsoft.Json.dll</HintPath>

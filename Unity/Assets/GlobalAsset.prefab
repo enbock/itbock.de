@@ -49,6 +49,7 @@ MonoBehaviour:
   GlobalLight: {fileID: 2435953795557913203}
   Camera: {fileID: 2435953795978909499}
   PostProcessVolume: {fileID: 2435953797024458720}
+  ProjectSettings: {fileID: 0}
 --- !u!1 &2435953795557913196
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,7 +74,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2435953795557913196}
-  m_LocalRotation: {x: 0.7064338, y: 0.47771442, z: 0.030843567, w: 0.5213338}
+  m_LocalRotation: {x: 0.64085644, y: 0.64085644, z: 0.29883623, w: 0.29883623}
   m_LocalPosition: {x: 0.24, y: 3, z: 4.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

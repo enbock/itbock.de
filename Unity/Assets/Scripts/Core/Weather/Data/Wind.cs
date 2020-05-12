@@ -1,4 +1,4 @@
-namespace Core.Weather
+namespace Core.Weather.Data
 {
     [System.Serializable]
     public class Wind

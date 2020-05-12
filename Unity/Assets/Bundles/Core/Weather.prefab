@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5819117917690122772}
   - component: {fileID: 4844049288982259191}
+  - component: {fileID: 5616189508580164580}
+  - component: {fileID: 6298154333240774310}
   - component: {fileID: 7692297662700625638}
   m_Layer: 0
   m_Name: Weather
@@ -46,6 +48,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoaderManager: {fileID: 0}
   SharedContent: {fileID: 0}
+--- !u!114 &5616189508580164580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7646168221997225166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 228b0d5c9cc74096b761bc363ac63a1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TimeOffetInSeconds: 0
+--- !u!114 &6298154333240774310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7646168221997225166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88e5154e88a64b5babda5a70edf0707f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalLight: {fileID: 0}
+  ColorSetup:
+    SunRise: 3000
+    MidDay: 5600
+    SunSet: 6500
+    MidNight: 20000
+    CouldOffset: 2000
+    WarmOffset: -1000
+    DayRange:
+    - 30
+    - 60
+    NightRange:
+    - 25
+    - 75
+    Intensity: 2
+    IntensityNightRange:
+    - 10
+    - 90
+  AirTemperatur: 0
+  SunColorTemperatur: 0
+  SunColor: {r: 0, g: 0, b: 0, a: 0}
+  SunIntensity: 2
+  IsDay: 1
+  TimePercent: 0
 --- !u!114 &7692297662700625638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,3 +110,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AssetContent: {fileID: 4844049288982259191}
+  DateTime: {fileID: 5616189508580164580}
+  Sun: {fileID: 6298154333240774310}
+  Data:
+    IsLoaded: 0
+    Position:
+      Latitude: 0
+      Longitude: 0
+    Sun:
+      Rise: 0
+      Set: 0
+    Wind:
+      Speed: 0
+      direction: 0
+      Temperature: 0
+    Cloud:
+      Cloudiness: 0

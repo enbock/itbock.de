@@ -57,7 +57,6 @@ namespace Loader
 
         void LoadAsset(string assetBundleName, uint crc, System.Action<GameObject> callback)
         {
-            Debug.Log("Start loading '" + assetBundleName + "'");
             StartCoroutine(LoadAssetData(assetBundleName, crc, callback));
         }
 
@@ -93,7 +92,6 @@ namespace Loader
                     }
 
                     GameObject asset = assets[0];
-                    Debug.Log("Asset '" + asset.name + "' loaded.");
                     try
                     {
                         AssetContent assetContent = asset.GetComponent<AssetContent>();

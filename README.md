@@ -8,3 +8,4 @@ Used technologies, products and services:
 * WebGL 2.0 (Unity implementation)
 * AWS: Lambda, S3, CloudFront, Api-Gateway
 * https://ipstack.com/ to resolve IP Address to Geo-Location
+* https://openweathermap.org/ to get current weather data for Geo-Location

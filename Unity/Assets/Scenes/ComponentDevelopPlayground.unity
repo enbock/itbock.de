@@ -38,13 +38,13 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.2850269, g: 0.3713935, b: 0.49601045, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -505,6 +505,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6298154333240774310, guid: 947b5ef525f591a47a10d86b26354970,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7646168221997225166, guid: 947b5ef525f591a47a10d86b26354970,
         type: 3}
       propertyPath: m_Name
@@ -523,6 +528,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GlobalAsset
+      objectReference: {fileID: 0}
+    - target: {fileID: 2435953795557913202, guid: 480a45a7614326d468943c1babe06b20,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2435953795557913202, guid: 480a45a7614326d468943c1babe06b20,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 130
       objectReference: {fileID: 0}
     - target: {fileID: 5173876647055788878, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
