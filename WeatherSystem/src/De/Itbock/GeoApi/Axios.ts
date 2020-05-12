@@ -14,7 +14,8 @@ export default class Http implements GeoApi {
     }
 
     async getGeoData(lookupAddress): Promise<Position> {
-        const response: any = await Axios('http://api.ipstack.com/' + lookupAddress + '?access_key='+ this.accessKey);
+        console.log("Load Api: [Geo]", lookupAddress);
+        const response: any = await Axios('http://api.ipstack.com/' + lookupAddress + '?access_key=' + this.accessKey);
         const json: any = response.data;
 
         return this.jsonFormatter.format(json);

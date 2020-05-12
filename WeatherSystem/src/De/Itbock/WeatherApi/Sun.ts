@@ -1,9 +1,9 @@
 export default class Sun {
-    public rise: string;
-    public set: string;
+    public rise: number;
+    public set: number;
 
     public constructor() {
-        this.rise = "";
-        this.set = "";
+        this.rise = 0;
+        this.set = 0;
     }
 }
