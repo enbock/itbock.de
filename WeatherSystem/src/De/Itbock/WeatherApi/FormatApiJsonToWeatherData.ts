@@ -10,8 +10,7 @@ export default class FormatApiJsonToWeatherData {
         sun.set = parseFloat(json.sys.sunset);
 
         const cloud: Cloud = new Cloud();
-        cloud.all = parseInt(json.clouds.all);
-        cloud.visibility = parseInt(json.visibility);
+        cloud.cloudiness = parseInt(json.clouds.all);
 
         const wind: Wind = new Wind();
         wind.direction = parseInt(json.wind.deg);

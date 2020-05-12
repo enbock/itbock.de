@@ -1,9 +1,7 @@
 export default class Cloud {
-    public visibility: number;
-    public all: number;
+    public cloudiness: number;
 
     constructor() {
-        this.visibility = 0;
-        this.all = 0;
+        this.cloudiness = 0;
     }
 }
