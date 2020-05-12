@@ -12,10 +12,11 @@ namespace Loader
         public ProjectSettings Settings;
         public SharedContent SharedContent;
         public FileIndex.FileIndex FileIndex;
+        public bool Offline = false;
 
         void Start()
         {
-            if (FileIndex == null)
+            if (FileIndex == null && Offline == false)
             {
                 LoadAsset("loader/fileindex", 0U, LoadStartContent);
             }

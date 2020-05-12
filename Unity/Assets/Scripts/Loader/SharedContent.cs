@@ -7,5 +7,6 @@ namespace Loader
         public Light GlobalLight;
         public Camera Camera;
         public GameObject PostProcessVolume;
+        public ProjectSettings ProjectSettings;
     }
 }
