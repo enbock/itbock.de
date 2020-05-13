@@ -1,0 +1,21 @@
+{
+  "name": "weather-system",
+  "version": "1.0.0",
+  "description": "Take weather information from open weather map and geo ip services.",
+  "author": "Endre Bock",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsc -w",
+    "deploy": "node scripts/deploy.js"
+  },
+  "dependencies": {
+    "axios": "^0.19.2"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3",
+    "aws-sdk": "^2.673.0",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/node": "^13.13.5",
+    "zip-dir": "^1.0.2"
+  }
+}
