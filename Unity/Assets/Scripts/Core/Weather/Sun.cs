@@ -35,6 +35,7 @@ namespace Core.Weather
 
         void Update()
         {
+            if (GlobalLight == false) return;
             UpdateSunPosition();
             UpdateSunColor();
         }

@@ -76,6 +76,26 @@ namespace UnityTemplateProjects
         [Tooltip("Whether or not to invert our Y axis for mouse input to rotation.")]
         public bool invertY = false;
 
+        private bool freeLook = false;
+        public bool FreeLook
+        {
+            get { return freeLook; }
+            set
+            {
+                freeLook = value;
+                if (freeLook)
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                }
+                else
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
+            }
+        }
+
         void OnEnable()
         {
             m_TargetCameraState.SetFromTransform(transform);
@@ -129,18 +149,16 @@ namespace UnityTemplateProjects
             // Hide and lock cursor when right mouse button pressed
             if (Input.GetMouseButtonDown(1))
             {
-                Cursor.lockState = CursorLockMode.Locked;
             }
 
             // Unlock and show cursor when right mouse button released
             if (Input.GetMouseButtonUp(1))
             {
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                FreeLook = FreeLook == false;
             }
 
             // Rotation
-            if (Input.GetMouseButton(1))
+            if (/*Input.GetMouseButton(1) || */freeLook == true)
             {
                 var mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y") * (invertY ? 1 : -1));
                 

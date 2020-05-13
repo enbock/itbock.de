@@ -20,7 +20,7 @@ namespace Core.Weather
 
         void Start()
         {
-            if (AssetContent.LoaderManager == null) return;
+            if (AssetContent.LoadManager == null) return;
             Started = true;
             Sun.GlobalLight = AssetContent.SharedContent.GlobalLight;
             StartCoroutine(LoadWeatherData(FromJson));
@@ -28,7 +28,7 @@ namespace Core.Weather
 
         void Update()
         {
-            if (AssetContent.LoaderManager != null && Started == false) Start();
+            if (AssetContent.LoadManager != null && Started == false) Start();
 
             if (Data.IsLoaded)
             {

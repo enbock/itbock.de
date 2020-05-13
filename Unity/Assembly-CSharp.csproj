@@ -60,7 +60,6 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Core\ColorHelper.cs" />
      <Compile Include="Assets\Scripts\Core\DateTime.cs" />
-     <Compile Include="Assets\Scripts\Core\Environment\LoadSubModules.cs" />
      <Compile Include="Assets\Scripts\Core\Weather\Data\Cloud.cs" />
      <Compile Include="Assets\Scripts\Core\Weather\Data\Data.cs" />
      <Compile Include="Assets\Scripts\Core\Weather\Data\Position.cs" />
@@ -74,6 +73,11 @@
      <Compile Include="Assets\Scripts\Loader\ProjectSettings.cs" />
      <Compile Include="Assets\Scripts\Loader\SharedContent.cs" />
      <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
+     <Compile Include="Assets\_Creepy_Cat\Common Scripts\AnimateTiledTexture.cs" />
+     <Compile Include="Assets\_Creepy_Cat\Common Scripts\MouseLook.cs" />
+     <Compile Include="Assets\_Creepy_Cat\Common Scripts\ScrollTexture.cs" />
+     <Compile Include="Assets\_Creepy_Cat\Common Scripts\Turn_Move.cs" />
+     <None Include="Assets\_Creepy_Cat\Help Readme SOS.txt" />
  <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
  </Reference>

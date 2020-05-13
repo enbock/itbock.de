@@ -38,6 +38,12 @@ namespace Loader
 
         public void LoadAsset(string assetBundleName, System.Action<GameObject> callback)
         {
+            if (Offline)
+            {
+                Debug.Log("Offline mode. Skip loading of '" + assetBundleName + "'");
+                return;
+            }
+
             foreach (ContentData contentData in FileIndex.ContentData)
             {
                 if (contentData.Name == assetBundleName)
@@ -95,7 +101,7 @@ namespace Loader
                     try
                     {
                         AssetContent assetContent = asset.GetComponent<AssetContent>();
-                        assetContent.LoaderManager = this;
+                        assetContent.LoadManager = this;
                         assetContent.SharedContent = SharedContent;
                     }
                     catch (NullReferenceException exception)
