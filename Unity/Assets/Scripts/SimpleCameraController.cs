@@ -100,6 +100,7 @@ namespace UnityTemplateProjects
         {
             m_TargetCameraState.SetFromTransform(transform);
             m_InterpolatingCameraState.SetFromTransform(transform);
+            FreeLook = false;
         }
 
         Vector3 GetInputTranslationDirection()
@@ -146,15 +147,13 @@ namespace UnityTemplateProjects
 				UnityEditor.EditorApplication.isPlaying = false; 
 				#endif
             }
-            // Hide and lock cursor when right mouse button pressed
-            if (Input.GetMouseButtonDown(1))
-            {
-            }
-
-            // Unlock and show cursor when right mouse button released
-            if (Input.GetMouseButtonUp(1))
+            if (Input.GetMouseButtonDown(0))
             {
                 FreeLook = FreeLook == false;
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
             }
 
             // Rotation
