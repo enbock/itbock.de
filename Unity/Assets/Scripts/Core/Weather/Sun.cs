@@ -57,6 +57,7 @@ namespace Core.Weather
             LastAngle = sunAngle;
             GlobalLight.transform.rotation = target; //Quaternion.Slerp(transform.rotation, target, 1f);
             GlobalLight.color = SunColor;
+            RenderSettings.fogColor = SunColor;
             GlobalLight.intensity = (float) SunIntensity;
         }
 

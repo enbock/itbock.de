@@ -7,29 +7,29 @@ using UnityEngine.Networking;
 
 namespace Core.Weather
 {
-    public class Weather : MonoBehaviour
+    public class Weather : AssetContent
     {
-        public AssetContent AssetContent;
+        public delegate void LoadAction(Data.Data data);
+        public static event LoadAction OnLoad;
+        
         public DateTime DateTime;
         public Sun Sun;
         public Data.Data Data = new Data.Data();
         
         private bool IsDay = true;
         private float TimePercent = 0f;
-        private bool Started = false;
 
-        void Start()
+        override public void Start()
         {
-            if (AssetContent.LoadManager == null) return;
-            Started = true;
-            Sun.GlobalLight = AssetContent.SharedContent.GlobalLight;
+            base.Start();
+            
+            Sun.GlobalLight = SharedContent.GlobalLight;
+            DateTime = SharedContent.gameObject.GetComponent<DateTime>();
             StartCoroutine(LoadWeatherData(FromJson));
         }
 
         void Update()
         {
-            if (AssetContent.LoadManager != null && Started == false) Start();
-
             if (Data.IsLoaded)
             {
                 CalculateAndUpdateTimePercent();
@@ -42,7 +42,7 @@ namespace Core.Weather
         IEnumerator LoadWeatherData(System.Action<string> callback)
         {
             UnityWebRequest www =
-                UnityWebRequest.Get(AssetContent.SharedContent.ProjectSettings.ApiUri + "/weather-data");
+                UnityWebRequest.Get(SharedContent.ProjectSettings.ApiUri + "/weather-data");
             yield return www.SendWebRequest();
 
             if (www.isNetworkError || www.isHttpError)
@@ -58,6 +58,7 @@ namespace Core.Weather
         {
             this.Data = JsonConvert.DeserializeObject<Data.Data>(json);
             this.Data.IsLoaded = true;
+            OnLoad?.Invoke(this.Data);
         }
 
         void CalculateAndUpdateTimePercent()

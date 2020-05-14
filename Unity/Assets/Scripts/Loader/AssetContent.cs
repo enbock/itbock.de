@@ -13,7 +13,7 @@ namespace Loader
         public string[] SubAssests = new string[0];
         private GameObject container;
 
-        private void Start()
+        virtual public void Start()
         {
             LoadSubAssets();
         }

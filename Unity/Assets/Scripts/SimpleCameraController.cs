@@ -76,6 +76,9 @@ namespace UnityTemplateProjects
         [Tooltip("Whether or not to invert our Y axis for mouse input to rotation.")]
         public bool invertY = false;
 
+        public Light FlashLight;
+        private bool FlashLightEnabled = false;
+
         private bool freeLook = false;
         public bool FreeLook
         {
@@ -147,14 +150,14 @@ namespace UnityTemplateProjects
 				UnityEditor.EditorApplication.isPlaying = false; 
 				#endif
             }
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(1))
             {
                 FreeLook = FreeLook == false;
             }
 
-            if (Input.GetMouseButtonUp(0))
-            {
-            }
+            // if (Input.GetMouseButtonUp(0))
+            // {
+            // }
 
             // Rotation
             if (/*Input.GetMouseButton(1) || */freeLook == true)
@@ -193,6 +196,12 @@ namespace UnityTemplateProjects
             m_InterpolatingCameraState.LerpTowards(m_TargetCameraState, positionLerpPct, rotationLerpPct);
 
             m_InterpolatingCameraState.UpdateTransform(transform);
+
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                FlashLightEnabled = FlashLightEnabled == false;
+                FlashLight.enabled = FlashLightEnabled;
+            }
         }
     }
 

@@ -59,6 +59,49 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Editor\CreateAssetBundles.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\Editor\BitMaskEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\Editor\ResourcePathDrawer.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\Editor\ColorSchemeEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\Editor\ColorSchemeManagerEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Editor\Miscellaneous\ColorPropertyDrawer.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Editor\Tools\CreatePrefabs.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Editor\Tools\NavigationTools.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Bars\Editor\UIBulletBarEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Bars\Editor\UICastBarEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Bars\Editor\UIProgressBarEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Bars\Editor\UIStepBarEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Controls\Editor\UISliderExtendedEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Controls\Editor\UISwitchSelectEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Controls\Editor\UITabEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Controls\Select Field\Editor\UISelectFieldEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Controls\Select Field\Editor\UISelectField_ListEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Controls\Select Field\Editor\UISelectField_TransitionEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Databases\Editor\UIItemDatabaseEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Databases\Editor\UISpellDatabaseEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Databases\Editor\UITalentDatabaseEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Editor\UIAnimatorControllerGenerator.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Editor\UIDragObjectEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Icon Slot System\Editor\UIEquipSlotEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Icon Slot System\Editor\UIItemSlotEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Icon Slot System\Editor\UISlotBaseEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Icon Slot System\Editor\UISpellSlotEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Icon Slot System\Editor\UITalentSlotEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Loading Overlay\Editor\UILoadingOverlayManagerEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Modal Box\Editor\UIModalBoxManagerEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Raycast Filters\Editor\UICircularRaycastFilterEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Raycast Filters\Editor\UIRectangularRaycastFilterEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Scene System\Editor\UISceneEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Serializables\Editor\AnimationTriggersExtendedDrawer.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Serializables\Editor\ColorBlockExtendedDrawer.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Serializables\Editor\SpriteStateExtendedDrawer.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Tooltips\Editor\UITooltipEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Tooltips\Editor\UITooltipLineContentDrawer.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Tooltips\Editor\UITooltipManagerEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Transitions\Editor\UIEffectTransitionEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Transitions\Editor\UIHighlightTransitionEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Transitions\Editor\UIPressTransitionEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Window\Editor\UIBlackOverlayManagerEditor.cs" />
+     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Window\Editor\UIWindowEditor.cs" />
  <Reference Include="UnityEditor.TestRunner">
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
  </Reference>

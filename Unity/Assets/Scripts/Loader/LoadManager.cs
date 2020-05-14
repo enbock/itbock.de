@@ -16,10 +16,11 @@ namespace Loader
 
         void Start()
         {
-            if (FileIndex == null && Offline == false)
+            /*if (FileIndex == null)
             {
                 LoadAsset("loader/fileindex", 0U, LoadStartContent);
-            }
+            }*/
+            LoadAsset("core/environment", 0U, (GameObject content) => { Instantiate(content); });
         }
 
         void LoadStartContent(GameObject asset)
@@ -44,7 +45,7 @@ namespace Loader
                 return;
             }
 
-            foreach (ContentData contentData in FileIndex.ContentData)
+            /*foreach (ContentData contentData in FileIndex.ContentData)
             {
                 if (contentData.Name == assetBundleName)
                 {
@@ -53,7 +54,9 @@ namespace Loader
                 }
             }
 
-            Debug.LogError("Can not find '" + assetBundleName + "' in file index.");
+            Debug.LogError("Can not find '" + assetBundleName + "' in file index.");*/
+            
+            LoadAsset(assetBundleName, 0U, callback);
         }
 
         void LoadAsset(ContentData file, System.Action<GameObject> callback)
