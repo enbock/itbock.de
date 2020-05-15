@@ -28,7 +28,7 @@ const weatherApi:WeatherApi = new WeatherApiCache(
     config.s3Bucket,
     new WeatherApiCacheFormatter(),
     now,
-    60 * 60
+    60 * 14
 );
 
 exports.handler = async function (event/*, context*/) {
