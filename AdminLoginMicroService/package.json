@@ -1,0 +1,21 @@
+{
+  "name": "admin-login-micro-service",
+  "version": "1.0.0",
+  "author": "Endre Bock",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsc -w",
+    "deploy": "node scripts/deploy.js"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "uuid-random": "^1.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3",
+    "aws-sdk": "^2.673.0",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/node": "^13.13.5",
+    "zip-dir": "^1.0.2"
+  }
+}
