@@ -14,6 +14,7 @@ namespace Core.Weather
         
         public DateTime DateTime;
         public Sun Sun;
+        public float DataRefreshTimer = 900f; // 15min
         public Data.Data Data = new Data.Data();
         
         private bool IsDay = true;
@@ -25,7 +26,7 @@ namespace Core.Weather
             
             Sun.GlobalLight = SharedContent.GlobalLight;
             DateTime = SharedContent.gameObject.GetComponent<DateTime>();
-            StartCoroutine(LoadWeatherData(FromJson));
+            StartCoroutine(LoadDataFrequenly(FromJson));
         }
 
         void Update()
@@ -36,6 +37,16 @@ namespace Core.Weather
                 Sun.IsDay = IsDay;
                 Sun.TimePercent = TimePercent;
                 Sun.AirTemperatur = Data.Wind.Temperature;
+                Sun.Cloudiness = Data.Cloud.Cloudiness;
+            }
+        }
+
+        IEnumerator LoadDataFrequenly(System.Action<string> callback)
+        {
+            while (true)
+            {
+                StartCoroutine(LoadWeatherData(callback));
+                yield return new WaitForSecondsRealtime(DataRefreshTimer);
             }
         }
 

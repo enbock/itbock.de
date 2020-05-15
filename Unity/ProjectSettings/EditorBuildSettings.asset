@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Production.unity
     guid: c5361e791230b994db06e7920329749f
   - enabled: 0
-    path: Assets/Scenes/Web Development.unity
+    path: Assets/Scenes/Web Testing.unity
     guid: 3a897383a9e74fc4b9125156cce5712f
   m_configObjects: {}

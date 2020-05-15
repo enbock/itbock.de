@@ -25,6 +25,7 @@ namespace Core.Weather
         public Light GlobalLight;
         public ColorSetup ColorSetup = new ColorSetup();
         public double AirTemperatur;
+        public double Cloudiness = 100D;
 
         public double SunColorTemperatur;
         public Color SunColor;
@@ -58,7 +59,8 @@ namespace Core.Weather
             GlobalLight.transform.rotation = target; //Quaternion.Slerp(transform.rotation, target, 1f);
             GlobalLight.color = SunColor;
             RenderSettings.fogColor = SunColor;
-            GlobalLight.intensity = (float) SunIntensity;
+            GlobalLight.intensity = (float) (SunIntensity * (1.25D / 100D * Cloudiness));
+            GlobalLight.shadowStrength = 1f / 100f * (float) Cloudiness;
         }
 
         private void UpdateSunColor()

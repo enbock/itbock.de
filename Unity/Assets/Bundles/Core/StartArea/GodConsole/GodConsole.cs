@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class GodConsole : AssetContent
 {
     public Slider TimeChangeSlider;
+    public Button ResetButton;
     public DateTime DateTime;
     public Weather Weather;
     public Canvas Canvas;
@@ -21,6 +22,8 @@ public class GodConsole : AssetContent
         Weather = GetComponentInParent<Weather>();
         Weather.OnLoad += OnWeatherDataLoad;
         Canvas.worldCamera = SharedContent.Camera;
+        TimeChangeSlider.onValueChanged.AddListener(SetValue);
+        ResetButton.onClick.AddListener(ResetValue);
 
         if (Weather.Data.IsLoaded)
         {

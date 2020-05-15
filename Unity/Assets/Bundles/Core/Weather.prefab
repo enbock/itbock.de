@@ -63,6 +63,7 @@ MonoBehaviour:
     - 10
     - 90
   AirTemperatur: 0
+  Cloudiness: 100
   SunColorTemperatur: 0
   SunColor: {r: 0, g: 0, b: 0, a: 0}
   SunIntensity: 2

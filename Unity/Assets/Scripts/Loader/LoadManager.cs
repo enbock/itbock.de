@@ -55,7 +55,7 @@ namespace Loader
             }
 
             Debug.LogError("Can not find '" + assetBundleName + "' in file index.");*/
-            
+
             LoadAsset(assetBundleName, 0U, callback);
         }
 
@@ -103,9 +103,12 @@ namespace Loader
                     GameObject asset = assets[0];
                     try
                     {
-                        AssetContent assetContent = asset.GetComponent<AssetContent>();
-                        assetContent.LoadManager = this;
-                        assetContent.SharedContent = SharedContent;
+                        AssetContent[] assetContent = asset.GetComponents<AssetContent>();
+                        foreach (AssetContent content in assetContent)
+                        {
+                            content.LoadManager = this;
+                            content.SharedContent = SharedContent;
+                        }
                     }
                     catch (NullReferenceException exception)
                     {

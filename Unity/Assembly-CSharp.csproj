@@ -58,6 +58,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Bundles\Core\AdminTerminal\AdminAuthorization.cs" />
+     <Compile Include="Assets\Bundles\Core\AdminTerminal\AdminController.cs" />
+     <Compile Include="Assets\Bundles\Core\AdminTerminal\TokenData.cs" />
      <Compile Include="Assets\Bundles\Core\StartArea\GodConsole\GodConsole.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\BitMaskAttribute.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\ResourcePathAttribute.cs" />

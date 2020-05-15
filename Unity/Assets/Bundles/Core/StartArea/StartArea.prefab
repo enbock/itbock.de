@@ -80,6 +80,7 @@ MonoBehaviour:
   SharedContent: {fileID: 0}
   SubAssests:
   - core/startarea_infopanel
+  - admin/terminal
 --- !u!1001 &6448944771680898330
 PrefabInstance:
   m_ObjectHideFlags: 0
