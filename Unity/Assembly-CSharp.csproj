@@ -75,6 +75,7 @@
      <Compile Include="Assets\Bundles\Core\AdminTerminal\AdminController.cs" />
      <Compile Include="Assets\Bundles\Core\AdminTerminal\TokenData.cs" />
      <Compile Include="Assets\Bundles\Core\StartArea\GodConsole\GodConsole.cs" />
+     <Compile Include="Assets\Bundles\Grid\Grid\GridController.cs" />
      <Compile Include="Assets\Bundles\Grid\StartGrid\StartGridController.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\BitMaskAttribute.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\ResourcePathAttribute.cs" />
@@ -226,7 +227,11 @@
      <Compile Include="Assets\Scripts\Core\Weather\Data\Wind.cs" />
      <Compile Include="Assets\Scripts\Core\Weather\Sun.cs" />
      <Compile Include="Assets\Scripts\Core\Weather\Weather.cs" />
+     <Compile Include="Assets\Scripts\Grid\Asset\CatalogEntity.cs" />
      <Compile Include="Assets\Scripts\Grid\Asset\Entity.cs" />
+     <Compile Include="Assets\Scripts\Grid\Asset\EntitySnap.cs" />
+     <Compile Include="Assets\Scripts\Grid\Asset\Library.cs" />
+     <Compile Include="Assets\Scripts\Grid\Asset\Manager.cs" />
      <Compile Include="Assets\Scripts\Grid\Asset\Requirement.cs" />
      <Compile Include="Assets\Scripts\Grid\Manager.cs" />
      <Compile Include="Assets\Scripts\Loader\AssetContent.cs" />

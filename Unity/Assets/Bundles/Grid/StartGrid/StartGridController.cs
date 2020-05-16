@@ -8,18 +8,6 @@ using UnityEngine;
 public class StartGridController : AssetContent
 {
     public string EntityName = "StartGrid";
-    public AssetContent DevOfflineAsset;
-
-    public override void Start()
-    {
-        base.Start();
-        if (LoadManager.Offline)
-        {
-            DevOfflineAsset.LoadManager = LoadManager;
-            DevOfflineAsset.SharedContent = SharedContent;
-            InstantiateModule(DevOfflineAsset.gameObject);
-        }
-    }
 
     protected override GameObject InstantiateModule(GameObject asset)
     {
@@ -29,7 +17,6 @@ public class StartGridController : AssetContent
     private GameObject CreateEntity(GameObject asset, string entityName)
     {
         Entity entity = asset.GetComponent<Entity>();
-        entity.Name = entityName;
         entity.gameObject.name = entityName;
 
         foreach (Requirement entityRequirement in entity.Requirements)

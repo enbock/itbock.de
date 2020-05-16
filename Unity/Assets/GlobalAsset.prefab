@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7398332281284488248}
   - component: {fileID: 7481035803004715820}
   - component: {fileID: 4451664947609997726}
+  - component: {fileID: 554297520135584666}
   m_Layer: 0
   m_Name: GlobalAsset
   m_TagString: Untagged
@@ -78,12 +79,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdc89db8360d0954b9ba2184ba28338a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoadManager: {fileID: 0}
   SharedContent: {fileID: 7398332281284488248}
-  SubAssests: []
   Token:
     Token: 
   LoggedIn: 0
+--- !u!114 &554297520135584666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285058654934387200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223b3b10ca6644a986347fd1897d7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LoadManager: {fileID: 0}
+  SharedContent: {fileID: 7398332281284488248}
+  AssetLibrary:
+  - asset-library/floor
+  Catalog: []
+  Assets: []
 --- !u!1 &2435953795557913196
 GameObject:
   m_ObjectHideFlags: 0

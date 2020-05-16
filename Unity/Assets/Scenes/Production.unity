@@ -215,6 +215,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 554297520135584666, guid: 480a45a7614326d468943c1babe06b20,
+        type: 3}
+      propertyPath: LoadManager
+      value: 
+      objectReference: {fileID: 1434001887}
     - target: {fileID: 1285058654934387200, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
       propertyPath: m_Name
@@ -331,8 +336,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Settings: {fileID: 908361435}
   SharedContent: {fileID: 938157137}
-  FileIndex: {fileID: 0}
   Offline: 0
+  OfflineAssets: []
 --- !u!4 &1434001888
 Transform:
   m_ObjectHideFlags: 0

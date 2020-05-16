@@ -7,30 +7,42 @@ using UnityEngine.Networking;
 
 namespace Loader
 {
+    [Serializable]
+    public struct OfflineAsset
+    {
+        public string BundleName;
+        public GameObject Asset;
+    }
     public class LoadManager : MonoBehaviour
     {
+        public delegate void LoadAction(string assetBundleName, GameObject asset);
+
+        public static event LoadAction OnLoad;
+
         public ProjectSettings Settings;
         public SharedContent SharedContent;
-        public FileIndex.FileIndex FileIndex;
         public bool Offline = false;
+        public OfflineAsset[] OfflineAssets;
+        
+        private Dictionary<string, GameObject> OfflineAssetList = new Dictionary<string, GameObject>();
+        private Dictionary<string, GameObject> LoadedAssets = new Dictionary<string, GameObject>();
+        private Dictionary<string, bool> Loading = new Dictionary<string, bool>();
+
+        private Dictionary<string, List<Func<GameObject, GameObject>>> Queue =
+            new Dictionary<string, List<Func<GameObject, GameObject>>>();
+
+        private void OnEnable()
+        {
+            OnLoad += ApplyQueue;
+            foreach (OfflineAsset offlineAsset in OfflineAssets)
+            {
+                OfflineAssetList.Add(offlineAsset.BundleName, offlineAsset.Asset);
+            }
+        }
 
         void Start()
         {
-            /*if (FileIndex == null)
-            {
-                LoadAsset("loader/fileindex", 0U, LoadStartContent);
-            }*/
             LoadAsset("core/environment", 0U, (GameObject content) => { return Instantiate(content); });
-        }
-
-        void LoadStartContent(GameObject asset)
-        {
-            GameObject instance = Instantiate(asset, gameObject.transform);
-            FileIndex = instance.GetComponent<FileIndex.FileIndex>();
-            LoadAsset(
-                FileIndex.StartContent,
-                (GameObject content) => { return Instantiate(content); }
-            );
         }
 
         void Update()
@@ -39,23 +51,6 @@ namespace Loader
 
         public void LoadAsset(string assetBundleName, Func<GameObject, GameObject> callback)
         {
-            if (Offline)
-            {
-                Debug.Log("Offline mode. Skip loading of '" + assetBundleName + "'");
-                return;
-            }
-
-            /*foreach (ContentData contentData in FileIndex.ContentData)
-            {
-                if (contentData.Name == assetBundleName)
-                {
-                    LoadAsset(contentData, callback);
-                    return;
-                }
-            }
-
-            Debug.LogError("Can not find '" + assetBundleName + "' in file index.");*/
-
             LoadAsset(assetBundleName, 0U, callback);
         }
 
@@ -66,7 +61,51 @@ namespace Loader
 
         void LoadAsset(string assetBundleName, uint crc, Func<GameObject, GameObject> callback)
         {
+            if (LoadedAssets.ContainsKey(assetBundleName))
+            {
+                callback(LoadedAssets[assetBundleName]);
+                return;
+            }
+
+            if (Loading.ContainsKey(assetBundleName))
+            {
+                if (Queue.ContainsKey(assetBundleName) == false)
+                {
+                    Queue.Add(assetBundleName, new List<Func<GameObject, GameObject>>());
+                }
+
+                Queue[assetBundleName].Add(callback);
+
+                return;
+            }
+
+            Loading.Add(assetBundleName, true);
+            
+            if (Offline)
+            {
+                if (OfflineAssetList.ContainsKey(assetBundleName))
+                {
+                    Debug.Log("Emulate loding of '" + assetBundleName + "'.");
+                    InitializeAsset(assetBundleName, OfflineAssetList[assetBundleName], callback);
+                    return;
+                }
+
+                Debug.Log("Offline mode. Skip loading of '" + assetBundleName + "'."+OfflineAssetList.ContainsKey(assetBundleName));
+                return;
+            }
             StartCoroutine(LoadAssetData(assetBundleName, crc, callback));
+        }
+
+        private void ApplyQueue(string assetBundleName, GameObject asset)
+        {
+            if (Queue.ContainsKey(assetBundleName) == false) return;
+            List<Func<GameObject, GameObject>> queue = Queue[assetBundleName];
+            Queue.Remove(assetBundleName);
+
+            foreach (Func<GameObject, GameObject> callback in queue)
+            {
+                callback(asset);
+            }
         }
 
         IEnumerator LoadAssetData(string assetBundleName, uint version, Func<GameObject, GameObject> callback)
@@ -100,29 +139,38 @@ namespace Loader
                         );
                     }
 
-                    GameObject asset = assets[0];
-                    try
-                    {
-                        AssetContent[] assetContent = asset.GetComponents<AssetContent>();
-                        foreach (AssetContent content in assetContent)
-                        {
-                            content.LoadManager = this;
-                            content.SharedContent = SharedContent;
-                        }
-                    }
-                    catch (NullReferenceException exception)
-                    {
-                        Debug.LogWarning(
-                            "Loaded Content of '" +
-                            assetBundleName +
-                            "' must have 'AssetContent' script.   " +
-                            exception
-                        );
-                    }
-
-                    callback(asset);
+                    InitializeAsset(assetBundleName, assets[0], callback);
                 }
             }
+        }
+
+        private void InitializeAsset(string assetBundleName, GameObject asset, Func<GameObject, GameObject> callback)
+        {
+            try
+            {
+                AssetContent[] assetContent = asset.GetComponents<AssetContent>();
+                foreach (AssetContent content in assetContent)
+                {
+                    content.LoadManager = this;
+                    content.SharedContent = SharedContent;
+                }
+            }
+            catch (NullReferenceException exception)
+            {
+                Debug.LogWarning(
+                    "Loaded Content of '" +
+                    assetBundleName +
+                    "' must have 'AssetContent' script.   " +
+                    exception
+                );
+            }
+
+            LoadedAssets.Add(assetBundleName, asset);
+            Loading[assetBundleName] = false;
+
+            callback(asset);
+
+            OnLoad(assetBundleName, asset);
         }
     }
 }

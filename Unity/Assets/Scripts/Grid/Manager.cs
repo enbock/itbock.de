@@ -11,8 +11,13 @@ namespace Grid
     public class Manager : Entity
     {
         public AdminAuthorization AdminAuthorization;
-        public GameObject Container;
         public Text GridName;
+        public Asset.Manager AssetManager;
+
+        private void OnEnable()
+        {
+            AssetManager = SharedContent.GetComponent<Asset.Manager>();
+        }
 
         public override void Start()
         {

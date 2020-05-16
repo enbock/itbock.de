@@ -45,11 +45,7 @@ namespace Core.Weather
         private void UpdateSunPosition()
         {
             Quaternion rotation = GlobalLight.transform.rotation;
-            float calculatedSunAngle = CalculateAngle();
-
-            // Slerp
-            float step = Time.deltaTime * 3f;
-            float sunAngle = (LastAngle * (1f - step)) + (calculatedSunAngle * step);
+            float sunAngle = CalculateAngle();
 
             Quaternion target = Quaternion.Euler(
                 sunAngle,

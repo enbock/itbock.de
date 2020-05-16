@@ -198,8 +198,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Settings: {fileID: 131405789}
   SharedContent: {fileID: 839733941}
-  FileIndex: {fileID: 0}
   Offline: 0
+  OfflineAssets: []
 --- !u!4 &668756958
 Transform:
   m_ObjectHideFlags: 0
@@ -221,6 +221,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 554297520135584666, guid: 480a45a7614326d468943c1babe06b20,
+        type: 3}
+      propertyPath: LoadManager
+      value: 
+      objectReference: {fileID: 668756957}
     - target: {fileID: 1285058654934387200, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
       propertyPath: m_Name

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace Loader
@@ -9,12 +10,13 @@ namespace Loader
     {
         public LoadManager LoadManager;
         public SharedContent SharedContent;
+        public GameObject Container;
 
         public string[] SubAssests = new string[0];
-        private GameObject container;
 
         virtual public void Start()
         {
+            if (Container == null) Container = gameObject;
             LoadSubAssets();
         }
 
@@ -32,7 +34,7 @@ namespace Loader
 
         virtual protected GameObject InstantiateModule(GameObject asset)
         {
-            return Instantiate(asset, gameObject.transform);
+            return Instantiate(asset, Container.gameObject.transform);
         }
     }
 }

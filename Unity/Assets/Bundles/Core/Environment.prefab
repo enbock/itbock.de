@@ -4863,6 +4863,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoadManager: {fileID: 0}
   SharedContent: {fileID: 0}
+  Container: {fileID: 0}
   SubAssests:
   - core/weather
   - core/startarea_floor
@@ -9685,7 +9686,7 @@ MonoBehaviour:
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
   m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
+  m_InputActionsPerSecond: 25
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
 --- !u!1 &6569033612860324129
