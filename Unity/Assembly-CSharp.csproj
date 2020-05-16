@@ -58,10 +58,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AIO_Sky\Sample\Script\FPSDisplay.cs" />
+     <Compile Include="Assets\AIO_Sky\Sample\Script\NewDemoSky.cs" />
+     <Compile Include="Assets\AIO_Sky\Script\AIOSun.cs" />
+     <Compile Include="Assets\AIO_Sky\Script\AIOSunShaftsHelper.cs" />
+     <Compile Include="Assets\AIO_Sky\Script\deprecated\AIOMoon.cs" />
+     <Compile Include="Assets\AIO_Sky\Script\deprecated\AIOSky.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\ImageEffectHelper.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\MinAttribute.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\RenderTextureUtility.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\GlobalFog.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\PostEffectsBase.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\PostEffectsHelper.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\SunShafts.cs" />
      <Compile Include="Assets\Bundles\Core\AdminTerminal\AdminAuthorization.cs" />
      <Compile Include="Assets\Bundles\Core\AdminTerminal\AdminController.cs" />
      <Compile Include="Assets\Bundles\Core\AdminTerminal\TokenData.cs" />
      <Compile Include="Assets\Bundles\Core\StartArea\GodConsole\GodConsole.cs" />
+     <Compile Include="Assets\Bundles\Grid\StartGrid\StartGridController.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\BitMaskAttribute.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\ResourcePathAttribute.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\ColorScheme.cs" />
@@ -212,6 +226,9 @@
      <Compile Include="Assets\Scripts\Core\Weather\Data\Wind.cs" />
      <Compile Include="Assets\Scripts\Core\Weather\Sun.cs" />
      <Compile Include="Assets\Scripts\Core\Weather\Weather.cs" />
+     <Compile Include="Assets\Scripts\Grid\Asset\Entity.cs" />
+     <Compile Include="Assets\Scripts\Grid\Asset\Requirement.cs" />
+     <Compile Include="Assets\Scripts\Grid\Manager.cs" />
      <Compile Include="Assets\Scripts\Loader\AssetContent.cs" />
      <Compile Include="Assets\Scripts\Loader\FileIndex.cs" />
      <Compile Include="Assets\Scripts\Loader\LoadManager.cs" />
@@ -222,10 +239,19 @@
      <Compile Include="Assets\_Creepy_Cat\Common Scripts\MouseLook.cs" />
      <Compile Include="Assets\_Creepy_Cat\Common Scripts\ScrollTexture.cs" />
      <Compile Include="Assets\_Creepy_Cat\Common Scripts\Turn_Move.cs" />
+     <None Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Shaders\GlobalFog.shader" />
      <None Include="Assets\_Creepy_Cat\Help Readme SOS.txt" />
+     <None Include="Assets\AIO_Sky\Shader\AIO_V2.shader" />
+     <None Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Shaders\SunShaftsComposite.shader" />
      <None Include="Assets\RPG and MMO UI 7\Readme.txt" />
+     <None Include="Assets\AIO_Sky\Shader\deprecated\AIO_Std.shader" />
      <None Include="Assets\RPG and MMO UI 7\Shaders\UIMaskedBlur.shader" />
+     <None Include="Assets\AIO_Sky\Shader\AIO_V2Half.shader" />
+     <None Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Shaders\SimpleClear.shader" />
      <None Include="Assets\RPG and MMO UI 7\Changelog.txt" />
+     <None Include="Assets\AIO_Sky\Readme1.3.txt" />
+     <None Include="Assets\AIO_Sky\Shader\AIO_Simple01A.shader" />
+     <None Include="Assets\AIO_Sky\Shader\deprecated\AIO_Half01.shader" />
  <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
  </Reference>

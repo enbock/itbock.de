@@ -7,12 +7,13 @@ using UnityEngine.Networking;
 
 namespace Admin
 {
-    public class AdminAuthorization : AssetContent
+    public class AdminAuthorization : MonoBehaviour
     {
         public delegate void LoginChangedAction(bool loggedIn);
 
         public static event LoginChangedAction OnLoginChange;
-        
+
+        public SharedContent SharedContent;
         public TokenData Token;
         public bool LoggedIn = false;
 

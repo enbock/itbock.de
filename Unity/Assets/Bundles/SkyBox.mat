@@ -1,0 +1,189 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SkyBox
+  m_Shader: {fileID: 4800000, guid: 7342d8627cd114042a96810f16931bfb, type: 3}
+  m_ShaderKeywords: _NORMALMAPENABLE_ON _TOGGLEEXTRA_ON
+  m_LightmapFlags: 1
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseCloud:
+        m_Texture: {fileID: 2800000, guid: 959430aa20ad46740a9b89f4e0b3c830, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CloudDetail:
+        m_Texture: {fileID: 2800000, guid: f56ced4dc801a8d41aadfbdf231d6094, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortionTexture:
+        m_Texture: {fileID: 2800000, guid: f0470cc61abf6594fa602fc8eee31708, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Moon:
+        m_Texture: {fileID: 2800000, guid: edfaa4652781013418ed32fd70483224, type: 3}
+        m_Scale: {x: 0, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MoonGlow:
+        m_Texture: {fileID: 2800000, guid: 57df68bb9636546419042743fb2c838f, type: 3}
+        m_Scale: {x: 0, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StarField:
+        m_Texture: {fileID: 2800000, guid: 3221f187ec7029648938725457a96ab1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture0:
+        m_Texture: {fileID: 2800000, guid: c64c69f281199f747b229f70b337978b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureUVfloid:
+        m_Texture: {fileID: 2800000, guid: f7ed6e1d2fa44fb43aaee06f995228a1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _normalTexture:
+        m_Texture: {fileID: 2800000, guid: e64a4e267728eaa46bc4fa75f4d0d130, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ADDvsMult: 0
+    - _AmbientLight: 0.225
+    - _AtmosphereEnd: 0.4
+    - _AtmosphereStart: -0.2
+    - _BGRotate: 2.01
+    - _BGscale: 0.5
+    - _BumpScale: 1
+    - _CloudsBrightness: -0.24
+    - _CloudsContract: 0.778
+    - _CloudsDensity: 0.38
+    - _CloudsDensitySkyEdge: 1.157
+    - _CloudsRotation: 3.88
+    - _CloudsScale: 0.52
+    - _CloudsShadowBalance: 1
+    - _CloudsShadowWeight: 0.54
+    - _CloudsThickness: 0.176
+    - _CloudsTransmission: 1.474
+    - _Cutoff: 0.5
+    - _DayCloudsTransmission: 1
+    - _DayRange: 0.35
+    - _DetailNormalMapScale: 1
+    - _DetailScale01: 0.445
+    - _DetailScale02: 0.335
+    - _DetailScale03: 0.162
+    - _DistortionMax: 0.00052
+    - _DistortionMin: 0.055
+    - _DistortionScale: 15.6
+    - _DistortionTime: 0.005
+    - _DomeCurved: 0.52
+    - _DotOffset: 1
+    - _DstBlend: 0
+    - _FogLevel: 0.074
+    - _Glossiness: 0.5
+    - _GroundLevel: 0.117
+    - _LightPower: 0.93
+    - _MaskClipValue: 0.5
+    - _Metallic: 0
+    - _Mode: 0
+    - _MoonLightPower: 0.5
+    - _NightAmbientLight: 0.176
+    - _NightCloudsBrightness: 0.041
+    - _NightCloudsContract: 0.565
+    - _NightCloudsTransmission: 1
+    - _NormalScale: 1
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _ShadowOffset: 1
+    - _SrcBlend: 1
+    - _SunGlow: 0.0586
+    - _SunLightPower: 0.566
+    - _SunZoffset: 0
+    - _ToggleExtra: 1
+    - _ToggleRGAGNormal: 0
+    - _ToggleTest: 0
+    - _UVSec: 0
+    - _UVscaleV: 1
+    - _YScale: 1
+    - _ZWrite: 1
+    - __dirty: 0
+    - _moonScale: 14.8
+    - _nightRange: -0.3
+    - _normalMapenable: 1
+    - _normalscale: 1
+    - _remapswitch: 0
+    - _secondScale: 0.647
+    - _setRange: 0.184
+    - _sunMax: 1
+    - _sunMin: 0.00129
+    - _thirdScale: 0.222
+    - _timeScale: 0.001
+    - _uv2Scale: 1
+    m_Colors:
+    - _CloudsPan: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DayAtmosphere: {r: 0.57254905, g: 0.86274517, b: 1, a: 0}
+    - _DaySky: {r: 0.28070936, g: 0.60048914, b: 0.86764705, a: 0}
+    - _DayTransmissionColor: {r: 0.9056, g: 0.84096044, b: 0.7850761, a: 1}
+    - _DistortionPan: {r: 0.1247312, g: 0.1247312, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _ExtraLight: {r: 0.74264705, g: 0.74264705, b: 0.74264705, a: 0.253}
+    - _FogColor: {r: 0, g: 0, b: 0, a: 1}
+    - _GroundColor: {r: 0, g: 0, b: 0, a: 0}
+    - _MoonLight: {r: 0.681, g: 0.681, b: 0.681, a: 1}
+    - _MoonPosition: {r: 0.69814277, g: 0.59060556, b: 0.40469968, a: 0}
+    - _NightAtmosphere: {r: 0.2599235, g: 0.29747394, b: 0.31132078, a: 1}
+    - _NightSky: {r: 0.12716262, g: 0.25047243, b: 0.35294116, a: 0}
+    - _NightTransmissionColor: {r: 0.9056, g: 0.84096044, b: 0.7850761, a: 1}
+    - _SunSetAtmosphere: {r: 0.9117647, g: 0.63989973, b: 0.3486159, a: 0}
+    - _SunSetSky: {r: 0.5411765, g: 0.627451, b: 0.6313726, a: 0}
+    - _TransmissionColor: {r: 0.5808823, g: 0.5808823, b: 0.5808823, a: 1}
+    - _sunColor: {r: 1, g: 1, b: 1, a: 1}

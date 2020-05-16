@@ -10,5 +10,6 @@ namespace Loader
         public Camera Camera;
         public GameObject PostProcessVolume;
         public ProjectSettings ProjectSettings;
+        public Material SkyBox;
     }
 }

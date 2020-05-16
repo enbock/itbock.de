@@ -58,6 +58,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AIO_Sky\Editor\AIOSunInspector.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Editor\ImageEffects\SunShaftsEditor.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\Editor\EditorGUIHelper.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\Editor\FieldFinder.cs" />
+     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\Editor\MinDrawer.cs" />
      <Compile Include="Assets\Editor\CreateAssetBundles.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\Editor\BitMaskEditor.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\Editor\ResourcePathDrawer.cs" />

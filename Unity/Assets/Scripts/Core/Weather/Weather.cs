@@ -25,12 +25,14 @@ namespace Core.Weather
             base.Start();
             
             Sun.GlobalLight = SharedContent.GlobalLight;
+            Sun.SkyBox = SharedContent.SkyBox;
             DateTime = SharedContent.gameObject.GetComponent<DateTime>();
             StartCoroutine(LoadDataFrequenly(FromJson));
         }
 
-        void Update()
+        override public void Update()
         {
+            base.Update();
             if (Data.IsLoaded)
             {
                 CalculateAndUpdateTimePercent();
@@ -84,7 +86,7 @@ namespace Core.Weather
 
             long timeRange = IsDay ? dayTimeRange : nightTimeRange;
             long timeOffset = isMorning
-                ? (Data.Sun.Set - nightTimeRange) // start sunset yesterday
+                ? (Data.Sun.Rise - nightTimeRange) // start sunset yesterday
                 : (
                     IsDay
                         ? Data.Sun.Rise // day start at rise

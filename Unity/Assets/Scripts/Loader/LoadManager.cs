@@ -20,7 +20,7 @@ namespace Loader
             {
                 LoadAsset("loader/fileindex", 0U, LoadStartContent);
             }*/
-            LoadAsset("core/environment", 0U, (GameObject content) => { Instantiate(content); });
+            LoadAsset("core/environment", 0U, (GameObject content) => { return Instantiate(content); });
         }
 
         void LoadStartContent(GameObject asset)
@@ -29,7 +29,7 @@ namespace Loader
             FileIndex = instance.GetComponent<FileIndex.FileIndex>();
             LoadAsset(
                 FileIndex.StartContent,
-                (GameObject content) => { Instantiate(content); }
+                (GameObject content) => { return Instantiate(content); }
             );
         }
 
@@ -37,7 +37,7 @@ namespace Loader
         {
         }
 
-        public void LoadAsset(string assetBundleName, System.Action<GameObject> callback)
+        public void LoadAsset(string assetBundleName, Func<GameObject, GameObject> callback)
         {
             if (Offline)
             {
@@ -59,17 +59,17 @@ namespace Loader
             LoadAsset(assetBundleName, 0U, callback);
         }
 
-        void LoadAsset(ContentData file, System.Action<GameObject> callback)
+        void LoadAsset(ContentData file, Func<GameObject, GameObject> callback)
         {
             LoadAsset(file.Name, file.Crc, callback);
         }
 
-        void LoadAsset(string assetBundleName, uint crc, System.Action<GameObject> callback)
+        void LoadAsset(string assetBundleName, uint crc, Func<GameObject, GameObject> callback)
         {
             StartCoroutine(LoadAssetData(assetBundleName, crc, callback));
         }
 
-        IEnumerator LoadAssetData(string assetBundleName, uint version, System.Action<GameObject> callback)
+        IEnumerator LoadAssetData(string assetBundleName, uint version, Func<GameObject, GameObject> callback)
         {
             string url = Settings.HostUri + "/" + assetBundleName;
             using (UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(url))

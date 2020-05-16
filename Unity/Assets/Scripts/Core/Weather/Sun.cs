@@ -26,6 +26,7 @@ namespace Core.Weather
         public ColorSetup ColorSetup = new ColorSetup();
         public double AirTemperatur;
         public double Cloudiness = 100D;
+        public Material SkyBox;
 
         public double SunColorTemperatur;
         public Color SunColor;
@@ -58,9 +59,25 @@ namespace Core.Weather
             LastAngle = sunAngle;
             GlobalLight.transform.rotation = target; //Quaternion.Slerp(transform.rotation, target, 1f);
             GlobalLight.color = SunColor;
-            RenderSettings.fogColor = SunColor;
-            GlobalLight.intensity = (float) (SunIntensity * (1.25D / 100D * Cloudiness));
-            GlobalLight.shadowStrength = 1f / 100f * (float) Cloudiness;
+            float cloudinessPercent = 1f / 100f * (float) Cloudiness;
+            float sunIntensity = (float) (SunIntensity * (0.3D + (0.7D / 100D * Cloudiness)));
+            GlobalLight.intensity = sunIntensity;
+            GlobalLight.shadowStrength = cloudinessPercent;
+
+            float fogIntensity = sunIntensity * 0.8f;
+            Color cloudTransmissionColor = new Color(
+                SunColor.r * fogIntensity,
+                SunColor.g * fogIntensity,
+                SunColor.b * fogIntensity,
+                1f
+            );
+            RenderSettings.fogColor = cloudTransmissionColor;
+
+            SkyBox.SetFloat("_SunLightPower", sunIntensity / 2f);
+            SkyBox.SetFloat("_CloudsDensity", cloudinessPercent);
+            SkyBox.SetFloat("_CloudsThickness", 0.1f + (0.2f * cloudinessPercent));
+            SkyBox.SetColor("_DayTransmissionColor", cloudTransmissionColor);
+            SkyBox.SetColor("_NightTransmissionColor", cloudTransmissionColor);
         }
 
         private void UpdateSunColor()

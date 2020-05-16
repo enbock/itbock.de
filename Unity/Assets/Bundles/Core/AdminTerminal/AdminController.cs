@@ -17,6 +17,7 @@ namespace Admin
         public override void Start()
         {
             base.Start();
+            AdminAuthorization = SharedContent.gameObject.GetComponent<AdminAuthorization>();
             LoginButton.onClick.AddListener(OnLoginClick);
             AdminAuthorization.OnLoginChange += UpdateScreen;
         }

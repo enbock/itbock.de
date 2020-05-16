@@ -18,6 +18,10 @@ namespace Loader
             LoadSubAssets();
         }
 
+        virtual public void Update()
+        {
+        }
+
         private void LoadSubAssets()
         {
             foreach (string assetName in SubAssests)
@@ -26,9 +30,9 @@ namespace Loader
             }
         }
 
-        private void InstantiateModule(GameObject asset)
+        virtual protected GameObject InstantiateModule(GameObject asset)
         {
-            Instantiate(asset, gameObject.transform);
+            return Instantiate(asset, gameObject.transform);
         }
     }
 }
