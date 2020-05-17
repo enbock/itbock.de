@@ -64,6 +64,7 @@
      <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\Editor\FieldFinder.cs" />
      <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\Editor\MinDrawer.cs" />
      <Compile Include="Assets\Editor\CreateAssetBundles.cs" />
+     <Compile Include="Assets\Editor\ReadOnlyDrawer.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\Editor\BitMaskEditor.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\Editor\ResourcePathDrawer.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\Editor\ColorSchemeEditor.cs" />

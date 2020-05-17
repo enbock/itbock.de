@@ -9,11 +9,7 @@ namespace Grid.Asset
     [Serializable]
     public class Entity : AssetContent
     {
-        public string Name
-        {
-            get { return gameObject.name; }
-        }
-
+        public CatalogEntity CatalogEntity;
         public Requirement[] Requirements;
         public Vector3 Position;
         public Vector3 Rotation;

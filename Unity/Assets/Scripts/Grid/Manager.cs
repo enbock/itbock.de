@@ -10,19 +10,16 @@ namespace Grid
 {
     public class Manager : Entity
     {
-        public AdminAuthorization AdminAuthorization;
-        public Text GridName;
-        public Asset.Manager AssetManager;
+        public GameObject GridContainer;
+        public Grid Grid = new Grid();
+
+        [Space]
+        [ReadOnly] public Asset.Manager AssetManager;
+        [ReadOnly] public AdminAuthorization AdminAuthorization;
 
         private void OnEnable()
         {
             AssetManager = SharedContent.GetComponent<Asset.Manager>();
-        }
-
-        public override void Start()
-        {
-            base.Start();
-            GridName.text = Name;
         }
 
         public override void Update()

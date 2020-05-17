@@ -77,6 +77,8 @@
      <Compile Include="Assets\Bundles\Core\StartArea\GodConsole\GodConsole.cs" />
      <Compile Include="Assets\Bundles\Grid\Grid\GridController.cs" />
      <Compile Include="Assets\Bundles\Grid\StartGrid\StartGridController.cs" />
+     <Compile Include="Assets\Bundles\UI\SelectList\ListItem.cs" />
+     <Compile Include="Assets\Bundles\UI\SelectList\SelectList.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\BitMaskAttribute.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\ResourcePathAttribute.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\ColorScheme.cs" />
@@ -233,12 +235,15 @@
      <Compile Include="Assets\Scripts\Grid\Asset\Library.cs" />
      <Compile Include="Assets\Scripts\Grid\Asset\Manager.cs" />
      <Compile Include="Assets\Scripts\Grid\Asset\Requirement.cs" />
+     <Compile Include="Assets\Scripts\Grid\Grid.cs" />
+     <Compile Include="Assets\Scripts\Grid\GridEntity.cs" />
      <Compile Include="Assets\Scripts\Grid\Manager.cs" />
      <Compile Include="Assets\Scripts\Loader\AssetContent.cs" />
      <Compile Include="Assets\Scripts\Loader\FileIndex.cs" />
      <Compile Include="Assets\Scripts\Loader\LoadManager.cs" />
      <Compile Include="Assets\Scripts\Loader\ProjectSettings.cs" />
      <Compile Include="Assets\Scripts\Loader\SharedContent.cs" />
+     <Compile Include="Assets\Scripts\ReadOnlyAttribute.cs" />
      <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
      <Compile Include="Assets\_Creepy_Cat\Common Scripts\AnimateTiledTexture.cs" />
      <Compile Include="Assets\_Creepy_Cat\Common Scripts\MouseLook.cs" />
