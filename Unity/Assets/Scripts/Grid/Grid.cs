@@ -6,6 +6,7 @@ namespace Grid
     [Serializable]
     public class Grid
     {
+        [ReadOnly] public string Identifier = Guid.NewGuid().ToString();
         public string Name = "No name";
         public List<GridEntity> Assets = new List<GridEntity>();
     }

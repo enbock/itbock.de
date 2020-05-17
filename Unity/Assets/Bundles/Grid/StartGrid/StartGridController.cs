@@ -14,9 +14,9 @@ public class StartGridController : AssetContent
         return CreateEntity(base.InstantiateModule(asset), EntityName);
     }
 
-    private GameObject CreateEntity(GameObject asset, string entityName)
+    private GameObject CreateEntity(GameObject instance, string entityName)
     {
-        Entity entity = asset.GetComponent<Entity>();
+        Entity entity = instance.GetComponent<Entity>();
         entity.gameObject.name = entityName;
 
         foreach (Requirement entityRequirement in entity.Requirements)
@@ -59,6 +59,6 @@ public class StartGridController : AssetContent
             }
         }
 
-        return asset;
+        return instance;
     }
 }

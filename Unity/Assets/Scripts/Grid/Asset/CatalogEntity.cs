@@ -10,12 +10,12 @@ namespace Grid.Asset
 
         public static bool operator ==(CatalogEntity left, CatalogEntity right)
         {
-            return left.Name == right.Name && left.Library == right.Library;
+            return left?.Name == right?.Name && left?.Library == right?.Library;
         }
 
         public static bool operator !=(CatalogEntity left, CatalogEntity right)
         {
-            return left.Name != right.Name || left.Library != right.Library;
+            return left?.Name != right?.Name || left?.Library != right?.Library;
         }
     }
 }

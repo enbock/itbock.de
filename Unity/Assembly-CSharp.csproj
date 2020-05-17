@@ -76,6 +76,7 @@
      <Compile Include="Assets\Bundles\Core\AdminTerminal\TokenData.cs" />
      <Compile Include="Assets\Bundles\Core\StartArea\GodConsole\GodConsole.cs" />
      <Compile Include="Assets\Bundles\Grid\Grid\GridController.cs" />
+     <Compile Include="Assets\Bundles\Grid\Grid\PreviewRotate.cs" />
      <Compile Include="Assets\Bundles\Grid\StartGrid\StartGridController.cs" />
      <Compile Include="Assets\Bundles\UI\SelectList\ListItem.cs" />
      <Compile Include="Assets\Bundles\UI\SelectList\SelectList.cs" />

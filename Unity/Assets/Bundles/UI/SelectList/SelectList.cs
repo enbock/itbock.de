@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Grid.Asset;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,12 @@ namespace Bundles.UI.SelectList
             public string Value;
         }
 
+        public delegate void SelectAction(int id);
+        public delegate void DeselectAction();
+
+        public event SelectAction OnSelect;
+        public event DeselectAction OnRemove;
+
         public GameObject ContentPanel;
         public GameObject ListItemPrefab;
         public float ListItemHeight;
@@ -28,6 +35,7 @@ namespace Bundles.UI.SelectList
             {
                 AddItem(item.Id, item.Value);
             }
+
             Update();
         }
 
@@ -65,15 +73,18 @@ namespace Bundles.UI.SelectList
             if (selected == false)
             {
                 if (SelectedItem == selectedListItem) SelectedItem = null;
+                OnRemove?.Invoke();
                 return;
             }
+
             SelectedItem = selectedListItem;
+            OnSelect?.Invoke(SelectedItem.Id);
             foreach (GameObject listView in List)
             {
                 ListItem listItem = listView.GetComponent<ListItem>();
                 Toggle toggle = listView.GetComponent<Toggle>();
 
-                if(listItem != selectedListItem) toggle.isOn = false;
+                if (listItem != selectedListItem) toggle.isOn = false;
             }
         }
     }

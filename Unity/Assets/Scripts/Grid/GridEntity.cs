@@ -7,9 +7,11 @@ namespace Grid
     [Serializable]
     public class GridEntity
     {
+        [ReadOnly] public string Identifier = Guid.NewGuid().ToString();
+        public string Name = "No entity name";
         public CatalogEntity CatalogEntity = new CatalogEntity();
+        public EntitySnap Snap = new EntitySnap();
         public Vector3 Position = new Vector3();
         public Vector3 Rotation = new Vector3();
-        public EntitySnap Snap = new EntitySnap();
     }
 }
