@@ -18,7 +18,7 @@ namespace Grid
         [Space] [ReadOnly] public Asset.Manager AssetManager;
         [ReadOnly] public AdminAuthorization AdminAuthorization;
 
-        private Dictionary<Entity, GridEntity> EntityMap = new Dictionary<Entity, GridEntity>();
+        public Dictionary<Entity, GridEntity> EntityMap = new Dictionary<Entity, GridEntity>();
 
         private void OnEnable()
         {
@@ -86,12 +86,45 @@ namespace Grid
 
         public void AddToGrid(Entity entity)
         {
-            GridEntity gridEntity= new GridEntity();
+            GridEntity gridEntity = new GridEntity();
             gridEntity.Name = entity.gameObject.name;
             gridEntity.CatalogEntity = entity.CatalogEntity;
-            gridEntity.Snap = entity.Snap;
             Grid.Assets.Add(gridEntity);
             EntityMap.Add(entity, gridEntity);
+        }
+
+        public bool IsEntityInGrid(Entity instance)
+        {
+            foreach (Entity entity in EntityMap.Keys)
+            {
+                if (entity == instance) return true;
+            }
+
+            return false;
+        }
+
+        public void Move(Entity selectedEntity, Vector3 move)
+        {
+            GridEntity gridEntity = EntityMap[selectedEntity];
+            Vector3 newPosition = new Vector3(
+                gridEntity.Position.x + move.x * selectedEntity.Snap.Horizontal,
+                gridEntity.Position.y + move.y * selectedEntity.Snap.Vertical,
+                gridEntity.Position.z + move.z * selectedEntity.Snap.Horizontal
+            );
+            gridEntity.Position = newPosition;
+            selectedEntity.gameObject.transform.localPosition = newPosition;
+        }
+
+        public void Rotate(Entity selectedEntity, float direction)
+        {
+            GridEntity gridEntity = EntityMap[selectedEntity];
+            Vector3 newRotation = new Vector3(
+                0f,
+                gridEntity.Rotation.y + direction * selectedEntity.Snap.Rotation,
+                0f
+            );
+            gridEntity.Rotation = newRotation;
+            selectedEntity.gameObject.transform.localRotation = Quaternion.Euler(newRotation);
         }
     }
 }

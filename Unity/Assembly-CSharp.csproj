@@ -76,6 +76,7 @@
      <Compile Include="Assets\Bundles\Core\AdminTerminal\TokenData.cs" />
      <Compile Include="Assets\Bundles\Core\StartArea\GodConsole\GodConsole.cs" />
      <Compile Include="Assets\Bundles\Grid\Grid\GridController.cs" />
+     <Compile Include="Assets\Bundles\Grid\Grid\GridEditController.cs"/>
      <Compile Include="Assets\Bundles\Grid\Grid\PreviewRotate.cs" />
      <Compile Include="Assets\Bundles\Grid\StartGrid\StartGridController.cs" />
      <Compile Include="Assets\Bundles\UI\SelectList\ListItem.cs" />
@@ -239,6 +240,7 @@
      <Compile Include="Assets\Scripts\Grid\Grid.cs" />
      <Compile Include="Assets\Scripts\Grid\GridEntity.cs" />
      <Compile Include="Assets\Scripts\Grid\Manager.cs" />
+      <Compile Include="Assets\Scripts\Input\MouseRaycaster.cs"/>
      <Compile Include="Assets\Scripts\Loader\AssetContent.cs" />
      <Compile Include="Assets\Scripts\Loader\FileIndex.cs" />
      <Compile Include="Assets\Scripts\Loader\LoadManager.cs" />

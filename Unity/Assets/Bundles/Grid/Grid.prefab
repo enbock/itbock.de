@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 3140101249919033549}
   - component: {fileID: 2585413373809915624}
   - component: {fileID: 646695665218235383}
+  - component: {fileID: 6422737838399716647}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -97,6 +98,7 @@ MonoBehaviour:
     Rotation: 1
   GridContainer: {fileID: 8192717087535387843}
   Grid:
+    Identifier: 0a5fbaf8-b6c2-4f49-8d94-4e58e63c4618
     Name: No name
     Assets: []
   AssetManager: {fileID: 0}
@@ -122,6 +124,23 @@ MonoBehaviour:
   PreviewUI: {fileID: 1877491258647718162}
   AddToGridButton: {fileID: 7023844827561221367}
   Entities: []
+--- !u!114 &6422737838399716647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499364907303746798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c8b8e6b5154e949fd2ead8eaab3d4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GridManger: {fileID: 2585413373809915624}
+  SelectMaterial: {fileID: 2100000, guid: bcae77753bd2dfb46b09a7c86589b4cb, type: 2}
+  PlayerCamera: {fileID: 0}
+  SelectedEntity: {fileID: 0}
+  OriginalMaterials: []
 --- !u!1 &626518863452277283
 GameObject:
   m_ObjectHideFlags: 0
