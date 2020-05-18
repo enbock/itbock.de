@@ -98,7 +98,7 @@ namespace Grid.Asset
             foreach (Entity entity in entities)
             {
                 CatalogEntity catalogEntity = new CatalogEntity();
-                catalogEntity.Name = entity.gameObject.name;
+                catalogEntity.Name = entity.gameObject.GetComponent<Entity>().CatalogEntity.Name;
                 catalogEntity.Library = library;
 
                 entity.SharedContent = SharedContent;

@@ -1,0 +1,348 @@
+{
+  "Identifier": "0a5fbaf8-b6c2-4f49-8d94-4e58e63c4618",
+  "Name": "StartGrid",
+  "Assets": [
+    {
+      "Identifier": "435d5825-3ab5-4ce1-adc6-df71421a0edc",
+      "Name": "Floor_01(435d5825-3ab5-4ce1-adc6-df71421a0edc)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "b82dfce3-b39f-468b-a2c1-795a66b07975",
+      "Name": "Floor_01(b82dfce3-b39f-468b-a2c1-795a66b07975)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": -6,
+        "y": 0,
+        "z": 0
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "4e25e2d1-8227-404b-81d4-c3c0033f00cb",
+      "Name": "Floor_01(4e25e2d1-8227-404b-81d4-c3c0033f00cb)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": -6,
+        "y": 0,
+        "z": 6
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "46bbf80a-d7d3-4090-953e-c59b2937ece8",
+      "Name": "Floor_01(46bbf80a-d7d3-4090-953e-c59b2937ece8)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": 0,
+        "y": 0,
+        "z": 6
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "0d4c6eb2-9422-4241-babb-ad270399a4ec",
+      "Name": "Floor_01(0d4c6eb2-9422-4241-babb-ad270399a4ec)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": 6,
+        "y": 0,
+        "z": 6
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "08771615-bb4f-4843-8c8d-8ca73f2c95ad",
+      "Name": "Floor_01(08771615-bb4f-4843-8c8d-8ca73f2c95ad)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": 6,
+        "y": 0,
+        "z": 0
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "516c2b38-4442-443f-a3ab-34238c9719d1",
+      "Name": "Floor_01(516c2b38-4442-443f-a3ab-34238c9719d1)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": 6,
+        "y": 0,
+        "z": -6
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "61592db3-1be4-412f-8a95-87466c6d760b",
+      "Name": "Floor_01(61592db3-1be4-412f-8a95-87466c6d760b)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": 0,
+        "y": 0,
+        "z": -6
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "27cb20c0-5e0a-4dca-848b-b0cb4510a608",
+      "Name": "Floor_01(27cb20c0-5e0a-4dca-848b-b0cb4510a608)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": -6,
+        "y": 0,
+        "z": -6
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "c32f180b-d59c-4b43-a73c-c8c35552bb2b",
+      "Name": "Floor_01(c32f180b-d59c-4b43-a73c-c8c35552bb2b)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": -12,
+        "y": 0,
+        "z": 0
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "a09a9079-b54f-43ff-9b1f-506be5e8f10b",
+      "Name": "Floor_01(a09a9079-b54f-43ff-9b1f-506be5e8f10b)",
+      "CatalogEntity": {
+        "Name": "Floor_01",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": 12,
+        "y": 0,
+        "z": 0
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "0708ccb7-a5a5-42fe-91dc-811762dcf064",
+      "Name": "Floor_03(0708ccb7-a5a5-42fe-91dc-811762dcf064)",
+      "CatalogEntity": {
+        "Name": "Floor_03",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": 12,
+        "y": 0,
+        "z": -6
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 90,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "25c5b8a8-71c1-4f45-ae59-8379aaf876d0",
+      "Name": "Floor_03(25c5b8a8-71c1-4f45-ae59-8379aaf876d0)",
+      "CatalogEntity": {
+        "Name": "Floor_03",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": 12,
+        "y": 0,
+        "z": 6
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "23f30c6a-494f-4bd2-baa8-7ec5306f6999",
+      "Name": "Floor_03(23f30c6a-494f-4bd2-baa8-7ec5306f6999)",
+      "CatalogEntity": {
+        "Name": "Floor_03",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": -12,
+        "y": 0,
+        "z": 6
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 270,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "443395ba-f274-4560-a894-7e939b4e3272",
+      "Name": "Floor_03(443395ba-f274-4560-a894-7e939b4e3272)",
+      "CatalogEntity": {
+        "Name": "Floor_03",
+        "Library": "asset-library/floor"
+      },
+      "Position": {
+        "x": -12,
+        "y": 0,
+        "z": -6
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 180,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "8301357a-bdf7-453e-b9a9-3774b246622a",
+      "Name": "Admin Terminal(8301357a-bdf7-453e-b9a9-3774b246622a)",
+      "CatalogEntity": {
+        "Name": "Admin Terminal",
+        "Library": "asset-library/functional"
+      },
+      "Position": {
+        "x": 3.07999754,
+        "y": 0,
+        "z": 3.01999784
+      },
+      "Rotation": {
+        "x": 0,
+        "y": -89,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "cef8e47a-fe56-44da-9e60-f936b39bb5bd",
+      "Name": "God Console(cef8e47a-fe56-44da-9e60-f936b39bb5bd)",
+      "CatalogEntity": {
+        "Name": "God Console",
+        "Library": "asset-library/functional"
+      },
+      "Position": {
+        "x": 2.15999842,
+        "y": 0,
+        "z": 0.90999943
+      },
+      "Rotation": {
+        "x": 0,
+        "y": -47,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "bd9815b6-f4ed-4d7b-8479-da19805f9afe",
+      "Name": "Help Info Panel(bd9815b6-f4ed-4d7b-8479-da19805f9afe)",
+      "CatalogEntity": {
+        "Name": "Help Info Panel",
+        "Library": "asset-library/info"
+      },
+      "Position": {
+        "x": -4.699998,
+        "y": 0,
+        "z": 3.89999843
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Identifier": "fcf08c4f-43f9-49ea-b04c-ba5a06f25f97",
+      "Name": "Unity Tutorial(fcf08c4f-43f9-49ea-b04c-ba5a06f25f97)",
+      "CatalogEntity": {
+        "Name": "Unity Tutorial",
+        "Library": "asset-library/unity"
+      },
+      "Position": {
+        "x": -8,
+        "y": 0,
+        "z": -2
+      },
+      "Rotation": {
+        "x": 0,
+        "y": 5,
+        "z": 0
+      }
+    }
+  ]
+}

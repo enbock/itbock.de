@@ -61,30 +61,30 @@
      <Compile Include="Assets\AIO_Sky\Sample\Script\FPSDisplay.cs" />
      <Compile Include="Assets\AIO_Sky\Sample\Script\NewDemoSky.cs" />
      <Compile Include="Assets\AIO_Sky\Script\AIOSun.cs" />
-     <Compile Include="Assets\AIO_Sky\Script\AIOSunShaftsHelper.cs" />
-     <Compile Include="Assets\AIO_Sky\Script\deprecated\AIOMoon.cs" />
-     <Compile Include="Assets\AIO_Sky\Script\deprecated\AIOSky.cs" />
-     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\ImageEffectHelper.cs" />
-     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\MinAttribute.cs" />
-     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\RenderTextureUtility.cs" />
-     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\GlobalFog.cs" />
-     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\PostEffectsBase.cs" />
-     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\PostEffectsHelper.cs" />
-     <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\SunShafts.cs" />
-     <Compile Include="Assets\Bundles\Core\AdminTerminal\AdminAuthorization.cs" />
-     <Compile Include="Assets\Bundles\Core\AdminTerminal\AdminController.cs" />
-     <Compile Include="Assets\Bundles\Core\AdminTerminal\TokenData.cs" />
-     <Compile Include="Assets\Bundles\Core\StartArea\GodConsole\GodConsole.cs" />
-     <Compile Include="Assets\Bundles\Grid\Grid\GridController.cs" />
-     <Compile Include="Assets\Bundles\Grid\Grid\GridEditController.cs"/>
-     <Compile Include="Assets\Bundles\Grid\Grid\PreviewRotate.cs" />
-     <Compile Include="Assets\Bundles\Grid\StartGrid\StartGridController.cs" />
-     <Compile Include="Assets\Bundles\UI\SelectList\ListItem.cs" />
-     <Compile Include="Assets\Bundles\UI\SelectList\SelectList.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\BitMaskAttribute.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\ResourcePathAttribute.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\ColorScheme.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\ColorSchemeElement.cs" />
+      <Compile Include="Assets\AIO_Sky\Script\AIOSunShaftsHelper.cs"/>
+      <Compile Include="Assets\AIO_Sky\Script\deprecated\AIOMoon.cs"/>
+      <Compile Include="Assets\AIO_Sky\Script\deprecated\AIOSky.cs"/>
+      <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\ImageEffectHelper.cs"/>
+      <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\MinAttribute.cs"/>
+      <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\Common\RenderTextureUtility.cs"/>
+      <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\GlobalFog.cs"/>
+      <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\PostEffectsBase.cs"/>
+      <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\PostEffectsHelper.cs"/>
+      <Compile Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Scripts\SunShafts.cs"/>
+      <Compile Include="Assets\Bundles\Assets\Library\Functional\AdminTerminal\AdminAuthorization.cs"/>
+      <Compile Include="Assets\Bundles\Assets\Library\Functional\AdminTerminal\AdminController.cs"/>
+      <Compile Include="Assets\Bundles\Assets\Library\Functional\AdminTerminal\TokenData.cs"/>
+      <Compile Include="Assets\Bundles\Assets\Library\Functional\GodConsole\GodConsole.cs"/>
+      <Compile Include="Assets\Bundles\Grid\Grid\GridController.cs"/>
+      <Compile Include="Assets\Bundles\Grid\Grid\GridEditController.cs"/>
+      <Compile Include="Assets\Bundles\Grid\Grid\PreviewRotate.cs"/>
+      <Compile Include="Assets\Bundles\Grid\StartGrid\StartGridController.cs"/>
+      <Compile Include="Assets\Bundles\UI\SelectList\ListItem.cs"/>
+      <Compile Include="Assets\Bundles\UI\SelectList\SelectList.cs"/>
+      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\BitMaskAttribute.cs"/>
+      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Attributes\ResourcePathAttribute.cs"/>
+      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\ColorScheme.cs"/>
+      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\ColorSchemeElement.cs"/>
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\ColorSchemeElement_SelectField.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\ColorSchemeManager.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Color Scheme\ColorSchemeShade.cs" />
@@ -855,16 +855,16 @@
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XPath.XDocument.dll</HintPath>
  </Reference>
  <Reference Include="UnityScript">
- <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/UnityScript.dll</HintPath>
+     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/UnityScript.dll</HintPath>
  </Reference>
- <Reference Include="UnityScript.Lang">
- <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/UnityScript.Lang.dll</HintPath>
- </Reference>
- <Reference Include="Boo.Lang">
- <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
- </Reference>
+      <Reference Include="UnityScript.Lang">
+          <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/UnityScript.Lang.dll</HintPath>
+      </Reference>
+      <Reference Include="Boo.Lang">
+          <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
+      </Reference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">

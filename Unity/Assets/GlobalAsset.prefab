@@ -82,7 +82,6 @@ MonoBehaviour:
   SharedContent: {fileID: 7398332281284488248}
   Token:
     Token: 
-  LoggedIn: 0
 --- !u!114 &554297520135584666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,6 +99,8 @@ MonoBehaviour:
   AssetLibrary:
   - asset-library/floor
   - asset-library/functional
+  - asset-library/info
+  - asset-library/unity
   Catalog: []
   Assets: []
 --- !u!1 &2435953795557913196

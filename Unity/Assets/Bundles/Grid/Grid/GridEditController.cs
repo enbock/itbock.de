@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Admin;
 using Grid.Asset;
 using Scripts.Input;
 using UnityEngine;
@@ -13,19 +14,26 @@ namespace Bundles.Grid.Grid
         public Material SelectMaterial;
         [ReadOnly] public Camera PlayerCamera;
         [ReadOnly] public Entity SelectedEntity;
-        [ReadOnly] public Material[] OriginalMaterials;
+        [ReadOnly] public Material[] OriginalMaterials = null;
+        private float NextKeyRepeatTime = 0f;
 
         private void OnEnable()
         {
             PlayerCamera = GridManger.SharedContent.Camera;
             GridManger.OnAddToGrid += SelectEntity;
+            AdminAuthorization.OnLoginChange += (
+                (bool loggedIn) =>
+                {
+                    if (loggedIn == false) UnselectEntity();
+                }
+            );
         }
 
         private void Update()
         {
             if (
                 PlayerCamera.gameObject.GetComponent<SimpleCameraController>().enabled == false ||
-                GridManger.AdminAuthorization.LoggedIn == false
+                AdminAuthorization.LoggedIn == false
             ) return;
 
             if (Input.GetMouseButtonDown(0))
@@ -49,27 +57,67 @@ namespace Bundles.Grid.Grid
                 }
             }
 
-            if (SelectedEntity)
+            Vector3 relativeDirection = PlayerCamera.transform.forward - (gameObject.transform.forward * -2f);
+
+            Vector3 lockAt = Vector3.forward;
+            if (
+                relativeDirection.x >= 0.5 &&
+                relativeDirection.x <= 1.5 &&
+                relativeDirection.z >= 1.5 &&
+                relativeDirection.z <= 2.5
+            )
             {
+                lockAt = Vector3.left;
+            }
+            else if (
+                relativeDirection.x >= -1.5 &&
+                relativeDirection.x <= -0.5 &&
+                relativeDirection.z >= 1.5 &&
+                relativeDirection.z <= 2.5
+            )
+            {
+                lockAt = Vector3.right;
+            }
+            else if (relativeDirection.z >= 2.5)
+            {
+                lockAt = Vector3.back;
+            }
+
+            if (
+                SelectedEntity &&
+                (Time.realtimeSinceStartup >= NextKeyRepeatTime || Input.anyKeyDown || Input.GetKey(KeyCode.LeftShift))
+            )
+            {
+                Vector3 move = Vector3.zero;
                 if (Input.GetKey(KeyCode.RightArrow))
                 {
-                    GridManger.Move(SelectedEntity, new Vector3(-1f, 0f, 0f));
+                    move = Vector3.right;
+                    if (lockAt == Vector3.right) move = Vector3.back;
+                    if (lockAt == Vector3.back) move = Vector3.left;
+                    if (lockAt == Vector3.left) move = Vector3.forward;
+                    move *= -1;
                 }
 
                 if (Input.GetKey(KeyCode.LeftArrow))
                 {
-                    GridManger.Move(SelectedEntity, new Vector3(1f, 0f, 0f));
+                    move = Vector3.left;
+                    if (lockAt == Vector3.right) move = Vector3.forward;
+                    if (lockAt == Vector3.back) move = Vector3.right;
+                    if (lockAt == Vector3.left) move = Vector3.back;
+                    move *= -1;
                 }
 
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
-                    GridManger.Move(SelectedEntity, new Vector3(0f, 0f, -1f));
+                    move = lockAt * -1;
                 }
 
                 if (Input.GetKey(KeyCode.DownArrow))
                 {
-                    GridManger.Move(SelectedEntity, new Vector3(0f, 0f, 1f));
+                    move = lockAt;
                 }
+
+                if (move != Vector3.zero) GridManger.Move(SelectedEntity, move);
 
                 if (Input.GetKey(KeyCode.PageUp))
                 {
@@ -101,6 +149,8 @@ namespace Bundles.Grid.Grid
                 {
                     GridManger.Duplicate(SelectedEntity);
                 }
+
+                NextKeyRepeatTime = Time.realtimeSinceStartup + 1f / 10f;
             }
         }
 
@@ -108,19 +158,23 @@ namespace Bundles.Grid.Grid
         {
             if (SelectedEntity != null && entity != SelectedEntity) UnselectEntity();
             if (SelectedEntity == entity) return;
+            SelectedEntity = entity;
             MeshRenderer renderer = entity.gameObject.GetComponentInChildren<MeshRenderer>();
+            OriginalMaterials = null;
+            if (renderer == null) return;
             OriginalMaterials = renderer.materials;
             List<Material> materials = new List<Material>(OriginalMaterials);
             materials.Add(SelectMaterial);
             renderer.materials = materials.ToArray();
-            SelectedEntity = entity;
         }
 
         private void UnselectEntity()
         {
             if (SelectedEntity == null) return;
-            SelectedEntity.gameObject.GetComponentInChildren<MeshRenderer>().materials = OriginalMaterials;
+            if (OriginalMaterials != null)
+                SelectedEntity.gameObject.GetComponentInChildren<MeshRenderer>().materials = OriginalMaterials;
             SelectedEntity = null;
+            OriginalMaterials = null;
         }
 
         private Entity FindEntity(GameObject gameObject)

@@ -52,6 +52,9 @@ namespace Grid
             MoveTo(entity, gridEntity.Position);
             RotateTo(entity, gridEntity.Rotation);
 
+            Collider helpCollider = entity.gameObject.GetComponent<Collider>();
+            if (helpCollider != null) Destroy(helpCollider);
+
             return entity;
         }
 

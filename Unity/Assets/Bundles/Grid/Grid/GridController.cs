@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Admin;
 using Bundles.UI.SelectList;
 using Grid.Asset;
 using UnityEngine;
@@ -17,8 +18,10 @@ public class GridController : MonoBehaviour
     public GameObject Preview3D;
     public GameObject PreviewContainer;
     public GameObject PreviewUI;
+    public GameObject PreviewCamera;
     public Button AddToGridButton;
     public Button SaveGridButton;
+    public Button ReloadGridButton;
 
     [ReadOnly] public Camera PlayerCamera;
     [ReadOnly] public List<CatalogEntity> Entities = new List<CatalogEntity>();
@@ -39,6 +42,7 @@ public class GridController : MonoBehaviour
         GridNameField.onEndEdit.AddListener(FinishGridNameEdit);
         GridNameField.onValueChanged.AddListener(ChangeGridName);
         SaveGridButton.onClick.AddListener(GridManager.SaveGrid);
+        ReloadGridButton.onClick.AddListener(delegate { GridManager.LoadGrid(GridManager.Grid.Identifier); });
 
         Preview3D.SetActive(false);
         PreviewUI.SetActive(false);
@@ -72,7 +76,22 @@ public class GridController : MonoBehaviour
 
     void Update()
     {
-        GridName.text = GridManager.Grid.Name + "(" + GridManager.Grid.Identifier + ")";
+        if (
+            PlayerCamera.gameObject.GetComponent<SimpleCameraController>().enabled == false ||
+            AdminAuthorization.LoggedIn == false
+        ) return;
+
+        GridName.text = GridManager.Grid.Name + " (" + GridManager.Grid.Identifier + ")";
+
+        float newSize = 0f;
+        foreach (BoxCollider collider in PreviewContainer.GetComponentsInChildren<BoxCollider>())
+        {
+            Vector3 boundsSize = collider.size;
+            float size = ((boundsSize.x + boundsSize.z) / 2.2f + boundsSize.y) / 1.4f;
+            if (newSize < size) newSize = size;
+        }
+
+        PreviewCamera.transform.localPosition = new Vector3(0f, 0.091f, -0.1f * newSize);
     }
 
     private void NewEntity(Entity entity)
