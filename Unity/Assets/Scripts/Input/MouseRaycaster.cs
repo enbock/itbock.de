@@ -12,7 +12,6 @@ namespace Scripts.Input
             Physics.Raycast(ray, out hit);
             if (hit.collider == null) return null;
 
-            Debug.Log(hit.collider.gameObject.name);
             return hit.collider.gameObject;
         }
     }

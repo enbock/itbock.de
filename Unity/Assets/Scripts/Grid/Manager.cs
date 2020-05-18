@@ -31,7 +31,7 @@ namespace Grid
             Container.SetActive(AdminAuthorization.LoggedIn);
         }
 
-        public GameObject InstantiateEntity(Entity entityPrefab)
+        public Entity InstantiateEntityPrefab(Entity entityPrefab)
         {
             GameObject instance = Instantiate(entityPrefab.gameObject, GridContainer.transform);
             Entity entity = instance.GetComponent<Entity>();
@@ -76,21 +76,19 @@ namespace Grid
                 }
             }
 
-            return instance;
+            return entity;
         }
 
-        public void AddToGrid(GameObject instance)
+        public Entity AddToGrid(Entity entityPrefab)
         {
-            AddToGrid(instance.GetComponent<Entity>());
-        }
-
-        public void AddToGrid(Entity entity)
-        {
+            Entity entity = InstantiateEntityPrefab(entityPrefab);
             GridEntity gridEntity = new GridEntity();
             gridEntity.Name = entity.gameObject.name;
-            gridEntity.CatalogEntity = entity.CatalogEntity;
+            gridEntity.CatalogEntity = entityPrefab.CatalogEntity;
             Grid.Assets.Add(gridEntity);
             EntityMap.Add(entity, gridEntity);
+
+            return entity;
         }
 
         public bool IsEntityInGrid(Entity instance)
@@ -111,6 +109,12 @@ namespace Grid
                 gridEntity.Position.y + move.y * selectedEntity.Snap.Vertical,
                 gridEntity.Position.z + move.z * selectedEntity.Snap.Horizontal
             );
+            MoveTo(selectedEntity, newPosition);
+        }
+
+        private void MoveTo(Entity selectedEntity, Vector3 newPosition)
+        {
+            GridEntity gridEntity = EntityMap[selectedEntity];
             gridEntity.Position = newPosition;
             selectedEntity.gameObject.transform.localPosition = newPosition;
         }
@@ -123,8 +127,37 @@ namespace Grid
                 gridEntity.Rotation.y + direction * selectedEntity.Snap.Rotation,
                 0f
             );
+            RotateTo(selectedEntity, newRotation);
+        }
+
+        private void RotateTo(Entity selectedEntity, Vector3 newRotation)
+        {
+            GridEntity gridEntity = EntityMap[selectedEntity];
             gridEntity.Rotation = newRotation;
             selectedEntity.gameObject.transform.localRotation = Quaternion.Euler(newRotation);
+        }
+
+        public void Remove(Entity selectedEntity)
+        {
+            GridEntity gridEntity = EntityMap[selectedEntity];
+            EntityMap.Remove(selectedEntity);
+            Grid.Assets.Remove(gridEntity);
+            GameObject.Destroy(selectedEntity.gameObject);
+        }
+
+        public void Duplicate(Entity selectedEntity, Action<Entity> callback)
+        {
+            AssetManager.RequestEntity(
+                selectedEntity.CatalogEntity,
+                (Entity entityPrefab) =>
+                {
+                    Entity entity = AddToGrid(entityPrefab);
+                    GridEntity gridEntity = EntityMap[selectedEntity];
+                    MoveTo(entity, gridEntity.Position);
+                    RotateTo(entity, gridEntity.Rotation);
+                    callback(entity);
+                }
+            );
         }
     }
 }

@@ -32,12 +32,7 @@ namespace Bundles.Grid.Grid
                     if (entity != SelectedEntity) UnselectEntity();
                     if (entity && GridManger.IsEntityInGrid(entity) && entity != SelectedEntity)
                     {
-                        MeshRenderer renderer = entity.gameObject.GetComponentInChildren<MeshRenderer>();
-                        OriginalMaterials = renderer.materials;
-                        List<Material> materials = new List<Material>(OriginalMaterials);
-                        materials.Add(SelectMaterial);
-                        renderer.materials = materials.ToArray();
-                        SelectedEntity = entity;
+                        SelectEntity(entity);
                     }
                 }
             }
@@ -83,7 +78,35 @@ namespace Bundles.Grid.Grid
                 {
                     GridManger.Rotate(SelectedEntity, 1f);
                 }
+
+                if (Input.GetKeyDown(KeyCode.Delete))
+                {
+                    GridManger.Remove(SelectedEntity);
+                    UnselectEntity();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Insert))
+                {
+                    GridManger.Duplicate(
+                        SelectedEntity,
+                        (Entity entity) =>
+                        {
+                            UnselectEntity();
+                            SelectEntity(entity);
+                        }
+                    );
+                }
             }
+        }
+
+        private void SelectEntity(Entity entity)
+        {
+            MeshRenderer renderer = entity.gameObject.GetComponentInChildren<MeshRenderer>();
+            OriginalMaterials = renderer.materials;
+            List<Material> materials = new List<Material>(OriginalMaterials);
+            materials.Add(SelectMaterial);
+            renderer.materials = materials.ToArray();
+            SelectedEntity = entity;
         }
 
         private void UnselectEntity()

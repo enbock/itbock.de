@@ -84,7 +84,7 @@ public class GridController : MonoBehaviour
     {
         GridManager.AssetManager.RequestEntity(
             Entities[SelectList.SelectedItem.Id],
-            (Entity entityPrefab) => { GridManager.AddToGrid(GridManager.InstantiateEntity(entityPrefab)); }
+            (Entity entityPrefab) => { GridManager.AddToGrid(entityPrefab); }
         );
     }
 }
