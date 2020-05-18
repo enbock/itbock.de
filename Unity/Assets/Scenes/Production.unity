@@ -225,6 +225,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: GlobalAsset
       objectReference: {fileID: 0}
+    - target: {fileID: 2435953795978909492, guid: 480a45a7614326d468943c1babe06b20,
+        type: 3}
+      propertyPath: mouseSensitivityCurve.m_Curve.Array.data[0].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2435953795978909492, guid: 480a45a7614326d468943c1babe06b20,
+        type: 3}
+      propertyPath: mouseSensitivityCurve.m_Curve.Array.data[0].outSlope
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5173876647055788878, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
       propertyPath: m_LocalPosition.x
