@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Core.Weather;
-using Loader;
+﻿using Core.Weather;
+using Grid.Asset;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 
-public class GodConsole : AssetContent
+public class GodConsole : Entity
 {
     public Slider TimeChangeSlider;
     public Button ResetButton;
@@ -19,7 +16,6 @@ public class GodConsole : AssetContent
         base.Start();
 
         DateTime = SharedContent.GetComponent<DateTime>();
-        Weather = GetComponentInParent<Weather>();
         Weather.OnLoad += OnWeatherDataLoad;
         Canvas.worldCamera = SharedContent.Camera;
         TimeChangeSlider.onValueChanged.AddListener(SetValue);

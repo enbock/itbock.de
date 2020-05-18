@@ -121,90 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &160310782
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 633717153}
-    m_Modifications:
-    - target: {fileID: 2363221408557022569, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: LoadManager
-      value: 
-      objectReference: {fileID: 202564885}
-    - target: {fileID: 2363221408557022569, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: SharedContent
-      value: 
-      objectReference: {fileID: 1829022159}
-    - target: {fileID: 2363221408557022569, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: DevOfflineAsset
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6387445395094348686, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_Name
-      value: StartGrid
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8322673184147856240, guid: 672c4ca91fb28a245a524e2a5b3b4ce7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 672c4ca91fb28a245a524e2a5b3b4ce7, type: 3}
 --- !u!1 &202564884
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,6 +166,10 @@ MonoBehaviour:
     Asset: {fileID: 1304435686148843761, guid: 77642c879c4677245998b4a885c7d30f, type: 3}
   - BundleName: core/weather
     Asset: {fileID: 7646168221997225166, guid: 947b5ef525f591a47a10d86b26354970, type: 3}
+  - BundleName: asset-library/functional
+    Asset: {fileID: 1575021970813007000, guid: d674fdd32cd3c894c9bba1603dc974ac, type: 3}
+  - BundleName: grid/start_grid
+    Asset: {fileID: 6387445395094348686, guid: 672c4ca91fb28a245a524e2a5b3b4ce7, type: 3}
 --- !u!4 &202564886
 Transform:
   m_ObjectHideFlags: 0
@@ -321,6 +241,21 @@ PrefabInstance:
       propertyPath: SharedContent
       value: 
       objectReference: {fileID: 1829022159}
+    - target: {fileID: 7504985503722089540, guid: 34c1587fa0e51ef4f891733f71e62626,
+        type: 3}
+      propertyPath: SubAssests.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7504985503722089540, guid: 34c1587fa0e51ef4f891733f71e62626,
+        type: 3}
+      propertyPath: SubAssests.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7504985503722089540, guid: 34c1587fa0e51ef4f891733f71e62626,
+        type: 3}
+      propertyPath: SubAssests.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34c1587fa0e51ef4f891733f71e62626, type: 3}
 --- !u!108 &387651302 stripped
@@ -666,6 +601,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2219719372049792504, guid: 0024e91868f1a7f41a2d2ac32f074123,
+        type: 3}
+      propertyPath: HostUri
+      value: https://www.itbock.de
+      objectReference: {fileID: 0}
     - target: {fileID: 2219719372049792505, guid: 0024e91868f1a7f41a2d2ac32f074123,
         type: 3}
       propertyPath: m_Name

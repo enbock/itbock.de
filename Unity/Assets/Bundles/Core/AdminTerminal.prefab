@@ -49,6 +49,16 @@ MonoBehaviour:
   Container: {fileID: 3049481677011183028}
   SubAssests:
   - asset/screen-console
+  CatalogEntity:
+    Name: Admin Console
+    Library: asset-library/functional
+  Requirements: []
+  Position: {x: 0, y: 0, z: 0}
+  Rotation: {x: 0, y: 0, z: 0}
+  Snap:
+    Horizontal: 0.01
+    Vertical: 0.01
+    Rotation: 1
   AdminAuthorization: {fileID: 0}
   PasswordField: {fileID: 7213521172842976248}
   LoginButton: {fileID: 8860009234561826163}
@@ -1357,7 +1367,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 40, y: -40}
-  m_SizeDelta: {x: -80, y: 0}
+  m_SizeDelta: {x: -80, y: 44}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &7393057792448093066
 CanvasRenderer:

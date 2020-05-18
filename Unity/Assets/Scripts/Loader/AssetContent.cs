@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Grid.Asset;
 using UnityEngine;
 
 namespace Loader
@@ -34,7 +31,10 @@ namespace Loader
 
         virtual protected GameObject InstantiateModule(GameObject asset)
         {
-            return Instantiate(asset, Container.gameObject.transform);
+            GameObject instance = Instantiate(asset, Container.gameObject.transform);
+            AssetHelper.SetLayerRecursive(instance, Container.layer);
+
+            return instance;
         }
     }
 }

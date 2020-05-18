@@ -99,6 +99,7 @@ MonoBehaviour:
   SharedContent: {fileID: 7398332281284488248}
   AssetLibrary:
   - asset-library/floor
+  - asset-library/functional
   Catalog: []
   Assets: []
 --- !u!1 &2435953795557913196

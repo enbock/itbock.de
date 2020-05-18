@@ -1,9 +1,7 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using Grid.Asset;
+﻿using Grid.Asset;
 using Loader;
 using UnityEngine;
+using GridManager = Grid.Manager;
 
 public class StartGridController : AssetContent
 {
@@ -19,45 +17,10 @@ public class StartGridController : AssetContent
         Entity entity = instance.GetComponent<Entity>();
         entity.gameObject.name = entityName;
 
-        foreach (Requirement entityRequirement in entity.Requirements)
-        {
-            Component requirement = SharedContent.GetComponent(entityRequirement.Component);
-            if (requirement == null)
-            {
-                Debug.LogError(
-                    "Requierement '" +
-                    entityRequirement.Component +
-                    "' can not be found in shared content '" +
-                    SharedContent +
-                    "'."
-                );
-            }
-
-            Type type = entity.GetType();
-            FieldInfo field = type.GetField(entityRequirement.PropertyName);
-            if (field != null)
-            {
-                field.SetValue(entity, requirement);
-            }
-            else
-            {
-                PropertyInfo property = type.GetProperty(entityRequirement.PropertyName);
-                if (property != null)
-                {
-                    property.SetValue(entity, requirement);
-                }
-                else
-                {
-                    Debug.LogError(
-                        "Field or property '" +
-                        entityRequirement.PropertyName +
-                        "' not found in entity '" +
-                        entity +
-                        "'."
-                    );
-                }
-            }
-        }
+        AssetHelper.AddRequirements(SharedContent, entity);
+        GridManager gridManager = instance.GetComponent<GridManager>();
+        gridManager.Grid.Name = EntityName;
+        gridManager.LoadGrid("0a5fbaf8-b6c2-4f49-8d94-4e58e63c4618");
 
         return instance;
     }

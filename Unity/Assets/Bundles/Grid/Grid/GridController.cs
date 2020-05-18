@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Bundles.UI.SelectList;
 using Grid.Asset;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityTemplateProjects;
 using Manager = Grid.Manager;
 
 public class GridController : MonoBehaviour
@@ -12,12 +11,22 @@ public class GridController : MonoBehaviour
     public Manager GridManager;
     public Button LoadLibrariesButton;
     public Text GridName;
+    public Button GridNameEditButton;
+    public InputField GridNameField;
     public SelectList SelectList;
     public GameObject Preview3D;
     public GameObject PreviewContainer;
     public GameObject PreviewUI;
     public Button AddToGridButton;
+    public Button SaveGridButton;
+
+    [ReadOnly] public Camera PlayerCamera;
     [ReadOnly] public List<CatalogEntity> Entities = new List<CatalogEntity>();
+
+    private void OnEnable()
+    {
+        PlayerCamera = GridManager.SharedContent.Camera;
+    }
 
     void Start()
     {
@@ -26,8 +35,34 @@ public class GridController : MonoBehaviour
         SelectList.OnSelect += ShowPreview;
         SelectList.OnRemove += HidePreview;
         AddToGridButton.onClick.AddListener(InsertToGrid);
+        GridNameEditButton.onClick.AddListener(SwitchToGridNameEdit);
+        GridNameField.onEndEdit.AddListener(FinishGridNameEdit);
+        GridNameField.onValueChanged.AddListener(ChangeGridName);
+        SaveGridButton.onClick.AddListener(GridManager.SaveGrid);
+
         Preview3D.SetActive(false);
         PreviewUI.SetActive(false);
+    }
+
+    private void SwitchToGridNameEdit()
+    {
+        PlayerCamera.gameObject.GetComponent<SimpleCameraController>().enabled = false;
+        GridNameField.text = GridManager.Grid.Name;
+        GridNameField.gameObject.SetActive(true);
+        GridNameField.ActivateInputField();
+        GridName.gameObject.SetActive(false);
+    }
+
+    private void FinishGridNameEdit(string newName)
+    {
+        PlayerCamera.gameObject.GetComponent<SimpleCameraController>().enabled = true;
+        GridNameField.gameObject.SetActive(false);
+        GridName.gameObject.SetActive(true);
+    }
+
+    private void ChangeGridName(string newName)
+    {
+        GridManager.Grid.Name = newName;
     }
 
     private void LoadLibraries()
@@ -59,19 +94,11 @@ public class GridController : MonoBehaviour
 
     private void ShowPreviewEntity(Entity asset)
     {
-        Instantiate(asset, PreviewContainer.transform);
-        SetPreviewlayerRecursive(PreviewContainer);
+        Entity entity = Instantiate(asset, PreviewContainer.transform);
+        AssetHelper.AddRequirements(GridManager.SharedContent, entity);
+        AssetHelper.SetLayerRecursive(PreviewContainer, 8);
         Preview3D.SetActive(true);
         PreviewUI.SetActive(true);
-    }
-
-    private void SetPreviewlayerRecursive(GameObject preview)
-    {
-        foreach (Transform child in preview.transform)
-        {
-            child.gameObject.layer = 8;
-            SetPreviewlayerRecursive(child.gameObject);
-        }
     }
 
     private void HidePreview()

@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Loader;
+﻿using Grid.Asset;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Admin
 {
-    public class AdminController : AssetContent
+    public class AdminController : Entity
     {
         public AdminAuthorization AdminAuthorization;
         public InputField PasswordField;

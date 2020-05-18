@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Loader;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -43,7 +42,14 @@ namespace Admin
 
         void ParseToken(string json)
         {
-            this.Token = JsonConvert.DeserializeObject<TokenData>(json);
+            Token = JsonConvert.DeserializeObject<TokenData>(json);
+        }
+
+        public void Logout()
+        {
+            Token = null;
+            LoggedIn = false;
+            OnLoginChange?.Invoke(LoggedIn);
         }
     }
 }

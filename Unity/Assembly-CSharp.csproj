@@ -231,6 +231,7 @@
      <Compile Include="Assets\Scripts\Core\Weather\Data\Wind.cs" />
      <Compile Include="Assets\Scripts\Core\Weather\Sun.cs" />
      <Compile Include="Assets\Scripts\Core\Weather\Weather.cs" />
+      <Compile Include="Assets\Scripts\Grid\Asset\AssetHelper.cs"/>
      <Compile Include="Assets\Scripts\Grid\Asset\CatalogEntity.cs" />
      <Compile Include="Assets\Scripts\Grid\Asset\Entity.cs" />
      <Compile Include="Assets\Scripts\Grid\Asset\EntitySnap.cs" />
@@ -864,11 +865,11 @@
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
 </Project>

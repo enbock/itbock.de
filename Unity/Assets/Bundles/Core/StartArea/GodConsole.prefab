@@ -1651,6 +1651,18 @@ MonoBehaviour:
   Container: {fileID: 2579779786401148822}
   SubAssests:
   - asset/screen-console
+  CatalogEntity:
+    Name: GodConsole
+    Library: asset-library/functional
+  Requirements:
+  - PropertyName: Weather
+    Component: Core.Weather.Weather
+  Position: {x: 0, y: 0, z: 0}
+  Rotation: {x: 0, y: 0, z: 0}
+  Snap:
+    Horizontal: 0.01
+    Vertical: 0.01
+    Rotation: 1
   TimeChangeSlider: {fileID: 796781330719945819}
   ResetButton: {fileID: 4372197427944242001}
   DateTime: {fileID: 0}
@@ -1786,8 +1798,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2579779786401148822}
-  m_LocalRotation: {x: -0, y: -0.3505841, z: -0, w: 0.9365313}
-  m_LocalPosition: {x: 2.1322753, y: 0, z: 0.8695697}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2264970680266272570}

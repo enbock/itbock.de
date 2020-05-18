@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Grid.Asset;
-using Loader.FileIndex;
 using Scripts.Input;
 using UnityEngine;
+using UnityTemplateProjects;
 using Manager = Grid.Manager;
 
 namespace Bundles.Grid.Grid
@@ -19,62 +18,75 @@ namespace Bundles.Grid.Grid
         private void OnEnable()
         {
             PlayerCamera = GridManger.SharedContent.Camera;
+            GridManger.OnAddToGrid += SelectEntity;
         }
 
         private void Update()
         {
+            if (
+                PlayerCamera.gameObject.GetComponent<SimpleCameraController>().enabled == false ||
+                GridManger.AdminAuthorization.LoggedIn == false
+            ) return;
+
             if (Input.GetMouseButtonDown(0))
             {
                 GameObject hit = MouseRaycaster.GetPointetObject(PlayerCamera);
                 if (hit != null)
                 {
                     Entity entity = FindEntity(hit);
-                    if (entity != SelectedEntity) UnselectEntity();
                     if (entity && GridManger.IsEntityInGrid(entity) && entity != SelectedEntity)
                     {
                         SelectEntity(entity);
                     }
+                    else
+                    {
+                        UnselectEntity();
+                    }
+                }
+                else
+                {
+                    UnselectEntity();
                 }
             }
 
             if (SelectedEntity)
             {
-                if (Input.GetKeyDown(KeyCode.RightArrow))
+                if (Input.GetKey(KeyCode.RightArrow))
                 {
                     GridManger.Move(SelectedEntity, new Vector3(-1f, 0f, 0f));
                 }
 
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                if (Input.GetKey(KeyCode.LeftArrow))
                 {
                     GridManger.Move(SelectedEntity, new Vector3(1f, 0f, 0f));
                 }
 
-                if (Input.GetKeyDown(KeyCode.UpArrow))
+                if (Input.GetKey(KeyCode.UpArrow))
                 {
                     GridManger.Move(SelectedEntity, new Vector3(0f, 0f, -1f));
                 }
 
-                if (Input.GetKeyDown(KeyCode.DownArrow))
+                if (Input.GetKey(KeyCode.DownArrow))
                 {
                     GridManger.Move(SelectedEntity, new Vector3(0f, 0f, 1f));
                 }
 
-                if (Input.GetKeyDown(KeyCode.PageUp))
+                if (Input.GetKey(KeyCode.PageUp))
                 {
                     GridManger.Move(SelectedEntity, new Vector3(0f, 1f, 0f));
                 }
 
-                if (Input.GetKeyDown(KeyCode.PageDown))
+                if (Input.GetKey(KeyCode.PageDown))
                 {
                     GridManger.Move(SelectedEntity, new Vector3(0f, -1f, 0f));
                 }
 
-                if (Input.GetKeyDown(KeyCode.Home))
+                if (Input.GetKey(KeyCode.Home))
                 {
                     GridManger.Rotate(SelectedEntity, -1f);
                 }
 
-                if (Input.GetKeyDown(KeyCode.End))
+                if (Input.GetKey(KeyCode.End))
                 {
                     GridManger.Rotate(SelectedEntity, 1f);
                 }
@@ -87,20 +99,15 @@ namespace Bundles.Grid.Grid
 
                 if (Input.GetKeyDown(KeyCode.Insert))
                 {
-                    GridManger.Duplicate(
-                        SelectedEntity,
-                        (Entity entity) =>
-                        {
-                            UnselectEntity();
-                            SelectEntity(entity);
-                        }
-                    );
+                    GridManger.Duplicate(SelectedEntity);
                 }
             }
         }
 
         private void SelectEntity(Entity entity)
         {
+            if (SelectedEntity != null && entity != SelectedEntity) UnselectEntity();
+            if (SelectedEntity == entity) return;
             MeshRenderer renderer = entity.gameObject.GetComponentInChildren<MeshRenderer>();
             OriginalMaterials = renderer.materials;
             List<Material> materials = new List<Material>(OriginalMaterials);

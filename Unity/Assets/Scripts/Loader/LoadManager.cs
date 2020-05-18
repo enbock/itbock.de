@@ -13,6 +13,7 @@ namespace Loader
         public string BundleName;
         public GameObject Asset;
     }
+
     public class LoadManager : MonoBehaviour
     {
         public delegate void LoadAction(string assetBundleName, GameObject asset);
@@ -23,7 +24,7 @@ namespace Loader
         public SharedContent SharedContent;
         public bool Offline = false;
         public OfflineAsset[] OfflineAssets;
-        
+
         private Dictionary<string, GameObject> OfflineAssetList = new Dictionary<string, GameObject>();
         private Dictionary<string, GameObject> LoadedAssets = new Dictionary<string, GameObject>();
         private Dictionary<string, bool> Loading = new Dictionary<string, bool>();
@@ -80,19 +81,24 @@ namespace Loader
             }
 
             Loading.Add(assetBundleName, true);
-            
+
             if (Offline)
             {
                 if (OfflineAssetList.ContainsKey(assetBundleName))
                 {
-                    Debug.Log("Emulate loding of '" + assetBundleName + "'.");
                     InitializeAsset(assetBundleName, OfflineAssetList[assetBundleName], callback);
                     return;
                 }
 
-                Debug.Log("Offline mode. Skip loading of '" + assetBundleName + "'."+OfflineAssetList.ContainsKey(assetBundleName));
+                Debug.Log(
+                    "Offline mode. Skip loading of '" +
+                    assetBundleName +
+                    "'." +
+                    OfflineAssetList.ContainsKey(assetBundleName)
+                );
                 return;
             }
+
             StartCoroutine(LoadAssetData(assetBundleName, crc, callback));
         }
 

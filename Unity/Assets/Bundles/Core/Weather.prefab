@@ -64,6 +64,7 @@ MonoBehaviour:
     - 90
   AirTemperatur: 0
   Cloudiness: 100
+  SkyBox: {fileID: 0}
   SunColorTemperatur: 0
   SunColor: {r: 0, g: 0, b: 0, a: 0}
   SunIntensity: 2
@@ -83,10 +84,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoadManager: {fileID: 0}
   SharedContent: {fileID: 0}
+  Container: {fileID: 0}
   SubAssests:
-  - core/startarea_god_console
+  - grid/start_grid
   DateTime: {fileID: 0}
   Sun: {fileID: 6298154333240774310}
+  DataRefreshTimer: 900
   Data:
     IsLoaded: 0
     Position:

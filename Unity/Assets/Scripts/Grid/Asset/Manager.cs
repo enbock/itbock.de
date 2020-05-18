@@ -58,7 +58,7 @@ namespace Grid.Asset
             return false;
         }
 
-        private void LoadLibrary(string library, Action<string> callback = null)
+        private void LoadLibrary(string library)
         {
             if (LoadingLibraries.ContainsKey(library))
             {
@@ -73,8 +73,6 @@ namespace Grid.Asset
                 {
                     AddAsset(library, asset);
                     LoadingLibraries[library] = false;
-
-                    callback?.Invoke(library);
 
                     return asset;
                 }
@@ -95,7 +93,7 @@ namespace Grid.Asset
                 asset.transform.GetChild(index).gameObject.SetActive(true);
             }
 
-            Entity[] entities = asset.GetComponentsInChildren<Entity>();
+            Entity[] entities = asset.GetComponentsInChildren<Entity>(true);
             Debug.Log("Load " + entities.Length + " entities from '" + library + "'.");
             foreach (Entity entity in entities)
             {
