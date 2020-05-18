@@ -15,7 +15,7 @@ exports.handler = async function (event/*, context*/) {
     const now: number = Math.round(Date.now().valueOf() / 1000);
     let token: string | null = null;
 
-    if (await authorizer.login(event.body) == true) {
+    if (await authorizer.login(decodeURIComponent(event.body)) == true) {
         token = await tokenizer.generate(now);
     }
 

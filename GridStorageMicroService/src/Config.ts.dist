@@ -1,0 +1,11 @@
+export default class Config {
+    public readonly geoIpApiAccessKey: string;
+    public readonly weatherApiAccessKey: string;
+    public s3Bucket: string;
+
+    constructor() {
+        this.geoIpApiAccessKey = '';
+        this.weatherApiAccessKey = '';
+        this.s3Bucket = '';
+    }
+}
