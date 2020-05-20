@@ -15,6 +15,12 @@ namespace Admin
         public SharedContent SharedContent;
         public TokenData Token;
         public static bool LoggedIn = false;
+        public string AutoPassword = string.Empty;
+
+        private void Start()
+        {
+            if (AutoPassword != string.Empty) Login(AutoPassword);
+        }
 
         public void Login(string password)
         {

@@ -48,16 +48,16 @@
     <NoStdLib>true</NoStdLib>
     <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
     <ImplicitlyExpandNETStandardFacades>false</ImplicitlyExpandNETStandardFacades>
-    <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
+      <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="UnityEngine">
-        <HintPath>C:\Program Files\Unity\Hub\Editor\2019.3.14f1\Editor\Data\Managed/UnityEngine/UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor">
-        <HintPath>C:\Program Files\Unity\Hub\Editor\2019.3.14f1\Editor\Data\Managed/UnityEditor.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+    <ItemGroup>
+        <Reference Include="UnityEngine">
+            <HintPath>C:\Program Files\Unity\Hub\Editor\2019.3.14f1\Editor\Data\Managed/UnityEngine/UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEditor">
+            <HintPath>C:\Program Files\Unity\Hub\Editor\2019.3.14f1\Editor\Data\Managed/UnityEditor.dll</HintPath>
+        </Reference>
+    </ItemGroup>
     <ItemGroup>
         <Compile Include="Assets\AIO_Sky\Sample\Script\FPSDisplay.cs"/>
         <Compile Include="Assets\AIO_Sky\Sample\Script\NewDemoSky.cs"/>
@@ -96,16 +96,16 @@
         <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Character Select\Demo_CharacterInfo.cs"/>
         <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Character Select\List\Demo_CharacterSelectList.cs"/>
         <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Character Select\List\Demo_CharacterSelectList_Character.cs"/>
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Chat\Demo_AddChatMessage.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Chat\Demo_AddChatTestMessages.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Chat\Demo_Chat.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_CastManager.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_FixScrollRects.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_LookAtCamera.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_QualitySlider.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_QuestTrackerCollapse.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_Quit.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_ResolutionSelect.cs" />
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Chat\Demo_AddChatMessage.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Chat\Demo_AddChatTestMessages.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Chat\Demo_Chat.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_CastManager.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_FixScrollRects.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_LookAtCamera.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_QualitySlider.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_QuestTrackerCollapse.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_Quit.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_ResolutionSelect.cs"/>
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_Spellbook_SpellRow.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Demo\Demo_XPTooltip.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\Miscellaneous\BreakPrefabConnection.cs" />
@@ -325,26 +325,38 @@
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.InternalAPIEngineBridge.003">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.003.dll</HintPath>
+     <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.003.dll</HintPath>
  </Reference>
- <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
- </Reference>
- <Reference Include="Unity.TextMeshPro">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor.UI">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.AIModule">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.AccessibilityModule">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.AccessibilityModule.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.AndroidJNIModule">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.AndroidJNIModule.dll</HintPath>
- </Reference>
+        <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEditor.UI">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.ProBuilder">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ProBuilder.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.ProBuilder.Editor">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.ProBuilder.AddOns.Editor">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AIModule">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AccessibilityModule">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.AccessibilityModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AndroidJNIModule">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.AndroidJNIModule.dll</HintPath>
+        </Reference>
  <Reference Include="UnityEngine.AnimationModule">
      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.AnimationModule.dll</HintPath>
  </Reference>
@@ -840,15 +852,15 @@
  <Reference Include="System.Xml.ReaderWriter">
      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.ReaderWriter.dll</HintPath>
  </Reference>
- <Reference Include="System.Xml.XDocument">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XDocument.dll</HintPath>
- </Reference>
- <Reference Include="System.Xml.XmlDocument">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XmlDocument.dll</HintPath>
- </Reference>
- <Reference Include="System.Xml.XmlSerializer">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XmlSerializer.dll</HintPath>
- </Reference>
+        <Reference Include="System.Xml.XDocument">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XDocument.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml.XmlDocument">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XmlDocument.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml.XmlSerializer">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XmlSerializer.dll</HintPath>
+        </Reference>
         <Reference Include="System.Xml.XPath">
             <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XPath.dll</HintPath>
         </Reference>

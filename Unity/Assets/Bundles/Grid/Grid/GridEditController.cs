@@ -4,6 +4,7 @@ using Admin;
 using Grid.Asset;
 using Scripts.Input;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityTemplateProjects;
 using Manager = Grid.Manager;
 
@@ -39,22 +40,26 @@ namespace Bundles.Grid.Grid
 
             if (Input.GetMouseButtonDown(0))
             {
-                GameObject hit = MouseRaycaster.GetPointetObject(PlayerCamera);
-                if (hit != null)
+                if (EventSystem.current.IsPointerOverGameObject() == false)
                 {
-                    Entity entity = FindEntity(hit);
-                    if (entity && GridManger.IsEntityInGrid(entity) && entity != SelectedEntity)
+                    RaycastHit hit = MouseRaycaster.GetPointetObject(PlayerCamera);
+                    if (hit.transform != null && hit.transform.gameObject != null)
                     {
-                        SelectEntity(entity);
+                        GameObject hittedGameObject = hit.transform.gameObject;
+                        Entity entity = FindEntity(hittedGameObject);
+                        if (entity && GridManger.IsEntityInGrid(entity) && entity != SelectedEntity)
+                        {
+                            SelectEntity(entity);
+                        }
+                        else
+                        {
+                            UnselectEntity();
+                        }
                     }
                     else
                     {
                         UnselectEntity();
                     }
-                }
-                else
-                {
-                    UnselectEntity();
                 }
             }
 
@@ -116,7 +121,6 @@ namespace Bundles.Grid.Grid
 
                     float signedAngle = Vector3.SignedAngle(gridDirection, playerDirection, Vector3.up);
                     signedAngle += signedAngle % 90;
-                    Debug.Log(GridManger.Grid.Name + ":" + playerDirection + "|" + signedAngle);
                     GridManger.Move(SelectedEntity, new Vector3(0f, 1f, 0f));
                 }
 
@@ -162,14 +166,6 @@ namespace Bundles.Grid.Grid
         {
             foreach (MeshRenderer renderer in entity.gameObject.GetComponentsInChildren<MeshRenderer>())
             {
-                BoxCollider collider = renderer.gameObject.GetComponent<BoxCollider>();
-                if (collider == null)
-                {
-                    continue;
-                }
-
-                Vector3 boundsSize = collider.size;
-                float size = boundsSize.x + boundsSize.y + boundsSize.z;
                 Material[] originalMaterials = renderer.materials;
                 OriginalMaterials.Add(renderer, originalMaterials);
 

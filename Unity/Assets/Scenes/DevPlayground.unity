@@ -265,7 +265,7 @@ PrefabInstance:
     - target: {fileID: 2435953795557913202, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 90
+      value: 91
       objectReference: {fileID: 0}
     - target: {fileID: 2435953795557913202, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
@@ -275,22 +275,22 @@ PrefabInstance:
     - target: {fileID: 2435953795557913202, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.66446304
+      value: 0.6623273
       objectReference: {fileID: 0}
     - target: {fileID: 2435953795557913202, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.24184477
+      value: 0.23603718
       objectReference: {fileID: 0}
     - target: {fileID: 2435953795557913202, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.24184477
+      value: -0.24763393
       objectReference: {fileID: 0}
     - target: {fileID: 2435953795557913202, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.66446304
+      value: 0.6665482
       objectReference: {fileID: 0}
     - target: {fileID: 2435953795557913203, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
@@ -342,6 +342,11 @@ PrefabInstance:
       propertyPath: LoadManager
       value: 
       objectReference: {fileID: 202564885}
+    - target: {fileID: 4451664947609997726, guid: 480a45a7614326d468943c1babe06b20,
+        type: 3}
+      propertyPath: AutoPassword
+      value: Tarakul07
+      objectReference: {fileID: 0}
     - target: {fileID: 5173876647055788878, guid: 480a45a7614326d468943c1babe06b20,
         type: 3}
       propertyPath: m_LocalPosition.x
