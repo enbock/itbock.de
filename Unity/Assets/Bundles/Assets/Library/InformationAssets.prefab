@@ -296,6 +296,7 @@ MonoBehaviour:
     Horizontal: 0.1
     Vertical: 0.1
     Rotation: 1
+  Data: 
 --- !u!1 &5629702437437759742
 GameObject:
   m_ObjectHideFlags: 0

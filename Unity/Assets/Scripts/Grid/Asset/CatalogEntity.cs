@@ -17,5 +17,15 @@ namespace Grid.Asset
         {
             return left?.Name != right?.Name || left?.Library != right?.Library;
         }
+
+        public override bool Equals(object obj)
+        {
+            return this == obj as CatalogEntity;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

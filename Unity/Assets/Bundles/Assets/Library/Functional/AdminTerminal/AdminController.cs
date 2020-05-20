@@ -1,7 +1,7 @@
-﻿using System;
-using Grid.Asset;
+﻿using Grid.Asset;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityTemplateProjects;
 
 namespace Admin
 {
@@ -13,6 +13,7 @@ namespace Admin
         public Button LogoutButton;
         public GameObject LoginScreen;
         public GameObject SuccessScreen;
+        private bool FocusOnField = false;
 
         private void OnDestroy()
         {
@@ -29,6 +30,23 @@ namespace Admin
             UpdateScreen(AdminAuthorization.LoggedIn);
         }
 
+        public override void Update()
+        {
+            base.Update();
+
+            if (FocusOnField && Input.GetKeyDown(KeyCode.Return))
+            {
+                OnLoginClick();
+            }
+
+            if (FocusOnField != PasswordField.isFocused)
+            {
+                SharedContent.Camera.gameObject.GetComponent<SimpleCameraController>().enabled =
+                    PasswordField.isFocused == false;
+                FocusOnField = PasswordField.isFocused;
+            }
+        }
+
         private void UpdateScreen(bool loggedin)
         {
             LoginScreen.SetActive(loggedin == false);
@@ -37,6 +55,7 @@ namespace Admin
 
         private void OnLoginClick()
         {
+            SharedContent.Camera.gameObject.GetComponent<SimpleCameraController>().enabled = true;
             AdminAuthorization.Login(PasswordField.text);
         }
     }

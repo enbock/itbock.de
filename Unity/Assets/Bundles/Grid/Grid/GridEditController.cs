@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Admin;
 using Grid.Asset;
 using Scripts.Input;
@@ -14,7 +15,7 @@ namespace Bundles.Grid.Grid
         public Material SelectMaterial;
         [ReadOnly] public Camera PlayerCamera;
         [ReadOnly] public Entity SelectedEntity;
-        [ReadOnly] public Material[] OriginalMaterials = null;
+        Dictionary<MeshRenderer, Material[]> OriginalMaterials = new Dictionary<MeshRenderer, Material[]>();
         private float NextKeyRepeatTime = 0f;
 
         private void OnEnable()
@@ -57,32 +58,6 @@ namespace Bundles.Grid.Grid
                 }
             }
 
-            Vector3 relativeDirection = PlayerCamera.transform.forward - (gameObject.transform.forward * -2f);
-
-            Vector3 lockAt = Vector3.forward;
-            if (
-                relativeDirection.x >= 0.5 &&
-                relativeDirection.x <= 1.5 &&
-                relativeDirection.z >= 1.5 &&
-                relativeDirection.z <= 2.5
-            )
-            {
-                lockAt = Vector3.left;
-            }
-            else if (
-                relativeDirection.x >= -1.5 &&
-                relativeDirection.x <= -0.5 &&
-                relativeDirection.z >= 1.5 &&
-                relativeDirection.z <= 2.5
-            )
-            {
-                lockAt = Vector3.right;
-            }
-            else if (relativeDirection.z >= 2.5)
-            {
-                lockAt = Vector3.back;
-            }
-
             if (
                 SelectedEntity &&
                 (Time.realtimeSinceStartup >= NextKeyRepeatTime || Input.anyKeyDown || Input.GetKey(KeyCode.LeftShift))
@@ -92,35 +67,56 @@ namespace Bundles.Grid.Grid
                 if (Input.GetKey(KeyCode.RightArrow))
                 {
                     move = Vector3.right;
-                    if (lockAt == Vector3.right) move = Vector3.back;
-                    if (lockAt == Vector3.back) move = Vector3.left;
-                    if (lockAt == Vector3.left) move = Vector3.forward;
-                    move *= -1;
                 }
 
                 if (Input.GetKey(KeyCode.LeftArrow))
                 {
                     move = Vector3.left;
-                    if (lockAt == Vector3.right) move = Vector3.forward;
-                    if (lockAt == Vector3.back) move = Vector3.right;
-                    if (lockAt == Vector3.left) move = Vector3.back;
-                    move *= -1;
                 }
 
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
-                    move = lockAt * -1;
+                    move = Vector3.forward;
                 }
 
                 if (Input.GetKey(KeyCode.DownArrow))
                 {
-                    move = lockAt;
+                    move = Vector3.back;
                 }
 
-                if (move != Vector3.zero) GridManger.Move(SelectedEntity, move);
+                if (move != Vector3.zero)
+                {
+                    Vector3 gridDirection = gameObject.transform.forward;
+                    Vector3 playerDirection = PlayerCamera.transform.forward;
+
+                    // Round to full direction and clamp to y axis
+                    gridDirection.x = Mathf.Round(gridDirection.x);
+                    gridDirection.y = 0f; // Remove Look up/down
+                    gridDirection.z = Mathf.Round(gridDirection.z);
+                    playerDirection.x = Mathf.Round(playerDirection.x);
+                    playerDirection.y = 0f; // Remove Look up/down
+                    playerDirection.z = Mathf.Round(playerDirection.z);
+
+                    float signedAngle = Vector3.SignedAngle(gridDirection, playerDirection, Vector3.up);
+                    signedAngle += signedAngle % 90f; // clamp to 4 directions
+                    GridManger.Move(SelectedEntity, Quaternion.Euler(0f, signedAngle, 0f) * move);
+                }
 
                 if (Input.GetKey(KeyCode.PageUp))
                 {
+                    Vector3 gridDirection = gameObject.transform.forward;
+                    Vector3 playerDirection = PlayerCamera.transform.forward;
+
+                    gridDirection.x = Mathf.Round(gridDirection.x);
+                    gridDirection.y = 0f; // Remove Look up/down
+                    gridDirection.z = Mathf.Round(gridDirection.z);
+                    playerDirection.x = Mathf.Round(playerDirection.x);
+                    playerDirection.y = 0f; // Remove Look up/down
+                    playerDirection.z = Mathf.Round(playerDirection.z);
+
+                    float signedAngle = Vector3.SignedAngle(gridDirection, playerDirection, Vector3.up);
+                    signedAngle += signedAngle % 90;
+                    Debug.Log(GridManger.Grid.Name + ":" + playerDirection + "|" + signedAngle);
                     GridManger.Move(SelectedEntity, new Vector3(0f, 1f, 0f));
                 }
 
@@ -159,22 +155,45 @@ namespace Bundles.Grid.Grid
             if (SelectedEntity != null && entity != SelectedEntity) UnselectEntity();
             if (SelectedEntity == entity) return;
             SelectedEntity = entity;
-            MeshRenderer renderer = entity.gameObject.GetComponentInChildren<MeshRenderer>();
-            OriginalMaterials = null;
-            if (renderer == null) return;
-            OriginalMaterials = renderer.materials;
-            List<Material> materials = new List<Material>(OriginalMaterials);
-            materials.Add(SelectMaterial);
-            renderer.materials = materials.ToArray();
+            ReplaceMertials(entity);
+        }
+
+        private void ReplaceMertials(Entity entity)
+        {
+            foreach (MeshRenderer renderer in entity.gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                BoxCollider collider = renderer.gameObject.GetComponent<BoxCollider>();
+                if (collider == null)
+                {
+                    continue;
+                }
+
+                Vector3 boundsSize = collider.size;
+                float size = boundsSize.x + boundsSize.y + boundsSize.z;
+                Material[] originalMaterials = renderer.materials;
+                OriginalMaterials.Add(renderer, originalMaterials);
+
+                Material[] materials = new Material[originalMaterials.Length];
+                for (int index = 0; index < materials.Length; index++)
+                {
+                    materials[index] = SelectMaterial;
+                }
+
+                renderer.materials = materials.ToArray();
+            }
         }
 
         private void UnselectEntity()
         {
             if (SelectedEntity == null) return;
-            if (OriginalMaterials != null)
-                SelectedEntity.gameObject.GetComponentInChildren<MeshRenderer>().materials = OriginalMaterials;
+            foreach (KeyValuePair<MeshRenderer, Material[]> pair in OriginalMaterials)
+            {
+                if (pair.Key == null) continue;
+                pair.Key.materials = pair.Value;
+            }
+
             SelectedEntity = null;
-            OriginalMaterials = null;
+            OriginalMaterials.Clear();
         }
 
         private Entity FindEntity(GameObject gameObject)

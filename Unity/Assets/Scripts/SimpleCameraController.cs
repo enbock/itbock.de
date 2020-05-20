@@ -59,20 +59,18 @@ namespace UnityTemplateProjects
         CameraState m_TargetCameraState = new CameraState();
         CameraState m_InterpolatingCameraState = new CameraState();
 
-        [Header("Movement Settings")]
-        [Tooltip("Exponential boost factor on translation, controllable by mouse wheel.")]
+        [Header("Movement Settings")] [Tooltip("Exponential boost factor on translation, controllable by mouse wheel.")]
         public float boost = 3.5f;
 
-        [Tooltip("Time it takes to interpolate camera position 99% of the way to the target."), Range(0.001f, 1f)]
-        public float positionLerpTime = 0.2f;
+        // [Tooltip("Time it takes to interpolate camera position 99% of the way to the target."), Range(0.001f, 1f)]
+        // public float positionLerpTime = 0.2f;
 
         [Header("Rotation Settings")]
-        [Tooltip("X = Change in mouse position.\nY = Multiplicative factor for camera rotation.")]
-        public AnimationCurve mouseSensitivityCurve = new AnimationCurve(new Keyframe(0f, 0.5f, 0f, 5f), new Keyframe(1f, 2.5f, 0f, 0f));
+        // [Tooltip("X = Change in mouse position.\nY = Multiplicative factor for camera rotation.")]
+        // public AnimationCurve mouseSensitivityCurve = new AnimationCurve(new Keyframe(0f, 0.5f, 0f, 5f), new Keyframe(1f, 2.5f, 0f, 0f));
 
-        [Tooltip("Time it takes to interpolate camera rotation 99% of the way to the target."), Range(0.001f, 1f)]
-        public float rotationLerpTime = 0.01f;
-
+        // [Tooltip("Time it takes to interpolate camera rotation 99% of the way to the target."), Range(0.0001f, 1f)]
+        // public float rotationLerpTime = 0.01f;
         [Tooltip("Whether or not to invert our Y axis for mouse input to rotation.")]
         public bool invertY = false;
 
@@ -80,6 +78,7 @@ namespace UnityTemplateProjects
         private bool FlashLightEnabled = false;
 
         private bool freeLook = false;
+
         public bool FreeLook
         {
             get { return freeLook; }
@@ -113,26 +112,32 @@ namespace UnityTemplateProjects
             {
                 direction += Vector3.forward;
             }
+
             if (Input.GetKey(KeyCode.S))
             {
                 direction += Vector3.back;
             }
+
             if (Input.GetKey(KeyCode.A))
             {
                 direction += Vector3.left;
             }
+
             if (Input.GetKey(KeyCode.D))
             {
                 direction += Vector3.right;
             }
+
             if (Input.GetKey(KeyCode.Q))
             {
                 direction += Vector3.down;
             }
+
             if (Input.GetKey(KeyCode.E))
             {
                 direction += Vector3.up;
             }
+
             return direction;
         }
 
@@ -146,10 +151,11 @@ namespace UnityTemplateProjects
             if (Input.GetKey(KeyCode.Escape))
             {
                 Application.Quit();
-				#if UNITY_EDITOR
-				UnityEditor.EditorApplication.isPlaying = false;
-				#endif
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#endif
             }
+
             if (Input.GetMouseButtonDown(1))
             {
                 FreeLook = FreeLook == false;
@@ -160,14 +166,17 @@ namespace UnityTemplateProjects
             // }
 
             // Rotation
-            if (/*Input.GetMouseButton(1) || */freeLook == true)
+            if ( /*Input.GetMouseButton(1) || */freeLook == true)
             {
-                var mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y") * (invertY ? 1 : -1));
+                var mouseMovement = new Vector2(
+                    Input.GetAxis("Mouse X"),
+                    Input.GetAxis("Mouse Y") * (invertY ? 1 : -1)
+                );
 
-                var mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
+                //var mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
 
-                m_TargetCameraState.yaw += mouseMovement.x * mouseSensitivityFactor;
-                m_TargetCameraState.pitch += mouseMovement.y * mouseSensitivityFactor;
+                m_TargetCameraState.yaw += mouseMovement.x;
+                m_TargetCameraState.pitch += mouseMovement.y;
             }
 
             // Translation
@@ -191,9 +200,10 @@ namespace UnityTemplateProjects
 
             // Framerate-independent interpolation
             // Calculate the lerp amount, such that we get 99% of the way to our target in the specified time
-            var positionLerpPct = 1f - Mathf.Exp((Mathf.Log(1f - 0.99f) / positionLerpTime) * Time.deltaTime);
-            var rotationLerpPct = 1f - Mathf.Exp((Mathf.Log(1f - 0.99f) / rotationLerpTime) * Time.deltaTime);
-            m_InterpolatingCameraState.LerpTowards(m_TargetCameraState, positionLerpPct, rotationLerpPct);
+            // var positionLerpPct = 1f - Mathf.Exp((Mathf.Log(1f - 0.99f) / positionLerpTime) * Time.deltaTime);
+            // var rotationLerpPct = 1f - Mathf.Exp((Mathf.Log(1f - 0.99f) / rotationLerpTime) * Time.deltaTime);
+            // m_InterpolatingCameraState.LerpTowards(m_TargetCameraState, positionLerpPct, rotationLerpPct);
+            m_InterpolatingCameraState.LerpTowards(m_TargetCameraState, 1f, 1f);
 
             m_InterpolatingCameraState.UpdateTransform(transform);
 
@@ -204,5 +214,4 @@ namespace UnityTemplateProjects
             }
         }
     }
-
 }

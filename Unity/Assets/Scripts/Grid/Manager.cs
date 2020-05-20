@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Grid
         public event AddToGridAction OnAddToGrid;
         public GameObject GridContainer;
 
-        [Space] [ReadOnly] public Grid Grid = new Grid();
+        [ReadOnly] public Grid Grid = new Grid();
         [ReadOnly] public Asset.Manager AssetManager;
         [ReadOnly] public AdminAuthorization AdminAuthorization;
 
@@ -30,8 +31,7 @@ namespace Grid
         public override void Update()
         {
             base.Update();
-            Container.SetActive(AdminAuthorization.LoggedIn);
-            GridContainer.name = Grid.Name;
+            if (Container.activeSelf != AdminAuthorization.LoggedIn) Container.SetActive(AdminAuthorization.LoggedIn);
         }
 
         public Entity InstantiateEntityPrefab(Entity entityPrefab)
@@ -51,6 +51,15 @@ namespace Grid
             EntityMap.Add(entity, gridEntity);
             MoveTo(entity, gridEntity.Position);
             RotateTo(entity, gridEntity.Rotation);
+            entity.Data = gridEntity.Data;
+            entity.OnDataChange += (string data) => { gridEntity.Data = data; };
+
+            // Sub-Grid Initialization
+            Manager gridManager = entity.gameObject.GetComponent<Manager>();
+            if (gridManager != null)
+            {
+                gridManager.LoadGrid(gridEntity.Identifier);
+            }
 
             Collider helpCollider = entity.gameObject.GetComponent<Collider>();
             if (helpCollider != null) Destroy(helpCollider);
@@ -174,29 +183,39 @@ namespace Grid
 
         public void LoadGrid(string gridIdentifier)
         {
-            StartCoroutine(LoadGridData(gridIdentifier));
+            Grid grid = new Grid();
+            grid.Identifier = gridIdentifier;
+            ReplaceGrid(grid);
+
+            StartCoroutine(LoadGridData(gridIdentifier, ReplaceGrid));
         }
 
-        IEnumerator LoadGridData(string identifier)
+        IEnumerator LoadGridData(string identifier, Action<String> callback)
         {
-            UnityWebRequest www = UnityWebRequest.Get(
-                SharedContent.ProjectSettings.HostUri + "/grid-data/" + identifier + ".json"
-            );
+            string gridUrl = SharedContent.ProjectSettings.HostUri + "/grid-data/" + identifier + ".json";
+            UnityWebRequest www = UnityWebRequest.Get(gridUrl);
             yield return www.SendWebRequest();
 
             if (www.isNetworkError || www.isHttpError)
             {
-                UnityEngine.Debug.LogError(www.error);
+                UnityEngine.Debug.LogError("Not able to load '" + gridUrl + "'. " + www.error);
                 yield break;
             }
 
-            ReplaceGrid(www.downloadHandler.text);
+            callback(www.downloadHandler.text);
         }
 
         private void ReplaceGrid(string gridData)
         {
+            Grid grid = JsonConvert.DeserializeObject<Grid>(gridData);
+            ReplaceGrid(grid);
+        }
+
+        private void ReplaceGrid(Grid grid)
+        {
             RemoveGrid();
-            Grid = JsonConvert.DeserializeObject<Grid>(gridData);
+            Grid = grid;
+            GridContainer.name = Grid.Name;
             foreach (GridEntity gridEntity in Grid.Assets)
             {
                 AssetManager.RequestEntity(

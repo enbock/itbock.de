@@ -12,5 +12,6 @@ namespace Grid
         public CatalogEntity CatalogEntity = new CatalogEntity();
         public Vector3 Position = new Vector3();
         public Vector3 Rotation = new Vector3();
+        public string Data = "";
     }
 }

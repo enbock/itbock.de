@@ -234,6 +234,7 @@ MonoBehaviour:
     Horizontal: 1
     Vertical: 1
     Rotation: 5
+  Data: 
 --- !u!65 &7695689939690868821
 BoxCollider:
   m_ObjectHideFlags: 0

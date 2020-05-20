@@ -18,7 +18,8 @@ public class GridController : MonoBehaviour
     public GameObject Preview3D;
     public GameObject PreviewContainer;
     public GameObject PreviewUI;
-    public GameObject PreviewCamera;
+    public Camera PreviewCamera;
+    public RawImage PreviewImage;
     public Button AddToGridButton;
     public Button SaveGridButton;
     public Button ReloadGridButton;
@@ -29,12 +30,22 @@ public class GridController : MonoBehaviour
     private void OnEnable()
     {
         PlayerCamera = GridManager.SharedContent.Camera;
+        GridManager.AssetManager.OnLoadEntity += NewEntity;
+        RenderTexture cameraOutput = new RenderTexture(PreviewCamera.targetTexture);
+        cameraOutput.wrapMode = TextureWrapMode.Clamp;
+        cameraOutput.filterMode = FilterMode.Bilinear;
+        PreviewCamera.targetTexture = cameraOutput;
+        PreviewImage.texture = cameraOutput;
+    }
+
+    private void OnDestroy()
+    {
+        GridManager.AssetManager.OnLoadEntity -= NewEntity;
     }
 
     void Start()
     {
         LoadLibrariesButton.onClick.AddListener(LoadLibraries);
-        GridManager.AssetManager.OnLoadEntity += NewEntity;
         SelectList.OnSelect += ShowPreview;
         SelectList.OnRemove += HidePreview;
         AddToGridButton.onClick.AddListener(InsertToGrid);
@@ -46,6 +57,15 @@ public class GridController : MonoBehaviour
 
         Preview3D.SetActive(false);
         PreviewUI.SetActive(false);
+        FillAssetList();
+    }
+
+    private void FillAssetList()
+    {
+        foreach (Entity asset in GridManager.AssetManager.Assets)
+        {
+            NewEntity(asset);
+        }
     }
 
     private void SwitchToGridNameEdit()
@@ -91,7 +111,7 @@ public class GridController : MonoBehaviour
             if (newSize < size) newSize = size;
         }
 
-        PreviewCamera.transform.localPosition = new Vector3(0f, 0.091f, -0.1f * newSize);
+        PreviewCamera.gameObject.transform.localPosition = new Vector3(0f, 0.091f, -0.1f * newSize);
     }
 
     private void NewEntity(Entity entity)
