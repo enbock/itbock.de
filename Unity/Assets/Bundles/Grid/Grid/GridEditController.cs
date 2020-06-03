@@ -35,7 +35,7 @@ namespace Bundles.Grid.Grid
         {
             if (
                 PlayerCamera.gameObject.GetComponent<SimpleCameraController>().enabled == false ||
-                AdminAuthorization.LoggedIn == false
+                GridManger.IsActive == false
             ) return;
 
             if (Input.GetMouseButtonDown(0))
@@ -109,34 +109,48 @@ namespace Bundles.Grid.Grid
 
                 if (Input.GetKey(KeyCode.PageUp))
                 {
-                    Vector3 gridDirection = gameObject.transform.forward;
-                    Vector3 playerDirection = PlayerCamera.transform.forward;
+                    if (Input.GetKey(KeyCode.LeftControl))
+                    {
+                        GridManger.RotateVertical(SelectedEntity, 1f);
+                    }
+                    else
+                    {
+                        Vector3 gridDirection = gameObject.transform.forward;
+                        Vector3 playerDirection = PlayerCamera.transform.forward;
 
-                    gridDirection.x = Mathf.Round(gridDirection.x);
-                    gridDirection.y = 0f; // Remove Look up/down
-                    gridDirection.z = Mathf.Round(gridDirection.z);
-                    playerDirection.x = Mathf.Round(playerDirection.x);
-                    playerDirection.y = 0f; // Remove Look up/down
-                    playerDirection.z = Mathf.Round(playerDirection.z);
+                        gridDirection.x = Mathf.Round(gridDirection.x);
+                        gridDirection.y = 0f; // Remove Look up/down
+                        gridDirection.z = Mathf.Round(gridDirection.z);
+                        playerDirection.x = Mathf.Round(playerDirection.x);
+                        playerDirection.y = 0f; // Remove Look up/down
+                        playerDirection.z = Mathf.Round(playerDirection.z);
 
-                    float signedAngle = Vector3.SignedAngle(gridDirection, playerDirection, Vector3.up);
-                    signedAngle += signedAngle % 90;
-                    GridManger.Move(SelectedEntity, new Vector3(0f, 1f, 0f));
+                        float signedAngle = Vector3.SignedAngle(gridDirection, playerDirection, Vector3.up);
+                        signedAngle += signedAngle % 90;
+                        GridManger.Move(SelectedEntity, new Vector3(0f, 1f, 0f));
+                    }
                 }
 
                 if (Input.GetKey(KeyCode.PageDown))
                 {
-                    GridManger.Move(SelectedEntity, new Vector3(0f, -1f, 0f));
+                    if (Input.GetKey(KeyCode.LeftControl))
+                    {
+                        GridManger.RotateVertical(SelectedEntity, -1f);
+                    }
+                    else
+                    {
+                        GridManger.Move(SelectedEntity, new Vector3(0f, -1f, 0f));
+                    }
                 }
 
                 if (Input.GetKey(KeyCode.Home))
                 {
-                    GridManger.Rotate(SelectedEntity, -1f);
+                    GridManger.RotateHorizontal(SelectedEntity, -1f);
                 }
 
                 if (Input.GetKey(KeyCode.End))
                 {
-                    GridManger.Rotate(SelectedEntity, 1f);
+                    GridManger.RotateHorizontal(SelectedEntity, 1f);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Delete))

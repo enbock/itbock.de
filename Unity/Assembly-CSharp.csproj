@@ -33,16 +33,16 @@
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>Temp\bin\Release\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <NoWarn>0169</NoWarn>
-      <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>Temp\bin\Release\</OutputPath>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <NoWarn>0169</NoWarn>
+        <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+        <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    </PropertyGroup>
     <PropertyGroup>
         <NoConfig>true</NoConfig>
         <NoStdLib>true</NoStdLib>
@@ -116,16 +116,16 @@
         <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_Fill.cs"/>
         <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_SelectAddOption.cs"/>
         <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UIBulletBar.cs"/>
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UIEquipSlot_Assign.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UIItemSlot_Assign.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UIItemSlot_AssignAll.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UIProgressBar.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UISlotBase_Assign.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UISpellSlot_Assign.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UISpellSlot_AssignAll.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UITalentSlot_Assign.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Audio\UIAudioSource.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Audio\UIPlayAudio.cs" />
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UIEquipSlot_Assign.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UIItemSlot_Assign.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UIItemSlot_AssignAll.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UIProgressBar.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UISlotBase_Assign.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UISpellSlot_Assign.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UISpellSlot_AssignAll.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\Test Scripts\Test_UITalentSlot_Assign.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Audio\UIAudioSource.cs"/>
+        <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Audio\UIPlayAudio.cs"/>
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Bars\IUIProgressBar.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Bars\UIBulletBar.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Bars\UICastBar.cs" />
@@ -260,16 +260,16 @@
      <None Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Shaders\SunShaftsComposite.shader" />
      <None Include="Assets\RPG and MMO UI 7\Readme.txt" />
      <None Include="Assets\AIO_Sky\Shader\deprecated\AIO_Std.shader" />
-     <None Include="Assets\RPG and MMO UI 7\Shaders\UIMaskedBlur.shader" />
-     <None Include="Assets\AIO_Sky\Shader\AIO_V2Half.shader" />
-     <None Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Shaders\SimpleClear.shader" />
-     <None Include="Assets\RPG and MMO UI 7\Changelog.txt" />
-     <None Include="Assets\AIO_Sky\Readme1.3.txt" />
-     <None Include="Assets\AIO_Sky\Shader\AIO_Simple01A.shader" />
-     <None Include="Assets\AIO_Sky\Shader\deprecated\AIO_Half01.shader" />
- <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
-     <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
- </Reference>
+        <None Include="Assets\RPG and MMO UI 7\Shaders\UIMaskedBlur.shader"/>
+        <None Include="Assets\AIO_Sky\Shader\AIO_V2Half.shader"/>
+        <None Include="Assets\AIO_Sky\Standard Assets\Effects\ImageEffects\Shaders\SimpleClear.shader"/>
+        <None Include="Assets\RPG and MMO UI 7\Changelog.txt"/>
+        <None Include="Assets\AIO_Sky\Readme1.3.txt"/>
+        <None Include="Assets\AIO_Sky\Shader\AIO_Simple01A.shader"/>
+        <None Include="Assets\AIO_Sky\Shader\deprecated\AIO_Half01.shader"/>
+        <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+        </Reference>
         <Reference Include="Unity.Timeline.Editor">
             <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
         </Reference>
@@ -303,24 +303,24 @@
         <Reference Include="Unity.TextMeshPro.Editor">
             <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
         </Reference>
- <Reference Include="Unity.RenderPipelines.Universal.Runtime">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="Unity.RenderPipelines.Universal.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.UI">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Timeline">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
- </Reference>
- <Reference Include="Unity.CollabProxy.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Rider.Editor">
-     <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
- </Reference>
+        <Reference Include="Unity.RenderPipelines.Universal.Runtime">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.RenderPipelines.Universal.Editor">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Timeline">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.CollabProxy.Editor">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Rider.Editor">
+            <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+        </Reference>
         <Reference Include="Unity.VectorGraphics.Editor">
             <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.VectorGraphics.Editor.dll</HintPath>
         </Reference>
@@ -368,16 +368,16 @@
         </Reference>
         <Reference Include="UnityEngine.ClothModule">
             <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClothModule.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.CoreModule">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.CrashReportingModule">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.CrashReportingModule.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.DSPGraphModule">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.DSPGraphModule.dll</HintPath>
- </Reference>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CrashReportingModule">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.CrashReportingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.DSPGraphModule">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.DSPGraphModule.dll</HintPath>
+        </Reference>
  <Reference Include="UnityEngine.DirectorModule">
      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.DirectorModule.dll</HintPath>
  </Reference>
@@ -834,15 +834,15 @@
  <Reference Include="System.Threading.Tasks">
      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Threading.Tasks.dll</HintPath>
  </Reference>
- <Reference Include="System.Threading.Tasks.Parallel">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Threading.Tasks.Parallel.dll</HintPath>
- </Reference>
- <Reference Include="System.Threading.Thread">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Threading.Thread.dll</HintPath>
- </Reference>
- <Reference Include="System.Threading.ThreadPool">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Threading.ThreadPool.dll</HintPath>
- </Reference>
+        <Reference Include="System.Threading.Tasks.Parallel">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Threading.Tasks.Parallel.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Threading.Thread">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Threading.Thread.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Threading.ThreadPool">
+            <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Threading.ThreadPool.dll</HintPath>
+        </Reference>
         <Reference Include="System.Threading.Timer">
             <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Threading.Timer.dll</HintPath>
         </Reference>

@@ -108,16 +108,16 @@
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Transitions\Editor\UIHighlightTransitionEditor.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Transitions\Editor\UIPressTransitionEditor.cs" />
      <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Window\Editor\UIBlackOverlayManagerEditor.cs" />
-     <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Window\Editor\UIWindowEditor.cs" />
- <Reference Include="UnityEditor.TestRunner">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.TestRunner">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
- </Reference>
- <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
-     <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
- </Reference>
+      <Compile Include="Assets\RPG and MMO UI 7\Scripts\UI\Window\Editor\UIWindowEditor.cs"/>
+      <Reference Include="UnityEditor.TestRunner">
+          <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TestRunner">
+          <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
+          <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+      </Reference>
       <Reference Include="Unity.Timeline.Editor">
           <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
       </Reference>
@@ -151,24 +151,24 @@
       <Reference Include="Unity.TextMeshPro.Editor">
           <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
       </Reference>
- <Reference Include="Unity.RenderPipelines.Universal.Runtime">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="Unity.RenderPipelines.Universal.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.UI">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Timeline">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
- </Reference>
- <Reference Include="Unity.CollabProxy.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Rider.Editor">
-     <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
- </Reference>
+      <Reference Include="Unity.RenderPipelines.Universal.Runtime">
+          <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.RenderPipelines.Universal.Editor">
+          <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UI">
+          <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.Timeline">
+          <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.CollabProxy.Editor">
+          <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.Rider.Editor">
+          <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      </Reference>
       <Reference Include="Unity.VectorGraphics.Editor">
           <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.VectorGraphics.Editor.dll</HintPath>
       </Reference>
@@ -216,16 +216,16 @@
       </Reference>
       <Reference Include="UnityEngine.AudioModule">
           <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.AudioModule.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.ClothModule">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClothModule.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.ClusterInputModule">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClusterInputModule.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.ClusterRendererModule">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClusterRendererModule.dll</HintPath>
- </Reference>
+      </Reference>
+      <Reference Include="UnityEngine.ClothModule">
+          <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClothModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ClusterInputModule">
+          <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClusterInputModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ClusterRendererModule">
+          <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClusterRendererModule.dll</HintPath>
+      </Reference>
  <Reference Include="UnityEngine.CoreModule">
      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
  </Reference>
@@ -742,15 +742,15 @@
  <Reference Include="System.Xml.XPath.XDocument">
      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XPath.XDocument.dll</HintPath>
  </Reference>
- <Reference Include="UnityScript">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/UnityScript.dll</HintPath>
- </Reference>
- <Reference Include="UnityScript.Lang">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/UnityScript.Lang.dll</HintPath>
- </Reference>
- <Reference Include="Boo.Lang">
-     <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
- </Reference>
+      <Reference Include="UnityScript">
+          <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/UnityScript.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityScript.Lang">
+          <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/UnityScript.Lang.dll</HintPath>
+      </Reference>
+      <Reference Include="Boo.Lang">
+          <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.15f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
+      </Reference>
   </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="Assembly-CSharp.csproj">

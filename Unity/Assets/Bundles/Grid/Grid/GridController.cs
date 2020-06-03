@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Admin;
 using Bundles.UI.SelectList;
 using Grid.Asset;
 using UnityEngine;
@@ -98,7 +97,7 @@ public class GridController : MonoBehaviour
     {
         if (
             PlayerCamera.gameObject.GetComponent<SimpleCameraController>().enabled == false ||
-            AdminAuthorization.LoggedIn == false
+            GridManager.IsActive == false
         ) return;
 
         GridName.text = GridManager.Grid.Name + " (" + GridManager.Grid.Identifier + ")";

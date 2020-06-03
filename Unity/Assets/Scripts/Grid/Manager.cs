@@ -16,6 +16,12 @@ namespace Grid
 
         public event AddToGridAction OnAddToGrid;
         public GameObject GridContainer;
+        public bool DemoMode = false;
+
+        public bool IsActive
+        {
+            get { return Container.activeSelf; }
+        }
 
         [ReadOnly] public Grid Grid = new Grid();
         [ReadOnly] public Asset.Manager AssetManager;
@@ -31,7 +37,9 @@ namespace Grid
         public override void Update()
         {
             base.Update();
-            if (Container.activeSelf != AdminAuthorization.LoggedIn) Container.SetActive(AdminAuthorization.LoggedIn);
+            if (DemoMode == false && IsActive != AdminAuthorization.LoggedIn)
+                Container.SetActive(AdminAuthorization.LoggedIn);
+            if (DemoMode == true && IsActive == false) Container.SetActive(true);
         }
 
         public Entity InstantiateEntityPrefab(Entity entityPrefab)
@@ -69,6 +77,8 @@ namespace Grid
 
         public Entity AddToGrid(Entity entityPrefab)
         {
+            if (DemoMode && entityPrefab.CatalogEntity.Name == "Grid") return null;
+
             GridEntity gridEntity = new GridEntity();
             gridEntity.Name = entityPrefab.CatalogEntity.Name + "(" + gridEntity.Identifier + ")";
             gridEntity.CatalogEntity = entityPrefab.CatalogEntity;
@@ -93,11 +103,13 @@ namespace Grid
         public void Move(Entity selectedEntity, Vector3 move)
         {
             GridEntity gridEntity = EntityMap[selectedEntity];
+
             Vector3 newPosition = new Vector3(
                 gridEntity.Position.x + move.x * selectedEntity.Snap.Horizontal,
                 gridEntity.Position.y + move.y * selectedEntity.Snap.Vertical,
                 gridEntity.Position.z + move.z * selectedEntity.Snap.Horizontal
             );
+
             MoveTo(selectedEntity, newPosition);
         }
 
@@ -108,13 +120,27 @@ namespace Grid
             selectedEntity.gameObject.transform.localPosition = newPosition;
         }
 
-        public void Rotate(Entity selectedEntity, float direction)
+        public void RotateHorizontal(Entity selectedEntity, float direction)
         {
             GridEntity gridEntity = EntityMap[selectedEntity];
+
             Vector3 newRotation = new Vector3(
-                0f,
+                gridEntity.Rotation.x,
                 gridEntity.Rotation.y + direction * selectedEntity.Snap.Rotation,
-                0f
+                gridEntity.Rotation.z
+            );
+
+            RotateTo(selectedEntity, newRotation);
+        }
+
+        public void RotateVertical(Entity selectedEntity, float direction)
+        {
+            GridEntity gridEntity = EntityMap[selectedEntity];
+
+            Vector3 newRotation = new Vector3(
+                gridEntity.Rotation.x + direction * selectedEntity.Snap.Rotation,
+                gridEntity.Rotation.y,
+                gridEntity.Rotation.z
             );
             RotateTo(selectedEntity, newRotation);
         }
@@ -160,7 +186,14 @@ namespace Grid
 
         public void SaveGrid()
         {
+            if (DemoMode) return;
             StartCoroutine(UploadGridData(JsonConvert.SerializeObject(Grid)));
+
+            EntityMap.Keys.ToList<Entity>()
+                .FindAll((Entity entity) => entity is Manager)
+                .ForEach(
+                    (Entity entity) => (entity as Manager).SaveGrid()
+                );
         }
 
         IEnumerator UploadGridData(string gridData)
@@ -171,9 +204,9 @@ namespace Grid
                 SharedContent.ProjectSettings.ApiUri + "/grid",
                 System.Text.Encoding.UTF8.GetBytes(gridData)
             );
+
             www.SetRequestHeader("admin-token", AdminAuthorization.Token.Token);
             yield return www.SendWebRequest();
-
             if (www.isNetworkError || www.isHttpError)
             {
                 UnityEngine.Debug.Log(www.error);
@@ -185,8 +218,9 @@ namespace Grid
         {
             Grid grid = new Grid();
             grid.Identifier = gridIdentifier;
-            ReplaceGrid(grid);
 
+            ReplaceGrid(grid);
+            if (DemoMode) return;
             StartCoroutine(LoadGridData(gridIdentifier, ReplaceGrid));
         }
 
@@ -195,7 +229,6 @@ namespace Grid
             string gridUrl = SharedContent.ProjectSettings.HostUri + "/grid-data/" + identifier + ".json";
             UnityWebRequest www = UnityWebRequest.Get(gridUrl);
             yield return www.SendWebRequest();
-
             if (www.isNetworkError || www.isHttpError)
             {
                 UnityEngine.Debug.LogError("Not able to load '" + gridUrl + "'. " + www.error);
