@@ -1852,7 +1852,7 @@ MonoBehaviour:
   Rotation: {x: 0, y: 0, z: 0}
   Snap:
     Horizontal: 1
-    Vertical: 0.001
+    Vertical: 1
     Rotation: 45
   Data: 
 --- !u!65 &1485232396643074554
@@ -3318,7 +3318,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 6, y: 5, z: 3}
-  m_Center: {x: 0, y: 2.5, z: 0}
+  m_Center: {x: 0, y: 2.5, z: 0.5}
 --- !u!1 &7773201843091196956
 GameObject:
   m_ObjectHideFlags: 0
@@ -4886,7 +4886,7 @@ PrefabInstance:
     - target: {fileID: 9202627115047054194, guid: 03abb7b0c4ac5b4429521d08dae73193,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9202627115047054194, guid: 03abb7b0c4ac5b4429521d08dae73193,
         type: 3}
