@@ -105,13 +105,13 @@ Material:
     - _BumpScale: 1
     - _CloudsBrightness: -0.24
     - _CloudsContract: 0.778
-    - _CloudsDensity: 1
+    - _CloudsDensity: 0.9
     - _CloudsDensitySkyEdge: 1.157
     - _CloudsRotation: 3.88
     - _CloudsScale: 0.52
     - _CloudsShadowBalance: 1
     - _CloudsShadowWeight: 0.54
-    - _CloudsThickness: 0.3
+    - _CloudsThickness: 0.28
     - _CloudsTransmission: 1.474
     - _Cutoff: 0.5
     - _DayCloudsTransmission: 1
@@ -145,7 +145,7 @@ Material:
     - _ShadowOffset: 1
     - _SrcBlend: 1
     - _SunGlow: 0.0586
-    - _SunLightPower: 1
+    - _SunLightPower: 0.93
     - _SunZoffset: 0
     - _ToggleExtra: 1
     - _ToggleRGAGNormal: 0
@@ -172,7 +172,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DayAtmosphere: {r: 0.57254905, g: 0.86274517, b: 1, a: 0}
     - _DaySky: {r: 0.28070936, g: 0.60048914, b: 0.86764705, a: 0}
-    - _DayTransmissionColor: {r: 1.6, g: 1.409497, b: 1.2551037, a: 1}
+    - _DayTransmissionColor: {r: 1.488, g: 1.3580179, b: 1.2492528, a: 1}
     - _DistortionPan: {r: 0.1247312, g: 0.1247312, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _ExtraLight: {r: 0.74264705, g: 0.74264705, b: 0.74264705, a: 0.253}
@@ -182,7 +182,7 @@ Material:
     - _MoonPosition: {r: 0.69814277, g: 0.59060556, b: 0.40469968, a: 0}
     - _NightAtmosphere: {r: 0.2599235, g: 0.29747394, b: 0.31132078, a: 1}
     - _NightSky: {r: 0.14774139, g: 0.29548275, b: 0.41799998, a: 0}
-    - _NightTransmissionColor: {r: 1.6, g: 1.409497, b: 1.2551037, a: 1}
+    - _NightTransmissionColor: {r: 1.488, g: 1.3580179, b: 1.2492528, a: 1}
     - _SunSetAtmosphere: {r: 0.9117647, g: 0.63989973, b: 0.3486159, a: 0}
     - _SunSetSky: {r: 0.5411765, g: 0.627451, b: 0.6313726, a: 0}
     - _TransmissionColor: {r: 0.5808823, g: 0.5808823, b: 0.5808823, a: 1}

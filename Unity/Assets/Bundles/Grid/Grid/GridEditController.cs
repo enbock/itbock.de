@@ -5,6 +5,7 @@ using Grid.Asset;
 using Scripts.Input;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityTemplateProjects;
 using Manager = Grid.Manager;
 
@@ -12,8 +13,13 @@ namespace Bundles.Grid.Grid
 {
     public class GridEditController : MonoBehaviour
     {
+        public delegate void SelectEntityAction(Entity entity);
+
+        public event SelectEntityAction OnEntityChange;
+
         public Manager GridManger;
         public Material SelectMaterial;
+        public InputField DataInput;
         [ReadOnly] public Camera PlayerCamera;
         [ReadOnly] public Entity SelectedEntity;
         Dictionary<MeshRenderer, Material[]> OriginalMaterials = new Dictionary<MeshRenderer, Material[]>();
@@ -29,6 +35,7 @@ namespace Bundles.Grid.Grid
                     if (loggedIn == false) UnselectEntity();
                 }
             );
+            DataInput.onValueChanged.AddListener(DataChange);
         }
 
         private void Update()
@@ -109,7 +116,7 @@ namespace Bundles.Grid.Grid
 
                 if (Input.GetKey(KeyCode.PageUp))
                 {
-                    if (Input.GetKey(KeyCode.LeftControl))
+                    if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftAlt))
                     {
                         GridManger.RotateVertical(SelectedEntity, 1f);
                     }
@@ -133,7 +140,7 @@ namespace Bundles.Grid.Grid
 
                 if (Input.GetKey(KeyCode.PageDown))
                 {
-                    if (Input.GetKey(KeyCode.LeftControl))
+                    if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftAlt))
                     {
                         GridManger.RotateVertical(SelectedEntity, -1f);
                     }
@@ -174,6 +181,8 @@ namespace Bundles.Grid.Grid
             if (SelectedEntity == entity) return;
             SelectedEntity = entity;
             ReplaceMertials(entity);
+            DataInput.text = entity.Data;
+            OnEntityChange?.Invoke(entity);
         }
 
         private void ReplaceMertials(Entity entity)
@@ -204,6 +213,7 @@ namespace Bundles.Grid.Grid
 
             SelectedEntity = null;
             OriginalMaterials.Clear();
+            OnEntityChange?.Invoke(null);
         }
 
         private Entity FindEntity(GameObject gameObject)
@@ -222,6 +232,13 @@ namespace Bundles.Grid.Grid
             }
 
             return null;
+        }
+
+        private void DataChange(string data)
+        {
+            if (SelectedEntity == null) return;
+            SelectedEntity.Data = data; // update in world
+            GridManger.ChangeData(SelectedEntity, data); // update in grid data
         }
     }
 }

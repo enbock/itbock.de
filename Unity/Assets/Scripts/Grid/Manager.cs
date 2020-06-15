@@ -60,7 +60,6 @@ namespace Grid
             MoveTo(entity, gridEntity.Position);
             RotateTo(entity, gridEntity.Rotation);
             entity.Data = gridEntity.Data;
-            entity.OnDataChange += (string data) => { gridEntity.Data = data; };
 
             // Sub-Grid Initialization
             Manager gridManager = entity.gameObject.GetComponent<Manager>();
@@ -152,6 +151,12 @@ namespace Grid
             selectedEntity.gameObject.transform.localRotation = Quaternion.Euler(newRotation);
         }
 
+        public void ChangeData(Entity selectedEntity, string data)
+        {
+            GridEntity gridEntity = EntityMap[selectedEntity];
+            gridEntity.Data = data;
+        }
+
         public void Remove(Entity selectedEntity)
         {
             GridEntity gridEntity = EntityMap[selectedEntity];
@@ -177,9 +182,10 @@ namespace Grid
                 (Entity entityPrefab) =>
                 {
                     Entity entity = AddToGrid(entityPrefab);
-                    GridEntity gridEntity = EntityMap[selectedEntity];
-                    MoveTo(entity, gridEntity.Position);
-                    RotateTo(entity, gridEntity.Rotation);
+                    GridEntity origialEntity = EntityMap[selectedEntity];
+                    MoveTo(entity, origialEntity.Position);
+                    RotateTo(entity, origialEntity.Rotation);
+                    entity.Data = origialEntity.Data;
                 }
             );
         }

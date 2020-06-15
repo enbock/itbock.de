@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Bundles.Grid.Grid;
+using Bundles.UI;
 using Bundles.UI.SelectList;
 using Grid.Asset;
 using UnityEngine;
@@ -9,6 +11,7 @@ using Manager = Grid.Manager;
 public class GridController : MonoBehaviour
 {
     public Manager GridManager;
+    public GridEditController EditController;
     public Button LoadLibrariesButton;
     public Text GridName;
     public Button GridNameEditButton;
@@ -22,9 +25,12 @@ public class GridController : MonoBehaviour
     public Button AddToGridButton;
     public Button SaveGridButton;
     public Button ReloadGridButton;
+    public InputField DataInput;
+    public InputFieldFocusObserver DataInputFocus;
 
     [ReadOnly] public Camera PlayerCamera;
     [ReadOnly] public List<CatalogEntity> Entities = new List<CatalogEntity>();
+    [ReadOnly] public Entity SelectedEntity;
 
     private void OnEnable()
     {
@@ -35,15 +41,7 @@ public class GridController : MonoBehaviour
         cameraOutput.filterMode = FilterMode.Bilinear;
         PreviewCamera.targetTexture = cameraOutput;
         PreviewImage.texture = cameraOutput;
-    }
-
-    private void OnDestroy()
-    {
-        GridManager.AssetManager.OnLoadEntity -= NewEntity;
-    }
-
-    void Start()
-    {
+        EditController.OnEntityChange += SwitchLayout;
         LoadLibrariesButton.onClick.AddListener(LoadLibraries);
         SelectList.OnSelect += ShowPreview;
         SelectList.OnRemove += HidePreview;
@@ -53,10 +51,20 @@ public class GridController : MonoBehaviour
         GridNameField.onValueChanged.AddListener(ChangeGridName);
         SaveGridButton.onClick.AddListener(GridManager.SaveGrid);
         ReloadGridButton.onClick.AddListener(delegate { GridManager.LoadGrid(GridManager.Grid.Identifier); });
+        DataInputFocus.OnFocusChange += SwitchDataEdit;
+    }
 
+    private void OnDestroy()
+    {
+        GridManager.AssetManager.OnLoadEntity -= NewEntity;
+    }
+
+    void Start()
+    {
         Preview3D.SetActive(false);
         PreviewUI.SetActive(false);
         FillAssetList();
+        SwitchLayout(null);
     }
 
     private void FillAssetList()
@@ -69,7 +77,7 @@ public class GridController : MonoBehaviour
 
     private void SwitchToGridNameEdit()
     {
-        PlayerCamera.gameObject.GetComponent<SimpleCameraController>().enabled = false;
+        SetPlayerCameraEnabling(false);
         GridNameField.text = GridManager.Grid.Name;
         GridNameField.gameObject.SetActive(true);
         GridNameField.ActivateInputField();
@@ -78,7 +86,7 @@ public class GridController : MonoBehaviour
 
     private void FinishGridNameEdit(string newName)
     {
-        PlayerCamera.gameObject.GetComponent<SimpleCameraController>().enabled = true;
+        SetPlayerCameraEnabling(true);
         GridNameField.gameObject.SetActive(false);
         GridName.gameObject.SetActive(true);
     }
@@ -111,6 +119,11 @@ public class GridController : MonoBehaviour
         }
 
         PreviewCamera.gameObject.transform.localPosition = new Vector3(0f, 0.091f, -0.1f * newSize);
+    }
+
+    private bool SetPlayerCameraEnabling(bool isEnabled)
+    {
+        return PlayerCamera.gameObject.GetComponent<SimpleCameraController>().enabled = isEnabled;
     }
 
     private void NewEntity(Entity entity)
@@ -151,5 +164,24 @@ public class GridController : MonoBehaviour
             Entities[SelectList.SelectedItem.Id],
             (Entity entityPrefab) => { GridManager.AddToGrid(entityPrefab); }
         );
+    }
+
+    private void SwitchLayout(Entity entity)
+    {
+        SelectedEntity = entity;
+        DataInput.gameObject.SetActive(entity != null);
+        if (SelectList.SelectedItem != null && entity == null)
+        {
+            ShowPreview(SelectList.SelectedItem.Id);
+        }
+        else
+        {
+            HidePreview();
+        }
+    }
+
+    private void SwitchDataEdit(bool isFocussed)
+    {
+        SetPlayerCameraEnabling(isFocussed == false);
     }
 }
