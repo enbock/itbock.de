@@ -23,7 +23,7 @@ public class InfoData : MonoBehaviour
         Data = Entity.Data;
         foreach (Text text in Texts)
         {
-            text.text = Data;
+            text.text = Data.Length >= 4 && Data.Substring(0, 4) == "DATA" ? "" : Data;
         }
     }
 }
