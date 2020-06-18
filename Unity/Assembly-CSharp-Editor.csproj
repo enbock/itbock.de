@@ -126,20 +126,11 @@
  <Reference Include="Unity.VSCode.Editor">
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
  </Reference>
- <Reference Include="Unity.ProBuilder">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ProBuilder.dll</HintPath>
- </Reference>
  <Reference Include="Unity.RenderPipelines.Core.Editor">
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.VectorGraphics">
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.VectorGraphics.dll</HintPath>
- </Reference>
- <Reference Include="Unity.ProBuilder.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Core.Runtime">
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
@@ -176,9 +167,6 @@
  </Reference>
  <Reference Include="Unity.2D.Sprite.Editor">
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.ProBuilder.AddOns.Editor">
- <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.ShaderGraph.Editor">
  <HintPath>D:/Homepage 2020/Unity/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
