@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+	<asset>
+		<contributor>
+			<authoring_tool>SVG to Collada Code Extruder</authoring_tool>
+		</contributor>
+		<up_axis>Y_UP</up_axis>
+	</asset>
+	<library_geometries>
+		<geometry id="logo-mesh-1" name="logo-mesh">
+			<mesh>
+				<source id="logo-mesh-positions-1">
+					<float_array id="logo-mesh-positions-array-1" count="27">20.0 60.0 0.0 0.0 295.0 0.0 190.0 60.0 210.0 60.0 0.0 40.0 0.0 0.0 170.0 0.0 50.0 40.0 30.0 40.0 0.0 75.0 0.0 35.0 20.0 55.0 20.0 -30.0 90.0 100.0 90.0 210.0 120.0 170.0 120.0 110.0 150.0 90.0 150.0 140.0 180.0 90.0 180.0 -140.0 210.0 -200.0 210.0 -100.0 240.0 0.0 210.0</float_array>
+					<technique_common>
+						<accessor source="#logo-mesh-positions-array-1" count="9" stride="3">
+							<param name="X" type="float"/>
+							<param name="Y" type="float"/>
+							<param name="Z" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<vertices id="logo-mesh-vertices-1">
+					<input semantic="POSITION" source="#logo-mesh-positions-1"/>
+				</vertices>
+				<polylist count="9" material="material-1">
+					<input semantic="VERTEX" source="#logo-mesh-vertices-1" offset="0"/>
+					<vcount>3 3 3 3 3 3 3 3 3</vcount>
+					<p>0 1 2 0 3 4 0 5 6 0 7 8 0 9 10 0 11 12 0 13 14 0 15 16 0 17 18 0 19 20 0 21 22</p>
+				</polylist>
+			</mesh>
+		</geometry>
+	</library_geometries>
+	<library_materials>
+		<material id="material-1" name="material-1">
+			<instance_effect url="#effect-1"/>
+		</material>
+	</library_materials>
+	<library_effects>
+		<effect id="effect-1" name="effect-1">
+			<profile_COMMON>
+				<technique sid="common">
+					<phong>
+						<emission>
+							<color>0.4 0.4 0.4 1</color>
+						</emission>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+	</library_effects>
+	<library_visual_scenes>
+		<visual_scene id="scene" name="Scene">
+			<node id="node-1">
+				<instance_geometry url="#logo-mesh-1">
+					<bind_material>
+						<technique_common>
+							<instance_material symbol="material-1" target="#material-1"/>
+						</technique_common>
+					</bind_material>
+					<extra>
+						<technique profile="MAYA">
+							<translate sid="translate">42 -23 0</translate>
+							<rotate sid="rotateZ">0 0 1 8</rotate>
+						</technique>
+					</extra>
+				</instance_geometry>
+			</node>
+		</visual_scene>
+	</library_visual_scenes>
+	<scene>
+		<instance_visual_scene url="#scene"/>
+	</scene>
+</COLLADA>
