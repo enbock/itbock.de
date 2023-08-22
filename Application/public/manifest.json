@@ -1,0 +1,15 @@
+{
+  "short_name": "Bock-Labs",
+  "name": "Bock Laboratories",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "sizes": "96x96 72x72 64x64 32x32 24x24 16x16",
+      "type": "image/svg"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#444",
+  "background_color": "#444"
+}

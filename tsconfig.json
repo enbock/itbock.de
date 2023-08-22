@@ -1,0 +1,54 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "CommonJS",
+    "target": "ESNext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@enbock/ts-jsx",
+    "outDir": "./build/",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceRoot": ".",
+    "sourceMap": true,
+    "lib": [
+      "dom",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "Application/*": [
+        "Application/*"
+      ],
+      "Core/*": [
+        "Core/*"
+      ],
+      "Infrastructure/*": [
+        "Infrastructure/*"
+      ]
+    }
+  },
+  "include": [
+    "Application/**/*",
+    "Core/**/*",
+    "Infrastructure/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

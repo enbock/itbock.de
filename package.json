@@ -1,0 +1,23 @@
+{
+  "name": "ai-webpage-itbock.de-2024",
+  "version": "1.0.0",
+  "dependencies": {
+    "@enbock/ts-jsx": "^0.1.0-dev18",
+    "@types/jsdom": "*",
+    "@types/node": "*",
+    "copy-webpack-plugin": "*",
+    "css-loader": "*",
+    "html-webpack-plugin": "*",
+    "jsdom": "*",
+    "openai": "*",
+    "typescript": "*",
+    "webpack": "*",
+    "webpack-cli": "*",
+    "webpack-dev-server": "*"
+  },
+  "scripts": {
+    "start": "webpack serve --open --mode development --no-open --no-live-reload --no-hot --stats-error-details",
+    "build": "webpack --mode production",
+    "generate-container": "npx @enbock/ts-di-container-generator@0.1.0-dev37 Application index"
+  }
+}
