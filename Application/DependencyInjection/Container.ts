@@ -1,8 +1,8 @@
 // @formatter:off
 import StartController from 'Application/Start/Controller';
 class Container {
-    private manualInjections = new class {
-        public startControllerDocument:Document = document;
+    private manualInjections: any = {
+        startControllerDocument: document
     };
     private _startController?: StartController;
     public get startController(): StartController { if (this._startController)

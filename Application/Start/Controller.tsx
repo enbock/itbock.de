@@ -13,14 +13,7 @@ export default class Controller {
     }
 
     private appendStartApp(): void {
-        const jsx: JSX.Element = {
-            isNode: true,
-            component: typeof Start,
-            props: {},
-            tagName: "start",
-            children: []
-        };
-        const rootNode: HTMLElement = ShadowRenderer.render(jsx);
+        const rootNode: HTMLElement = ShadowRenderer.render(<Start/>);
         this.document.body.appendChild(rootNode);
     }
 

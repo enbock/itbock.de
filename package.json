@@ -10,6 +10,7 @@
     "html-webpack-plugin": "*",
     "jsdom": "*",
     "openai": "*",
+    "ts-loader": "*",
     "typescript": "*",
     "webpack": "*",
     "webpack-cli": "*",
