@@ -4,8 +4,8 @@ import {ShadowDomElement} from "@enbock/ts-jsx/ShadowDom";
 interface Properties {
 }
 
-export declare class Start extends Component<Properties> {
-    render(): ShadowDomElement | ShadowDomElement[] {
-        return 'hello';
+export default class Start extends Component<Properties> {
+    render(): ShadowDomElement | ShadowDomElement[] | JSX.Element {
+        return <div>Hello World</div>;
     }
 }

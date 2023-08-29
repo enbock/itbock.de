@@ -1,4 +1,4 @@
-import {Start} from 'Application/Start/View/Start';
+import Start from 'Application/Start/View/Start';
 import ShadowRenderer from '@enbock/ts-jsx/ShadowRenderer';
 
 export default class Controller {
