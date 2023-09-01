@@ -2,6 +2,7 @@
   "name": "ai-webpage-itbock.de-2024",
   "version": "1.0.0",
   "dependencies": {
+    "@aws-sdk/client-polly": "*",
     "@enbock/ts-jsx": "^0.1.0-dev18",
     "@types/jsdom": "*",
     "@types/node": "*",

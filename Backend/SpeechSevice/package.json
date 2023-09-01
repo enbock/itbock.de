@@ -1,0 +1,19 @@
+{
+  "name": "itbock.de-speech-service",
+  "version": "1.0.0",
+  "author": "Endre Bock",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "deploy": "node scripts/deploy.js"
+  },
+  "devDependencies": {
+    "@types/aws-sdk": "*",
+    "@types/node": "*",
+    "@aws-sdk/client-polly": "*",
+    "@aws-sdk/client-s3": "*",
+    "ts-node": "*",
+    "typescript": "*",
+    "zip-dir": "*"
+  }
+}

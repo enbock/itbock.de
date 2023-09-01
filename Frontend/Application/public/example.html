@@ -1,0 +1,12 @@
+<html>
+<body>
+<script>
+    function sayIt() {
+        document.getElementById("audio").src = encodeURI("https://api.itbock.de/speech?text=" + document.getElementById("input").value)
+    }
+</script>
+<audio id="audio" autoplay ></audio>
+<input type="text" id="input"/>
+<button onclick="javascript:sayIt()">Say</button>
+</body>
+</html>
