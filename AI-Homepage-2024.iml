@@ -2,7 +2,11 @@
 <module version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/Frontend" />
+    <content url="file://$MODULE_DIR$/Frontend">
+      <sourceFolder url="file://$MODULE_DIR$/Frontend/Application" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Frontend/Core" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Frontend/Infrastructure" isTestSource="false" />
+    </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

@@ -11,7 +11,6 @@
     "@types/aws-sdk": "*",
     "@types/node": "*",
     "@aws-sdk/client-polly": "*",
-    "@aws-sdk/client-s3": "*",
     "ts-node": "*",
     "typescript": "*",
     "zip-dir": "*"
