@@ -9,13 +9,11 @@ import StartViewStartPresenter from "Application/Start/View/StartPresenter";
 import WelcomeControllerController from "Application/Welcome/Controller/Controller";
 import StartAdapter from "Application/Start/Adapter";
 import StartControllerController from "Application/Start/Controller/Controller";
-// @formatter:on
 import renderApplication, {Start} from "Application/Start/View/Start";
 import Welcome from "Application/Welcome/View/Welcome";
 import StartMemory from "Infrastructure/Storage/Start/Memory";
 import AudioMemory from "Infrastructure/Storage/Audio/Memory";
 import ViewInjection from "@enbock/ts-jsx/ViewInjection";
-
 interface ManualInjections {
     startControllerControllerView: typeof Start;
     welcomeControllerControllerView: typeof Welcome;
@@ -23,12 +21,13 @@ interface ManualInjections {
     startControllerControllerDocument: Document;
     audioViewAudioPresenterSoundServiceUrl: string;
 }
-
 interface InterfaceInstances {
     coreStartStartStorage: StartMemory;
     coreAudioAudioStorage: AudioMemory;
 }
-
+interface AdditionalResources {
+    welcomeController: WelcomeControllerController;
+}
 class Container {
     private manualInjections: ManualInjections = {
         welcomeControllerControllerView: Welcome,
@@ -37,16 +36,14 @@ class Container {
         startControllerControllerInitializeApplicationView: renderApplication,
         audioViewAudioPresenterSoundServiceUrl: "https://api.itbock.de/speech"
     };
-    private interfaceInstances: InterfaceInstances = {
+    private interfaceInstances: InterfaceInstances & AdditionalResources = {
+        welcomeController: this.welcomeControllerController,
         coreStartStartStorage: new StartMemory(),
         coreAudioAudioStorage: new AudioMemory()
     };
-
     constructor() {
         ViewInjection(Start, this.startAdapter);
     }
-
-    // @formatter:off
     public coreAudioAudioStorage: CoreAudioAudioStorage = this.interfaceInstances.coreAudioAudioStorage;
     public coreStartStartStorage: CoreStartStartStorage = this.interfaceInstances.coreStartStartStorage;
     private _startAdapter?: StartAdapter;

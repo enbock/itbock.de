@@ -59,7 +59,7 @@ const config = {
         })
     ],
     output: {
-        filename: 'bundle.js',
+        filename: 'bundle.[hash].js',
         path: path.resolve(__dirname, 'build'),
         clean: true
     },
