@@ -37,8 +37,8 @@ Deine Befehle:
 - Du ordnest die Eingaben des Benutzers den Befehlen zu. Sollte kein Befehl passen, lasse ihn leer.
 - Du wirst in folgender Syntax antworten:
     {
-        command: "<command name>",
-        say: "<sprech text for the user>"
+        "command": "<command name>",
+        "say": "<sprech text for the user>"
     }
 `
                     },
@@ -46,6 +46,7 @@ Deine Befehle:
                         role: 'user',
                         content: 'Heiße den Benutzer nun bei Bock Laboratories willkommen'
                             + ' und erkläre, daß Du Dich aktuell noch in der Entwicklung befindest und deshalb noch keine Eingaben entgegennehmen kann.'
+                            + ' Jedoch wird gerade der Link zur alten Homepage angezeigt und kann benutzt werden.'
                     }
                 ]
             }
