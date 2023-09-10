@@ -20,7 +20,6 @@
   "scripts": {
     "start": "webpack serve --open --mode development --no-open --no-live-reload --no-hot --stats-error-details",
     "build": "webpack --mode production",
-    "generate-container:lib": "npx @enbock/ts-di-container-generator@0.1.0-dev40 Application index",
-    "generate-container": "npx ../../ts-di-container-generator Application index"
+    "generate-container": "npx @enbock/ts-di-container-generator@ Application index"
   }
 }
