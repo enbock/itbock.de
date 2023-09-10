@@ -2,9 +2,9 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/Backend/SpeechSevice">
-      <sourceFolder url="file://$MODULE_DIR$/Backend/SpeechSevice/src" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/Backend/SpeechSevice/build" />
+    <content url="file://$MODULE_DIR$/GeneralGPT">
+      <sourceFolder url="file://$MODULE_DIR$/GeneralGPT/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/GeneralGPT/build" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

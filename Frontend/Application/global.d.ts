@@ -4,6 +4,7 @@ type throwsErrorOrReturn<E extends Error, T> = T;
 type throwsError<E extends Error> = void;
 type Callback<Function = () => void> = Function;
 type AdapterCallback<Function = () => Promise<void>> = Function;
+type BusCallback<Function = () => Promise<void>> = Function;
 type MockedObject<T = any> = SpyObj<T>;
 
 type Factorizable<T> = {
@@ -18,7 +19,7 @@ declare namespace JSX {
     }
 }
 
-declare module "*.css" {
+declare module '*.css' {
     const content: any;
     export default content;
 }

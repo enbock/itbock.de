@@ -1,15 +1,13 @@
-import Request from "Core/Audio/AddTextUseCase/Request";
-import AudioStorage from "Core/Audio/AudioStorage";
+import Request from 'Core/Audio/AddTextUseCase/Request';
+import AudioService from 'Core/Audio/AudioService';
 
 export default class AddAudioTextUseCase {
     constructor(
-        private audioStorage: AudioStorage
+        private audioService: AudioService
     ) {
     }
 
     public addText(request: Request): void {
-        const buffer: Array<string> = this.audioStorage.getBuffer();
-        buffer.push(request.text);
-        this.audioStorage.setBuffer(buffer);
+        this.audioService.addAudioText(request.text);
     }
 }

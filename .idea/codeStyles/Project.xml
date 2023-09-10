@@ -5,6 +5,7 @@
       <option name="FIELD_PREFIX" value="" />
       <option name="FILE_NAME_STYLE" value="PASCAL_CASE" />
       <option name="USE_PUBLIC_MODIFIER" value="true" />
+      <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="FORCE_QUOTE_STYlE" value="true" />
       <option name="PREFER_EXPLICIT_TYPES_VARS_FIELDS" value="true" />
       <option name="PREFER_EXPLICIT_TYPES_FUNCTION_RETURNS" value="true" />

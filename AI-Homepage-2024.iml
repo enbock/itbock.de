@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Frontend/Application" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Frontend/Core" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Frontend/Infrastructure" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/Frontend/build" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

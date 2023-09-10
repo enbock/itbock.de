@@ -1,0 +1,21 @@
+{
+  "name": "itbock.de-generic-gpt",
+  "version": "1.0.0",
+  "author": "Endre Bock",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "deploy": "node scripts/deploy.js",
+    "test:run": "node ./localRun.js"
+  },
+  "dependencies": {
+    "openai": "*"
+  },
+  "devDependencies": {
+    "@types/aws-sdk": "*",
+    "@types/node": "*",
+    "ts-node": "*",
+    "typescript": "*",
+    "zip-dir": "*"
+  }
+}

@@ -1,9 +1,11 @@
 // @formatter:off
-import CoreAudioAudioStorage from 'Core/Audio/AudioStorage';
-import CoreAudioAddTextUseCaseAddAudioTextUseCase from 'Core/Audio/AddTextUseCase/AddAudioTextUseCase';
-import AudioViewAudioPresenter from 'Application/Audio/View/AudioPresenter';
-import CoreStartStartStorage from 'Core/Start/StartStorage';
+import CoreGptGptClient from 'Core/Gpt/GptClient';
 import CoreAudioAudioService from 'Core/Audio/AudioService';
+import CoreGptGeneralConversationUseCaseGeneralConversationUseCase from 'Core/Gpt/GeneralConversationUseCase/GeneralConversationUseCase';
+import StartControllerStartControllerBus from 'Application/Start/Controller/StartControllerBus';
+import AudioViewAudioPresenter from 'Application/Audio/View/AudioPresenter';
+import CoreAudioAudioStorage from 'Core/Audio/AudioStorage';
+import CoreStartStartStorage from 'Core/Start/StartStorage';
 import CoreStartStartUseCaseStartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 import StartViewStartPresenter from 'Application/Start/View/StartPresenter';
 import WelcomeControllerController from 'Application/Welcome/Controller/Controller';
@@ -13,22 +15,28 @@ import { Start } from 'Application/Start/View/Start';
 import Welcome from 'Application/Welcome/View/Welcome';
 import renderApplication from 'Application/Start/View/Start';
 import ViewInjection from '@enbock/ts-jsx/ViewInjection';
+import FetchHelper from 'Infrastructure/ApiHelper/FetchHelper';
+import ParseHelper from 'Infrastructure/ParseHelper';
 import StartMemory from 'Infrastructure/Storage/Start/Memory';
 import AudioMemory from 'Infrastructure/Storage/Audio/Memory';
+import CoreGptGptClientNetwork from 'Infrastructure/GptClient/Network';
 interface ManualInjections {
     startControllerControllerView: typeof Start;
     welcomeControllerControllerView: typeof Welcome;
     startControllerControllerInitializeApplicationView: typeof renderApplication;
     startControllerControllerDocument: Document;
     audioViewAudioPresenterSoundServiceUrl: string;
+    generalGptServiceUrl: string;
     ViewInjection: typeof ViewInjection;
+    fetchHelper: FetchHelper;
+    parseHelper: ParseHelper;
 }
 interface InterfaceInstances {
     coreStartStartStorage: StartMemory;
     coreAudioAudioStorage: AudioMemory;
+    coreGptGptClient: CoreGptGptClientNetwork;
 }
 interface AdditionalResources {
-    welcomeController: WelcomeControllerController;
 }
 class Container {
     private manualInjections: ManualInjections = {
@@ -37,15 +45,22 @@ class Container {
         startControllerControllerDocument: document,
         startControllerControllerInitializeApplicationView: renderApplication,
         audioViewAudioPresenterSoundServiceUrl: "https://api.itbock.de/speech",
-        ViewInjection: ViewInjection
+        generalGptServiceUrl: "https://api.itbock.de/gpt/general",
+        ViewInjection: ViewInjection,
+        fetchHelper: new FetchHelper(),
+        parseHelper: new ParseHelper()
     };
     private interfaceInstances: InterfaceInstances & AdditionalResources = {
-        welcomeController: this.welcomeControllerController,
         coreStartStartStorage: new StartMemory(),
-        coreAudioAudioStorage: new AudioMemory()
+        coreAudioAudioStorage: new AudioMemory(),
+        coreGptGptClient: "" as any
     };
     constructor() {
         ViewInjection(Start, this.startAdapter);
+        this.interfaceInstances.coreGptGptClient = new CoreGptGptClientNetwork(this.manualInjections.fetchHelper, this.manualInjections.parseHelper, this.manualInjections.generalGptServiceUrl);
+    }
+    public get coreGptGptClient(): CoreGptGptClient {
+        return this.interfaceInstances.coreGptGptClient;
     }
     public get coreAudioAudioStorage(): CoreAudioAudioStorage {
         return this.interfaceInstances.coreAudioAudioStorage;
@@ -60,19 +75,26 @@ class Container {
         else
             return this._startAdapter = new StartAdapter();
     }
-    private _coreAudioAddTextUseCaseAddAudioTextUseCase?: CoreAudioAddTextUseCaseAddAudioTextUseCase;
-    public get coreAudioAddTextUseCaseAddAudioTextUseCase(): CoreAudioAddTextUseCaseAddAudioTextUseCase {
-        if (this._coreAudioAddTextUseCaseAddAudioTextUseCase)
-            return this._coreAudioAddTextUseCaseAddAudioTextUseCase;
+    private _startControllerStartControllerBus?: StartControllerStartControllerBus;
+    public get startControllerStartControllerBus(): StartControllerStartControllerBus {
+        if (this._startControllerStartControllerBus)
+            return this._startControllerStartControllerBus;
         else
-            return this._coreAudioAddTextUseCaseAddAudioTextUseCase = new CoreAudioAddTextUseCaseAddAudioTextUseCase(this.coreAudioAudioStorage);
+            return this._startControllerStartControllerBus = new StartControllerStartControllerBus();
+    }
+    private _coreGptGeneralConversationUseCaseGeneralConversationUseCase?: CoreGptGeneralConversationUseCaseGeneralConversationUseCase;
+    public get coreGptGeneralConversationUseCaseGeneralConversationUseCase(): CoreGptGeneralConversationUseCaseGeneralConversationUseCase {
+        if (this._coreGptGeneralConversationUseCaseGeneralConversationUseCase)
+            return this._coreGptGeneralConversationUseCaseGeneralConversationUseCase;
+        else
+            return this._coreGptGeneralConversationUseCaseGeneralConversationUseCase = new CoreGptGeneralConversationUseCaseGeneralConversationUseCase(this.coreGptGptClient, this.coreAudioAudioService);
     }
     private _welcomeControllerController?: WelcomeControllerController;
     public get welcomeControllerController(): WelcomeControllerController {
         if (this._welcomeControllerController)
             return this._welcomeControllerController;
         else
-            return this._welcomeControllerController = new WelcomeControllerController(this.manualInjections.welcomeControllerControllerView, this.coreAudioAddTextUseCaseAddAudioTextUseCase);
+            return this._welcomeControllerController = new WelcomeControllerController(this.manualInjections.welcomeControllerControllerView, this.coreGptGeneralConversationUseCaseGeneralConversationUseCase, this.startControllerStartControllerBus);
     }
     private _audioViewAudioPresenter?: AudioViewAudioPresenter;
     public get audioViewAudioPresenter(): AudioViewAudioPresenter {
@@ -107,7 +129,7 @@ class Container {
         if (this._startControllerController)
             return this._startControllerController;
         else
-            return this._startControllerController = new StartControllerController(this.manualInjections.startControllerControllerDocument, this.manualInjections.startControllerControllerInitializeApplicationView, this.manualInjections.startControllerControllerView, this.coreStartStartUseCaseStartUseCase, this.startViewStartPresenter, this.welcomeControllerController, this.startAdapter);
+            return this._startControllerController = new StartControllerController(this.manualInjections.startControllerControllerDocument, this.manualInjections.startControllerControllerInitializeApplicationView, this.manualInjections.startControllerControllerView, this.coreStartStartUseCaseStartUseCase, this.startViewStartPresenter, this.welcomeControllerController, this.startAdapter, this.startControllerStartControllerBus);
     }
 }
 var DependencyInjectionContainer: Container = new Container();

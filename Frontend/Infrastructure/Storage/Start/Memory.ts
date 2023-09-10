@@ -1,4 +1,4 @@
-import StartStorage from "Core/Start/StartStorage";
+import StartStorage from 'Core/Start/StartStorage';
 
 export default class Memory implements StartStorage {
     private started: boolean = false;

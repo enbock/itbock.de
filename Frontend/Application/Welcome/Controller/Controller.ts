@@ -1,14 +1,18 @@
-import Welcome from "Application/Welcome/View/Welcome";
-import RootComponent from "Application/RootComponent";
-import AddAudioTextUseCase from "Core/Audio/AddTextUseCase/AddAudioTextUseCase";
-import ModuleController from "Application/ModuleController";
+import Welcome from 'Application/Welcome/View/Welcome';
+import RootComponent from 'Application/RootComponent';
+import ModuleController from 'Application/ModuleController';
+import GeneralConversationUseCase from 'Core/Gpt/GeneralConversationUseCase/GeneralConversationUseCase';
+import ConversationResponse from 'Application/Welcome/Controller/ConversationResponse';
+import RunResponse from 'Core/Gpt/GeneralConversationUseCase/RunResponse';
+import StartControllerBus from 'Application/Start/Controller/StartControllerBus';
 
 export default class Controller implements ModuleController {
     private view?: RootComponent;
 
     constructor(
         view: typeof Welcome,
-        private addAudioText: AddAudioTextUseCase
+        private conversationUseCase: GeneralConversationUseCase,
+        private startControllerBus: StartControllerBus
     ) {
         view.componentReceiver = this;
     }
@@ -18,7 +22,8 @@ export default class Controller implements ModuleController {
     }
 
     public async init(): Promise<void> {
-        this.addAudioText.addText({text: "Bock Laboratories: Terminal! Noch nicht bereit!"});
-        this.addAudioText.addText({text: "Die Homepage aus dem Jahre 2020 kann über den angezeigten Link erreicht werden."});
+        const response: RunResponse = new ConversationResponse();
+        await this.conversationUseCase.runConversation(response);
+        await this.startControllerBus.refresh();
     }
 }

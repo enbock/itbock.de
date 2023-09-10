@@ -5,6 +5,8 @@ const {promisify} = require('util');
 const zipDir = promisify(require('zip-dir'));
 const {resolve} = require('path');
 
+const LAMBDA_NAME = "SpeechService";
+
 async function buildCoded() {
     const {stdout, stderr} = await exec('npm run build');
     console.log('TSC: Error =', stdout);
@@ -39,7 +41,7 @@ async function zipBuild() {
 }
 
 async function deploy() {
-    const updateCmd = `aws lambda update-function-code --function-name SpeechService --zip-file "fileb://${resolve('build/lambda.zip')}" --publish`;
+    const updateCmd = `aws lambda update-function-code --function-name ${LAMBDA_NAME} --zip-file "fileb://${resolve('build/lambda.zip')}" --publish`;
     const {error: updateError, stdout: updateStdout} = await exec(updateCmd);
     console.log('Lambda deployment: Error =', updateError, 'Output =', updateStdout);
 }
