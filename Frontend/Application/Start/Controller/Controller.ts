@@ -4,9 +4,9 @@ import RootComponent from 'Application/RootComponent';
 import StateResponse from 'Application/Start/Controller/StateResponse';
 import StartPresenter from 'Application/Start/View/StartPresenter';
 import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
-import WelcomeController from 'Application/Welcome/Controller/Controller';
 import Adapter from 'Application/Start/Adapter';
 import StartControllerBus from 'Application/Start/Controller/StartControllerBus';
+import ModuleController from 'Application/ModuleController';
 
 export default class Controller implements ShadowComponentReceiver {
     private view?: RootComponent;
@@ -17,7 +17,7 @@ export default class Controller implements ShadowComponentReceiver {
         view: typeof Start,
         private startUseCase: StartUseCase,
         private presenter: StartPresenter,
-        private welcomeController: WelcomeController,
+        private moduleControllers: Array<ModuleController>,
         private adapter: Adapter,
         private bus: StartControllerBus
     ) {
@@ -42,8 +42,9 @@ export default class Controller implements ShadowComponentReceiver {
         this.startUseCase.initialize();
         this.presentData();
 
-        //for (const controller of this.moduleControllers) await controller.init();
-        await this.welcomeController.init();
+        const callStack: Array<Promise<void>> = [];
+        for (const controller of this.moduleControllers) callStack.push(controller.init());
+        await Promise.all(callStack);
     }
 
     private presentData(): void {

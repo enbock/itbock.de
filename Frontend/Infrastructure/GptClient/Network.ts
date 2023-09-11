@@ -14,7 +14,7 @@ export default class Network implements GptClient {
 
     public async generalConversation(): Promise<ConversationRecordEntity> {
         const entity: ConversationRecordEntity = new ConversationRecordEntity();
-        const response: Response = await fetch(this.serviceUrl, this.fetchHelper.createHeader(Method.GET));
+        const response: Response = await fetch(this.serviceUrl, this.fetchHelper.createHeader(Method.POST, JSON.stringify({})));
 
         this.fetchHelper.isResponseSuccessful(response);
 

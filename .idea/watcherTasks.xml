@@ -18,7 +18,7 @@
       <option name="runOnExternalChanges" value="true" />
       <option name="scopeName" value="GeneralGPT" />
       <option name="trackOnlyRoot" value="false" />
-      <option name="workingDir" value="$PROJECT_DIR$/GeneralGPT" />
+      <option name="workingDir" value="$PROJECT_DIR$/Backend/GeneralGPT" />
       <envs />
     </TaskOptions>
   </component>

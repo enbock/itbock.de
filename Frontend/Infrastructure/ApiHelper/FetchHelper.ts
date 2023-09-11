@@ -4,11 +4,13 @@ export default class FetchHelper {
     public createHeader(method: Method, body?: BodyInit): RequestInit {
         const isFileUpload: boolean = body instanceof FormData;
         const headers: any = {};
-        if (!isFileUpload) {
+        if (!isFileUpload && body) {
             headers['content-type'] = 'application/json';
         }
         const headerData: RequestInit = {
-            method: method
+            headers: new Headers(headers),
+            method: method,
+            mode: 'cors'
         } as RequestInit;
         if (body) {
             headerData.body = body;
