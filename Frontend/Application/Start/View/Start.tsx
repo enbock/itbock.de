@@ -7,6 +7,7 @@ import RootComponent from 'Application/RootComponent';
 import Adapter from 'Application/Start/Adapter';
 import Welcome from 'Application/Welcome/View/Welcome';
 import AudioInput from 'Application/Audio/Input/Input';
+import Container from 'Application/DependencyInjection/Container';
 
 interface Properties {
 }
@@ -49,6 +50,14 @@ export class Start extends Component<Properties> implements RootComponent {
                 >{(model.bypass as any)[x] || 'false'}</div>
                 <br/>
             </>)}
+
+            <b>Conversation:</b><br/>
+            {Container.coreGptConversationStorage.getConversations().map(x => [
+                <i>Role: {x.role}</i>,
+                <div
+                    style="margin-left: 1rem; padding: 0.2rem; border: 1px solid black; font-family: monospace"
+                >{x.text}</div>
+            ])}
         </p>;
 
         if (model.showStart) return <>
