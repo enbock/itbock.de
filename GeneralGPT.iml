@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/Backend/GeneralGPT">
+      <sourceFolder url="file://$MODULE_DIR$/Backend/GeneralGPT/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/GeneralGPT/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/GeneralGPT/build" />
     </content>
