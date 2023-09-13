@@ -14,7 +14,6 @@ export default class Program {
         console.log('Event-Data:', event, context);
 
         const pastConversation: Array<ChatCompletionMessageParam> = this.bodyParser.parseBody(event?.body || '');
-        console.log("???>>>", pastConversation);
 
         try {
             let gpt: GptEntity = await this.gptUseCase.execute(pastConversation);

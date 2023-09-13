@@ -1,5 +1,13 @@
 export default interface StartStorage {
-    getStarted(): boolean;
+    getApplicationStarted(): boolean;
 
-    setStarted(started: boolean): void;
+    setApplicationStarted(started: boolean): void;
+
+    getMicrophoneMuted(): boolean;
+
+    setMicrophoneMuted(muted: boolean): void;
+
+    getShowLinks(): boolean;
+
+    setShowLinks(show: boolean): void;
 }

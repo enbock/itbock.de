@@ -11,7 +11,6 @@ export default class Network implements GptBackend {
     }
 
     public async runChatCompletion(messages: Array<ChatCompletionMessageParam>): Promise<GptEntity> {
-        console.log(">>>", messages);
         const response: ChatCompletion = await this.openai.chat.completions.create({
             stream: false,
             model: 'gpt-4',

@@ -11,9 +11,7 @@ export default class BodyParser {
     public parseBody(body: string): Array<ChatCompletionMessageParam> {
         try {
             const data: Json = JSON.parse(body);
-            console.log('?>', data);
             const conversation: Array<Json> = this.parseHelper.get<Array<Json> | undefined>(data, 'messages', []) || [];
-            console.log('?>', conversation);
             return conversation.map(x => this.parse(x));
         } catch (error) {
 

@@ -1,4 +1,7 @@
 export default interface Response {
+    showLinks: boolean;
+    isPlaying: boolean;
     text: string;
-    hasStarted: boolean;
+    applicationStarted: boolean;
+    muted: boolean;
 }

@@ -7,8 +7,12 @@ export default class AudioService {
     }
 
     public getAudioText(): string {
-        const text: string = this.audioStorage.getBuffer().join(' ');
+        const buffer: Array<string> = this.audioStorage.getBuffer();
+        if (buffer.length == 0) return '';
+        
+        const text: string = buffer.join(' ');
         this.audioStorage.setBuffer([]);
+        this.audioStorage.setPlaying(true);
 
         return text;
     }

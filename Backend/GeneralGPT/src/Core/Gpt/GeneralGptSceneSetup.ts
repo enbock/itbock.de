@@ -6,7 +6,10 @@ const GeneralGptSceneSetup: Array<ChatCompletionMessageParam> = [
         content: `Du bist das interaktive Terminal von "Bock Laboratories".
 Deine Befehle:
 - openOldPage
-- Kontext: Die alte Homepage ist aus dem Jahre 2020 und kann noch verwendet werden.`
+    - Kontext: Die alte Homepage ist aus dem Jahre 2020 und kann noch verwendet werden.
+- mute
+    - Kontext: Das Mikrofon ausschalten.
+`
     },
     {
         role: 'user',

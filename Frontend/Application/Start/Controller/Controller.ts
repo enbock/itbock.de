@@ -1,5 +1,5 @@
 import start, {Start} from 'Application/Start/View/Start';
-import {ShadowComponentReceiver} from '@enbock/ts-jsx/Component';
+import Component, {ShadowComponentReceiver} from '@enbock/ts-jsx/Component';
 import RootComponent from 'Application/RootComponent';
 import StateResponse from 'Application/Start/Controller/StateResponse';
 import StartPresenter from 'Application/Start/View/StartPresenter';
@@ -7,6 +7,7 @@ import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 import Adapter from 'Application/Start/Adapter';
 import StartControllerBus from 'Application/Start/Controller/StartControllerBus';
 import ModuleController from 'Application/ModuleController';
+import ControllerHandler from 'Application/ControllerHandler';
 
 export default class Controller implements ShadowComponentReceiver {
     private view?: RootComponent;
@@ -19,12 +20,13 @@ export default class Controller implements ShadowComponentReceiver {
         private presenter: StartPresenter,
         private moduleControllers: Array<ModuleController>,
         private adapter: Adapter,
-        private bus: StartControllerBus
+        private bus: StartControllerBus,
+        private handlers: Array<ControllerHandler>
     ) {
         view.componentReceiver = this;
     }
 
-    public setComponent(view: RootComponent): void {
+    public setComponent(view: Component & RootComponent): void {
         this.view = view;
         this.presentData();
     }
@@ -39,6 +41,8 @@ export default class Controller implements ShadowComponentReceiver {
 
 
     private async initializeController(): Promise<void> {
+        const boundPresentData: Callback = async () => this.presentData();
+        this.handlers.forEach(h => h.init(boundPresentData));
         this.startUseCase.initialize();
         this.presentData();
 

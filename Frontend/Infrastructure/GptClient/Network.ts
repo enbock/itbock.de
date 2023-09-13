@@ -1,24 +1,38 @@
 import GptClient from 'Core/Gpt/GptClient';
 import FetchHelper from 'Infrastructure/ApiHelper/FetchHelper';
-import ConversationRecordEntity from 'Core/Gpt/ConversationRecordEntity';
+import ConversationRecordEntity, {Role} from 'Core/Gpt/ConversationRecordEntity';
 import Method from 'Infrastructure/ApiHelper/Method';
 import ParseHelper from 'Infrastructure/ParseHelper';
+import Encoder from 'Infrastructure/GptClient/Encoder';
 
 export default class Network implements GptClient {
     constructor(
         private fetchHelper: FetchHelper,
         private parseHelper: ParseHelper,
-        private serviceUrl: string
+        private serviceUrl: string,
+        private encoder: Encoder
     ) {
     }
 
-    public async generalConversation(): Promise<ConversationRecordEntity> {
+    public async generalConversation(conversations: Array<ConversationRecordEntity>): Promise<ConversationRecordEntity> {
         const entity: ConversationRecordEntity = new ConversationRecordEntity();
-        const response: Response = await fetch(this.serviceUrl, this.fetchHelper.createHeader(Method.POST, JSON.stringify({})));
+        const response: Response = await fetch(
+            this.serviceUrl,
+            this.fetchHelper.createHeader(
+                Method.POST,
+                this.encoder.encodeConversations(conversations)
+            )
+        );
 
         this.fetchHelper.isResponseSuccessful(response);
 
-        entity.text = this.parseHelper.get<string>(await response.json(), 'say', 'Netzwerkfehler') || 'Datenfehler';
+        const data: Json = await response.json();
+
+        entity.text = String(this.parseHelper.get<string>(data, 'say', 'Netzwerkfehler') || 'Datenfehler');
+        entity.role = String(this.parseHelper.get<string>(data, 'role', 'user') || 'user') as Role;
+        entity.command = String(this.parseHelper.get<string>(data, 'command', '') || '');
+
         return entity;
     }
+
 }

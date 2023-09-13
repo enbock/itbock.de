@@ -1,4 +1,4 @@
-import AudioModel from "Application/Audio/View/AudioModel";
+import AudioModel from 'Application/Audio/View/AudioModel';
 
 export default class AudioPresenter {
     constructor(
@@ -9,8 +9,8 @@ export default class AudioPresenter {
     public present(text: string): AudioModel {
         const model: AudioModel = new AudioModel();
 
-        model.audioSource = this.soundServiceUrl + "?text=" + text;
-        model.showAudio = text != "";
+        model.audioSource = this.soundServiceUrl + '?text=' + text.replaceAll('\'', '');
+        model.showAudio = text != '';
 
         return model;
     }
