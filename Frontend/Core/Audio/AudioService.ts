@@ -16,6 +16,7 @@ export default class AudioService {
         this.audioStorage.setPlaying(true);
         this.audioStorage.setPlayingText(text);
         this.audioStorage.setBuffer([]);
+        this.audioStorage.setLoading(true);
 
         return text;
     }

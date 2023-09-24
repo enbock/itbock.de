@@ -14,12 +14,14 @@ export default class AudioPresenter {
 
         this.presentTextToAudio(model, data);
         model.audioInput = this.inputPresenter.present(data);
+        model.isLoading = data.isLoading == true;
 
         return model;
     }
 
     private presentTextToAudio(model: AudioModel, data: StateResponse): void {
-        model.audioSource = this.soundServiceUrl + '?text=' + data.textOutput.replaceAll('\'', '');
-        model.showAudio = data.textOutput != '';
+        const doAudioOutput: boolean = data.textOutput != '';
+        if (doAudioOutput) model.audioSource = this.soundServiceUrl + '?text=' + data.textOutput.replaceAll('\'', '');
+        model.showAudio = doAudioOutput;
     }
 }

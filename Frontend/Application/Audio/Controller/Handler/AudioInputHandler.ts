@@ -10,10 +10,14 @@ export default class AudioInputHandler implements ControllerHandler {
     }
 
     public init(presentData: Callback): void {
+        this.presentData = presentData;
         this.adapter.speechInput = (text: string) => this.handleInput(text);
     }
 
+    private presentData: Callback = () => <never>false;
+
     private async handleInput(text: string): Promise<void> {
         await this.welcomeBus.newInput(text);
+        await this.presentData();
     }
 }

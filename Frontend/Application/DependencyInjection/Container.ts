@@ -5,8 +5,6 @@ import CoreWelcomeOldHomepageUseCaseOldHomepageUseCase from 'Core/Welcome/OldHom
 import CoreAudioAudioStorage from 'Core/Audio/AudioStorage';
 import CoreAudioInputUseCaseInputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
 import AudioControllerAudioControllerBus from 'Application/Audio/Controller/AudioControllerBus';
-import CoreStartStartStorage from 'Core/Start/StartStorage';
-import CoreAudioAudioService from 'Core/Audio/AudioService';
 import AudioViewInputInputPresenter from 'Application/Audio/View/Input/InputPresenter';
 import AudioViewAudioPresenter from 'Application/Audio/View/AudioPresenter';
 import CoreAudioStateUseCaseStateUseCase from 'Core/Audio/StateUseCase/StateUseCase';
@@ -14,6 +12,7 @@ import StartAdapter from 'Application/Start/Adapter';
 import CoreStartStartUseCaseStartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 import AudioAdapter from 'Application/Audio/Adapter';
 import CoreAudioPlaybackUseCasePlaybackUseCase from 'Core/Audio/PlaybackUseCase/PlaybackUseCase';
+import StartControllerStartControllerBus from 'Application/Start/Controller/StartControllerBus';
 import WelcomeControllerWelcomeBus from 'Application/Welcome/Controller/WelcomeBus';
 import CoreGptGeneralConversationUseCaseGeneralConversationUseCase from 'Core/Gpt/GeneralConversationUseCase/GeneralConversationUseCase';
 import InfrastructureApiHelperFetchHelper from 'Infrastructure/ApiHelper/FetchHelper';
@@ -24,10 +23,14 @@ import InfrastructureGptClientNetworkEncoder from 'Infrastructure/GptClient/Netw
 import CoreWelcomeStateStorage from 'Core/Welcome/StateStorage';
 import StateStorage from 'Core/Welcome/StateStorage';
 import CoreGptGptClient from 'Core/Gpt/GptClient';
+import CoreAudioAudioService from 'Core/Audio/AudioService';
 import CoreGptConversationStorage from 'Core/Gpt/ConversationStorage';
 import CoreWelcomeStateUseCaseStateUseCase from 'Core/Welcome/StateUseCase/StateUseCase';
 import WelcomeViewWelcomePresenter from 'Application/Welcome/View/WelcomePresenter';
+import CoreStartStartStorage from 'Core/Start/StartStorage';
+import CoreGptStateUseCaseStateUseCase from 'Core/Gpt/StateUseCase/StateUseCase';
 import StartViewStartPresenter from 'Application/Start/View/StartPresenter';
+import StartControllerDataCollector from 'Application/Start/Controller/DataCollector';
 import StartControllerController from 'Application/Start/Controller/Controller';
 import WelcomeControllerController from 'Application/Welcome/Controller/Controller';
 import InfrastructureGptClientNetworkNetwork from 'Infrastructure/GptClient/Network/Network';
@@ -65,7 +68,7 @@ interface ManualInjections {
     audioControllerControllerViewComponent: typeof Audio;
     infrastructureGptClientFakeFakeArray: Array<FakeCase>;
     audioViewInputInputRecognitionClass: typeof SpeechRecognition;
-    startControllerControllerHandlerArray: Array<ControllerHandler>;
+    startControllerControllerArrayHandler: Array<ControllerHandler>;
     welcomeControllerControllerArray: Array<ControllerHandler>;
     infrastructureGptClientNetworkNetworkServiceUrl: string;
     startControllerControllerArray: Array<ModuleController>;
@@ -117,7 +120,7 @@ class Container {
         startControllerControllerArray: [],
         infrastructureGptClientNetworkNetworkServiceUrl: "https://api.itbock.de/gpt/general",
         welcomeControllerControllerArray: [],
-        startControllerControllerHandlerArray: [],
+        startControllerControllerArrayHandler: [],
         audioViewInputInputRecognitionClass: undefined!,
         infrastructureGptClientFakeFakeArray: [],
         audioControllerControllerArray: [],
@@ -130,70 +133,18 @@ class Container {
         coreGptConversationStorage: new ConversationMemory(),
         coreWelcomeStateStorage: this.infrastructureStorageWelcomeMemory
     };
-    private _welcomeControllerHandlerCommandOldHomepageHandler?: WelcomeControllerHandlerCommandOldHomepageHandler;
-    private _coreAudioInputUseCaseInputUseCase?: CoreAudioInputUseCaseInputUseCase;
-    private _welcomeControllerHandlerCommandMuteHandler?: WelcomeControllerHandlerCommandMuteHandler;
-    private _coreAudioStateUseCaseStateUseCase?: CoreAudioStateUseCaseStateUseCase;
-    private _audioViewInputInputPresenter?: AudioViewInputInputPresenter;
-    private _audioViewAudioPresenter?: AudioViewAudioPresenter;
-    private _audioControllerController?: AudioControllerController;
-    private _infrastructureGptClientFakeCasesOldHomepage?: InfrastructureGptClientFakeCasesOldHomepage;
-    private _infrastructureGptClientFakeCasesMuteMicrophone?: InfrastructureGptClientFakeCasesMuteMicrophone;
-    private _infrastructureGptClientFakeCasesStartCase?: InfrastructureGptClientFakeCasesStartCase;
-    private _infrastructureGptClientFakeFake?: InfrastructureGptClientFakeFake;
-    private _startAdapter?: StartAdapter;
-    private _startControllerHandlerStartHandler?: StartControllerHandlerStartHandler;
-    private _infrastructureStorageWelcomeMemory?: InfrastructureStorageWelcomeMemory;
-    private _coreAudioPlaybackUseCasePlaybackUseCase?: CoreAudioPlaybackUseCasePlaybackUseCase;
-    private _audioControllerHandlerAudioOutputHandler?: AudioControllerHandlerAudioOutputHandler;
-    private _audioViewInputInput?: AudioViewInputInput;
-    private _audioAdapter?: AudioAdapter;
-    private _audioControllerHandlerAudioInputHandler?: AudioControllerHandlerAudioInputHandler;
-    private _welcomeControllerWelcomeBus?: WelcomeControllerWelcomeBus;
-    private _welcomeControllerHandlerConversationInputHandler?: WelcomeControllerHandlerConversationInputHandler;
-    private _infrastructureGptClientNetworkEncoder?: InfrastructureGptClientNetworkEncoder;
-    private _infrastructureParseHelper?: InfrastructureParseHelper;
-    private _infrastructureApiHelperFetchHelper?: InfrastructureApiHelperFetchHelper;
-    private _infrastructureGptClientNetworkNetwork?: InfrastructureGptClientNetworkNetwork;
-    private _welcomeViewWelcomePresenter?: WelcomeViewWelcomePresenter;
-    private _coreWelcomeStateUseCaseStateUseCase?: CoreWelcomeStateUseCaseStateUseCase;
-    private _coreWelcomeOldHomepageUseCaseOldHomepageUseCase?: CoreWelcomeOldHomepageUseCaseOldHomepageUseCase;
-    private _audioControllerAudioControllerBus?: AudioControllerAudioControllerBus;
-    private _coreAudioAudioService?: CoreAudioAudioService;
-    private _coreGptGeneralConversationUseCaseGeneralConversationUseCase?: CoreGptGeneralConversationUseCaseGeneralConversationUseCase;
-    private _welcomeControllerController?: WelcomeControllerController;
-    private _startViewStartPresenter?: StartViewStartPresenter;
-    private _coreStartStartUseCaseStartUseCase?: CoreStartStartUseCaseStartUseCase;
-    private _startControllerController?: StartControllerController;
-
     constructor() {
         function getEnv(key: string): string {
             return (env as any)[key] || "";
         }
-        this.manualInjections.infrastructureGptClientFakeFakeArray.push(
-            this.infrastructureGptClientFakeCasesStartCase,
-            this.infrastructureGptClientFakeCasesMuteMicrophone,
-            this.infrastructureGptClientFakeCasesOldHomepage
-        );
+        this.manualInjections.infrastructureGptClientFakeFakeArray.push(this.infrastructureGptClientFakeCasesStartCase, this.infrastructureGptClientFakeCasesMuteMicrophone, this.infrastructureGptClientFakeCasesOldHomepage);
         this.interfaceInstances.coreGptGptClient = getEnv("FAKE") ? this.infrastructureGptClientFakeFake : this.infrastructureGptClientNetworkNetwork;
-        this.manualInjections.welcomeControllerControllerArray = [
-            this.welcomeControllerHandlerConversationInputHandler
-        ];
-        this.manualInjections.startControllerControllerHandlerArray.push(
-            this.startControllerHandlerStartHandler
-            );
-        this.manualInjections.startControllerControllerArray.push(
-            this.welcomeControllerController
-        );
-        this.manualInjections.audioControllerControllerArray.push(
-            this.audioControllerHandlerAudioInputHandler,
-            this.audioControllerHandlerAudioOutputHandler
-        );
-        this.manualInjections.welcomeControllerHandlerConversationInputHandlerArray.push(
-            this.welcomeControllerHandlerCommandOldHomepageHandler,
-            this.welcomeControllerHandlerCommandMuteHandler
-        );
-        this._startControllerController = new StartControllerController(this.manualInjections.startControllerControllerDocument, this.manualInjections.startControllerControllerInitializeApplicationView, this.manualInjections.startControllerControllerView, this.coreStartStartUseCaseStartUseCase, this.startViewStartPresenter, this.manualInjections.startControllerControllerArray, this.manualInjections.startControllerControllerHandlerArray);
+        this.manualInjections.welcomeControllerControllerArray.push(this.welcomeControllerHandlerConversationInputHandler);
+        this.manualInjections.startControllerControllerArrayHandler.push(this.startControllerHandlerStartHandler);
+        this.manualInjections.startControllerControllerArray.push(this.welcomeControllerController);
+        this.manualInjections.audioControllerControllerArray.push(this.audioControllerHandlerAudioInputHandler, this.audioControllerHandlerAudioOutputHandler);
+        this.manualInjections.welcomeControllerHandlerConversationInputHandlerArray.push(this.welcomeControllerHandlerCommandOldHomepageHandler, this.welcomeControllerHandlerCommandMuteHandler);
+        this._startControllerController = new StartControllerController(this.manualInjections.startControllerControllerDocument, this.manualInjections.startControllerControllerInitializeApplicationView, this.manualInjections.startControllerControllerView, this.coreStartStartUseCaseStartUseCase, this.startViewStartPresenter, this.manualInjections.startControllerControllerArray, this.manualInjections.startControllerControllerArrayHandler, this.startControllerStartControllerBus, this.startControllerDataCollector);
         const LocalSpeechRecognition = (window as any)["SpeechRecognition"] || (window as any)["webkitSpeechRecognition"] || (window as any)["speechRecognition"];
         this.manualInjections.audioViewInputInputRecognitionClass = LocalSpeechRecognition;
         this.audioControllerController;
@@ -201,270 +152,286 @@ class Container {
         ViewInjection(Audio, this.audioAdapter, this.audioViewInputInput);
         ViewInjection(Welcome);
     }
-
     public get coreWelcomeStateStorage(): CoreWelcomeStateStorage {
         return this.interfaceInstances.coreWelcomeStateStorage;
     }
-
-    public get coreGptConversationStorage(): CoreGptConversationStorage {
-        return this.interfaceInstances.coreGptConversationStorage;
-    }
-
-    public get coreAudioAudioStorage(): CoreAudioAudioStorage {
-        return this.interfaceInstances.coreAudioAudioStorage;
-    }
-
     public get coreGptGptClient(): CoreGptGptClient {
         return this.interfaceInstances.coreGptGptClient;
     }
-
+    public get coreAudioAudioStorage(): CoreAudioAudioStorage {
+        return this.interfaceInstances.coreAudioAudioStorage;
+    }
+    public get coreGptConversationStorage(): CoreGptConversationStorage {
+        return this.interfaceInstances.coreGptConversationStorage;
+    }
     public get coreStartStartStorage(): CoreStartStartStorage {
         return this.interfaceInstances.coreStartStartStorage;
     }
-
+    private _welcomeControllerHandlerCommandOldHomepageHandler?: WelcomeControllerHandlerCommandOldHomepageHandler;
     public get welcomeControllerHandlerCommandOldHomepageHandler(): WelcomeControllerHandlerCommandOldHomepageHandler {
         if (this._welcomeControllerHandlerCommandOldHomepageHandler)
             return this._welcomeControllerHandlerCommandOldHomepageHandler;
         else
             return this._welcomeControllerHandlerCommandOldHomepageHandler = new WelcomeControllerHandlerCommandOldHomepageHandler(this.coreWelcomeOldHomepageUseCaseOldHomepageUseCase);
     }
-
+    private _coreAudioInputUseCaseInputUseCase?: CoreAudioInputUseCaseInputUseCase;
     public get coreAudioInputUseCaseInputUseCase(): CoreAudioInputUseCaseInputUseCase {
         if (this._coreAudioInputUseCaseInputUseCase)
             return this._coreAudioInputUseCaseInputUseCase;
         else
             return this._coreAudioInputUseCaseInputUseCase = new CoreAudioInputUseCaseInputUseCase(this.coreAudioAudioStorage);
     }
-
+    private _welcomeControllerHandlerCommandMuteHandler?: WelcomeControllerHandlerCommandMuteHandler;
     public get welcomeControllerHandlerCommandMuteHandler(): WelcomeControllerHandlerCommandMuteHandler {
         if (this._welcomeControllerHandlerCommandMuteHandler)
             return this._welcomeControllerHandlerCommandMuteHandler;
         else
             return this._welcomeControllerHandlerCommandMuteHandler = new WelcomeControllerHandlerCommandMuteHandler(this.coreAudioInputUseCaseInputUseCase, this.audioControllerAudioControllerBus);
     }
-
-    public get coreAudioStateUseCaseStateUseCase(): CoreAudioStateUseCaseStateUseCase {
-        if (this._coreAudioStateUseCaseStateUseCase)
-            return this._coreAudioStateUseCaseStateUseCase;
-        else
-            return this._coreAudioStateUseCaseStateUseCase = new CoreAudioStateUseCaseStateUseCase(this.coreStartStartStorage, this.coreAudioAudioService, this.coreAudioAudioStorage);
-    }
-
+    private _audioViewInputInputPresenter?: AudioViewInputInputPresenter;
     public get audioViewInputInputPresenter(): AudioViewInputInputPresenter {
         if (this._audioViewInputInputPresenter)
             return this._audioViewInputInputPresenter;
         else
             return this._audioViewInputInputPresenter = new AudioViewInputInputPresenter();
     }
-
+    private _audioViewAudioPresenter?: AudioViewAudioPresenter;
     public get audioViewAudioPresenter(): AudioViewAudioPresenter {
         if (this._audioViewAudioPresenter)
             return this._audioViewAudioPresenter;
         else
             return this._audioViewAudioPresenter = new AudioViewAudioPresenter(this.manualInjections.audioViewAudioPresenterSoundServiceUrl, this.audioViewInputInputPresenter);
     }
-
+    private _audioControllerController?: AudioControllerController;
     public get audioControllerController(): AudioControllerController {
         if (this._audioControllerController)
             return this._audioControllerController;
         else
             return this._audioControllerController = new AudioControllerController(this.manualInjections.audioControllerControllerViewComponent, this.audioViewAudioPresenter, this.manualInjections.audioControllerControllerArray, this.coreAudioStateUseCaseStateUseCase, this.audioControllerAudioControllerBus);
     }
-
+    private _infrastructureGptClientFakeCasesOldHomepage?: InfrastructureGptClientFakeCasesOldHomepage;
     public get infrastructureGptClientFakeCasesOldHomepage(): InfrastructureGptClientFakeCasesOldHomepage {
         if (this._infrastructureGptClientFakeCasesOldHomepage)
             return this._infrastructureGptClientFakeCasesOldHomepage;
         else
             return this._infrastructureGptClientFakeCasesOldHomepage = new InfrastructureGptClientFakeCasesOldHomepage();
     }
-
+    private _infrastructureGptClientFakeCasesMuteMicrophone?: InfrastructureGptClientFakeCasesMuteMicrophone;
     public get infrastructureGptClientFakeCasesMuteMicrophone(): InfrastructureGptClientFakeCasesMuteMicrophone {
         if (this._infrastructureGptClientFakeCasesMuteMicrophone)
             return this._infrastructureGptClientFakeCasesMuteMicrophone;
         else
             return this._infrastructureGptClientFakeCasesMuteMicrophone = new InfrastructureGptClientFakeCasesMuteMicrophone();
     }
-
+    private _infrastructureGptClientFakeCasesStartCase?: InfrastructureGptClientFakeCasesStartCase;
     public get infrastructureGptClientFakeCasesStartCase(): InfrastructureGptClientFakeCasesStartCase {
         if (this._infrastructureGptClientFakeCasesStartCase)
             return this._infrastructureGptClientFakeCasesStartCase;
         else
             return this._infrastructureGptClientFakeCasesStartCase = new InfrastructureGptClientFakeCasesStartCase();
     }
-
+    private _infrastructureGptClientFakeFake?: InfrastructureGptClientFakeFake;
     public get infrastructureGptClientFakeFake(): InfrastructureGptClientFakeFake {
         if (this._infrastructureGptClientFakeFake)
             return this._infrastructureGptClientFakeFake;
         else
             return this._infrastructureGptClientFakeFake = new InfrastructureGptClientFakeFake(this.manualInjections.infrastructureGptClientFakeFakeArray);
     }
-
+    private _startAdapter?: StartAdapter;
     public get startAdapter(): StartAdapter {
         if (this._startAdapter)
             return this._startAdapter;
         else
             return this._startAdapter = new StartAdapter();
     }
-
+    private _startControllerHandlerStartHandler?: StartControllerHandlerStartHandler;
     public get startControllerHandlerStartHandler(): StartControllerHandlerStartHandler {
         if (this._startControllerHandlerStartHandler)
             return this._startControllerHandlerStartHandler;
         else
             return this._startControllerHandlerStartHandler = new StartControllerHandlerStartHandler(this.startAdapter, this.coreStartStartUseCaseStartUseCase, this.audioControllerAudioControllerBus);
     }
-
+    private _infrastructureStorageWelcomeMemory?: InfrastructureStorageWelcomeMemory;
     public get infrastructureStorageWelcomeMemory(): InfrastructureStorageWelcomeMemory {
         if (this._infrastructureStorageWelcomeMemory)
             return this._infrastructureStorageWelcomeMemory;
         else
             return this._infrastructureStorageWelcomeMemory = new InfrastructureStorageWelcomeMemory();
     }
-
+    private _coreAudioPlaybackUseCasePlaybackUseCase?: CoreAudioPlaybackUseCasePlaybackUseCase;
     public get coreAudioPlaybackUseCasePlaybackUseCase(): CoreAudioPlaybackUseCasePlaybackUseCase {
         if (this._coreAudioPlaybackUseCasePlaybackUseCase)
             return this._coreAudioPlaybackUseCasePlaybackUseCase;
         else
             return this._coreAudioPlaybackUseCasePlaybackUseCase = new CoreAudioPlaybackUseCasePlaybackUseCase(this.coreAudioAudioStorage);
     }
-
+    private _audioControllerHandlerAudioOutputHandler?: AudioControllerHandlerAudioOutputHandler;
     public get audioControllerHandlerAudioOutputHandler(): AudioControllerHandlerAudioOutputHandler {
         if (this._audioControllerHandlerAudioOutputHandler)
             return this._audioControllerHandlerAudioOutputHandler;
         else
-            return this._audioControllerHandlerAudioOutputHandler = new AudioControllerHandlerAudioOutputHandler(this.audioAdapter, this.coreAudioPlaybackUseCasePlaybackUseCase);
+            return this._audioControllerHandlerAudioOutputHandler = new AudioControllerHandlerAudioOutputHandler(this.audioAdapter, this.coreAudioPlaybackUseCasePlaybackUseCase, this.startControllerStartControllerBus);
     }
-
+    private _audioViewInputInput?: AudioViewInputInput;
     public get audioViewInputInput(): AudioViewInputInput {
         if (this._audioViewInputInput)
             return this._audioViewInputInput;
         else
             return this._audioViewInputInput = new AudioViewInputInput(this.manualInjections.audioViewInputInputRecognitionClass, this.audioAdapter);
     }
-
+    private _audioAdapter?: AudioAdapter;
     public get audioAdapter(): AudioAdapter {
         if (this._audioAdapter)
             return this._audioAdapter;
         else
             return this._audioAdapter = new AudioAdapter();
     }
-
+    private _audioControllerHandlerAudioInputHandler?: AudioControllerHandlerAudioInputHandler;
     public get audioControllerHandlerAudioInputHandler(): AudioControllerHandlerAudioInputHandler {
         if (this._audioControllerHandlerAudioInputHandler)
             return this._audioControllerHandlerAudioInputHandler;
         else
             return this._audioControllerHandlerAudioInputHandler = new AudioControllerHandlerAudioInputHandler(this.audioAdapter, this.welcomeControllerWelcomeBus);
     }
-
+    private _welcomeControllerWelcomeBus?: WelcomeControllerWelcomeBus;
     public get welcomeControllerWelcomeBus(): WelcomeControllerWelcomeBus {
         if (this._welcomeControllerWelcomeBus)
             return this._welcomeControllerWelcomeBus;
         else
             return this._welcomeControllerWelcomeBus = new WelcomeControllerWelcomeBus();
     }
-
+    private _welcomeControllerHandlerConversationInputHandler?: WelcomeControllerHandlerConversationInputHandler;
     public get welcomeControllerHandlerConversationInputHandler(): WelcomeControllerHandlerConversationInputHandler {
         if (this._welcomeControllerHandlerConversationInputHandler)
             return this._welcomeControllerHandlerConversationInputHandler;
         else
             return this._welcomeControllerHandlerConversationInputHandler = new WelcomeControllerHandlerConversationInputHandler(this.welcomeControllerWelcomeBus, this.coreGptGeneralConversationUseCaseGeneralConversationUseCase, this.manualInjections.welcomeControllerHandlerConversationInputHandlerArray);
     }
-
+    private _infrastructureGptClientNetworkEncoder?: InfrastructureGptClientNetworkEncoder;
     public get infrastructureGptClientNetworkEncoder(): InfrastructureGptClientNetworkEncoder {
         if (this._infrastructureGptClientNetworkEncoder)
             return this._infrastructureGptClientNetworkEncoder;
         else
             return this._infrastructureGptClientNetworkEncoder = new InfrastructureGptClientNetworkEncoder();
     }
-
+    private _infrastructureParseHelper?: InfrastructureParseHelper;
     public get infrastructureParseHelper(): InfrastructureParseHelper {
         if (this._infrastructureParseHelper)
             return this._infrastructureParseHelper;
         else
             return this._infrastructureParseHelper = new InfrastructureParseHelper();
     }
-
+    private _infrastructureApiHelperFetchHelper?: InfrastructureApiHelperFetchHelper;
     public get infrastructureApiHelperFetchHelper(): InfrastructureApiHelperFetchHelper {
         if (this._infrastructureApiHelperFetchHelper)
             return this._infrastructureApiHelperFetchHelper;
         else
             return this._infrastructureApiHelperFetchHelper = new InfrastructureApiHelperFetchHelper();
     }
-
+    private _infrastructureGptClientNetworkNetwork?: InfrastructureGptClientNetworkNetwork;
     public get infrastructureGptClientNetworkNetwork(): InfrastructureGptClientNetworkNetwork {
         if (this._infrastructureGptClientNetworkNetwork)
             return this._infrastructureGptClientNetworkNetwork;
         else
             return this._infrastructureGptClientNetworkNetwork = new InfrastructureGptClientNetworkNetwork(this.infrastructureApiHelperFetchHelper, this.infrastructureParseHelper, this.manualInjections.infrastructureGptClientNetworkNetworkServiceUrl, this.infrastructureGptClientNetworkEncoder);
     }
-
+    private _welcomeViewWelcomePresenter?: WelcomeViewWelcomePresenter;
     public get welcomeViewWelcomePresenter(): WelcomeViewWelcomePresenter {
         if (this._welcomeViewWelcomePresenter)
             return this._welcomeViewWelcomePresenter;
         else
             return this._welcomeViewWelcomePresenter = new WelcomeViewWelcomePresenter();
     }
-
+    private _coreWelcomeStateUseCaseStateUseCase?: CoreWelcomeStateUseCaseStateUseCase;
     public get coreWelcomeStateUseCaseStateUseCase(): CoreWelcomeStateUseCaseStateUseCase {
         if (this._coreWelcomeStateUseCaseStateUseCase)
             return this._coreWelcomeStateUseCaseStateUseCase;
         else
             return this._coreWelcomeStateUseCaseStateUseCase = new CoreWelcomeStateUseCaseStateUseCase(this.coreWelcomeStateStorage);
     }
-
+    private _coreWelcomeOldHomepageUseCaseOldHomepageUseCase?: CoreWelcomeOldHomepageUseCaseOldHomepageUseCase;
     public get coreWelcomeOldHomepageUseCaseOldHomepageUseCase(): CoreWelcomeOldHomepageUseCaseOldHomepageUseCase {
         if (this._coreWelcomeOldHomepageUseCaseOldHomepageUseCase)
             return this._coreWelcomeOldHomepageUseCaseOldHomepageUseCase;
         else
             return this._coreWelcomeOldHomepageUseCaseOldHomepageUseCase = new CoreWelcomeOldHomepageUseCaseOldHomepageUseCase(this.coreWelcomeStateStorage);
     }
-
+    private _audioControllerAudioControllerBus?: AudioControllerAudioControllerBus;
     public get audioControllerAudioControllerBus(): AudioControllerAudioControllerBus {
         if (this._audioControllerAudioControllerBus)
             return this._audioControllerAudioControllerBus;
         else
             return this._audioControllerAudioControllerBus = new AudioControllerAudioControllerBus();
     }
-
-    public get coreAudioAudioService(): CoreAudioAudioService {
-        if (this._coreAudioAudioService)
-            return this._coreAudioAudioService;
-        else
-            return this._coreAudioAudioService = new CoreAudioAudioService(this.coreAudioAudioStorage);
-    }
-
+    private _coreGptGeneralConversationUseCaseGeneralConversationUseCase?: CoreGptGeneralConversationUseCaseGeneralConversationUseCase;
     public get coreGptGeneralConversationUseCaseGeneralConversationUseCase(): CoreGptGeneralConversationUseCaseGeneralConversationUseCase {
         if (this._coreGptGeneralConversationUseCaseGeneralConversationUseCase)
             return this._coreGptGeneralConversationUseCaseGeneralConversationUseCase;
         else
             return this._coreGptGeneralConversationUseCaseGeneralConversationUseCase = new CoreGptGeneralConversationUseCaseGeneralConversationUseCase(this.coreGptGptClient, this.coreAudioAudioService, this.coreGptConversationStorage);
     }
-
+    private _welcomeControllerController?: WelcomeControllerController;
     public get welcomeControllerController(): WelcomeControllerController {
         if (this._welcomeControllerController)
             return this._welcomeControllerController;
         else
-            return this._welcomeControllerController = new WelcomeControllerController(this.manualInjections.welcomeControllerControllerViewTemplate, this.coreGptGeneralConversationUseCaseGeneralConversationUseCase, this.audioControllerAudioControllerBus, this.manualInjections.welcomeControllerControllerArray, this.coreWelcomeOldHomepageUseCaseOldHomepageUseCase, this.coreWelcomeStateUseCaseStateUseCase, this.welcomeViewWelcomePresenter);
+            return this._welcomeControllerController = new WelcomeControllerController(this.manualInjections.welcomeControllerControllerViewTemplate, this.coreGptGeneralConversationUseCaseGeneralConversationUseCase, this.audioControllerAudioControllerBus, this.manualInjections.welcomeControllerControllerArray, this.coreWelcomeOldHomepageUseCaseOldHomepageUseCase, this.coreWelcomeStateUseCaseStateUseCase, this.welcomeViewWelcomePresenter, this.startControllerStartControllerBus);
     }
-
+    private _coreAudioAudioService?: CoreAudioAudioService;
+    public get coreAudioAudioService(): CoreAudioAudioService {
+        if (this._coreAudioAudioService)
+            return this._coreAudioAudioService;
+        else
+            return this._coreAudioAudioService = new CoreAudioAudioService(this.coreAudioAudioStorage);
+    }
+    private _coreAudioStateUseCaseStateUseCase?: CoreAudioStateUseCaseStateUseCase;
+    public get coreAudioStateUseCaseStateUseCase(): CoreAudioStateUseCaseStateUseCase {
+        if (this._coreAudioStateUseCaseStateUseCase)
+            return this._coreAudioStateUseCaseStateUseCase;
+        else
+            return this._coreAudioStateUseCaseStateUseCase = new CoreAudioStateUseCaseStateUseCase(this.coreStartStartStorage, this.coreAudioAudioService, this.coreAudioAudioStorage);
+    }
+    private _coreGptStateUseCaseStateUseCase?: CoreGptStateUseCaseStateUseCase;
+    public get coreGptStateUseCaseStateUseCase(): CoreGptStateUseCaseStateUseCase {
+        if (this._coreGptStateUseCaseStateUseCase)
+            return this._coreGptStateUseCaseStateUseCase;
+        else
+            return this._coreGptStateUseCaseStateUseCase = new CoreGptStateUseCaseStateUseCase(this.coreGptConversationStorage);
+    }
+    private _startControllerDataCollector?: StartControllerDataCollector;
+    public get startControllerDataCollector(): StartControllerDataCollector {
+        if (this._startControllerDataCollector)
+            return this._startControllerDataCollector;
+        else
+            return this._startControllerDataCollector = new StartControllerDataCollector(this.coreGptStateUseCaseStateUseCase, this.coreStartStartUseCaseStartUseCase, this.coreAudioStateUseCaseStateUseCase);
+    }
+    private _startControllerStartControllerBus?: StartControllerStartControllerBus;
+    public get startControllerStartControllerBus(): StartControllerStartControllerBus {
+        if (this._startControllerStartControllerBus)
+            return this._startControllerStartControllerBus;
+        else
+            return this._startControllerStartControllerBus = new StartControllerStartControllerBus();
+    }
+    private _startViewStartPresenter?: StartViewStartPresenter;
     public get startViewStartPresenter(): StartViewStartPresenter {
         if (this._startViewStartPresenter)
             return this._startViewStartPresenter;
         else
             return this._startViewStartPresenter = new StartViewStartPresenter();
     }
-
+    private _coreStartStartUseCaseStartUseCase?: CoreStartStartUseCaseStartUseCase;
     public get coreStartStartUseCaseStartUseCase(): CoreStartStartUseCaseStartUseCase {
         if (this._coreStartStartUseCaseStartUseCase)
             return this._coreStartStartUseCaseStartUseCase;
         else
             return this._coreStartStartUseCaseStartUseCase = new CoreStartStartUseCaseStartUseCase(this.coreStartStartStorage);
     }
-
+    private _startControllerController?: StartControllerController;
     public get startControllerController(): StartControllerController {
         if (this._startControllerController)
             return this._startControllerController;
         else
-            return this._startControllerController = new StartControllerController(this.manualInjections.startControllerControllerDocument, this.manualInjections.startControllerControllerInitializeApplicationView, this.manualInjections.startControllerControllerView, this.coreStartStartUseCaseStartUseCase, this.startViewStartPresenter, this.manualInjections.startControllerControllerArray, this.manualInjections.startControllerControllerArray);
+            return this._startControllerController = new StartControllerController(this.manualInjections.startControllerControllerDocument, this.manualInjections.startControllerControllerInitializeApplicationView, this.manualInjections.startControllerControllerView, this.coreStartStartUseCaseStartUseCase, this.startViewStartPresenter, this.manualInjections.startControllerControllerArray, this.manualInjections.startControllerControllerArray, this.startControllerStartControllerBus, this.startControllerDataCollector);
     }
 }
 var DependencyInjectionContainer: Container = new Container();

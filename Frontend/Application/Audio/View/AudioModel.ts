@@ -4,4 +4,5 @@ export default class AudioModel {
     public audioSource: string = '';
     public showAudio: boolean = false;
     public audioInput: InputModel = new InputModel();
+    public isLoading: boolean = false;
 }

@@ -20,7 +20,7 @@ export default class StartHandler implements ControllerHandler {
 
     private async handleStart(): Promise<void> {
         this.startUseCase.startApplication();
-        await this.presentData();
         await this.audioControllerBus.refresh();
+        await this.presentData();
     }
 }

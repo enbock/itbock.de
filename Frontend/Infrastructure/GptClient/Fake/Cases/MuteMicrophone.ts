@@ -7,7 +7,7 @@ export default class MuteMicrophone {
     }
 
     public run(conversations: Array<ConversationRecordEntity>, result: ConversationRecordEntity): void {
-        result.text = 'Microfon wird ausgeschalten.';
+        result.text = 'Mikrofon wird ausgeschalten.';
         result.role = 'assistant';
         result.command = 'mute';
     }

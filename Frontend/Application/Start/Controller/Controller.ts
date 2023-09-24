@@ -1,10 +1,12 @@
 import start, {Start} from 'Application/Start/View/Start';
 import {ShadowComponentReceiver} from '@enbock/ts-jsx/Component';
-import StateResponse from 'Application/Start/Controller/StateResponse';
 import StartPresenter from 'Application/Start/View/StartPresenter';
 import ModuleController from 'Application/ModuleController';
 import ControllerHandler from 'Application/ControllerHandler';
 import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
+import StartControllerBus from 'Application/Start/Controller/StartControllerBus';
+import DataCollector from 'Application/Start/Controller/DataCollector';
+import DataCollection from 'Application/Start/Controller/DataCollection';
 
 export default class Controller implements ShadowComponentReceiver {
     private startView?: Start;
@@ -16,7 +18,9 @@ export default class Controller implements ShadowComponentReceiver {
         private startUseCase: StartUseCase,
         private presenter: StartPresenter,
         private moduleControllers: Array<ModuleController>,
-        private handlers: Array<ControllerHandler>
+        private handlers: Array<ControllerHandler>,
+        private startControllerBus: StartControllerBus,
+        private dataCollector: DataCollector
     ) {
         view.componentReceiver = this;
     }
@@ -32,13 +36,19 @@ export default class Controller implements ShadowComponentReceiver {
         this.initializeApplicationView(this.document);
     }
 
-
     private async initializeController(): Promise<void> {
         const boundPresentData: Callback = async () => this.presentData();
+
+        this.startControllerBus.refresh = boundPresentData;
         this.handlers.forEach(h => h.init(boundPresentData));
+
         this.startUseCase.initialize();
         this.presentData();
 
+        await this.startModules();
+    }
+
+    private async startModules(): Promise<void> {
         const callStack: Array<Promise<void>> = [];
         for (const controller of this.moduleControllers) callStack.push(controller.init());
         await Promise.all(callStack);
@@ -47,8 +57,7 @@ export default class Controller implements ShadowComponentReceiver {
     private presentData(): void {
         if (!this.startView) return;
 
-        const stateResponse: StateResponse = new StateResponse();
-        this.startUseCase.getState(stateResponse);
-        this.startView.model = this.presenter.presentData(stateResponse);
+        const data: DataCollection = this.dataCollector.getData();
+        this.startView.model = this.presenter.presentData(data);
     }
 }

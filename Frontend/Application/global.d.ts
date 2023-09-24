@@ -26,14 +26,14 @@ declare module '*.css' {
 }
 
 declare class SpeechRecognition implements EventTarget {
-    constructor();
-
     // recognition parameters
     grammars;
     lang;
     continuous;
     interimResults;
     maxAlternatives;
+
+    constructor();
 
     // methods to drive the speech interaction
     start();
@@ -43,6 +43,8 @@ declare class SpeechRecognition implements EventTarget {
     abort();
 
     addEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean): void;
+
+    removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean): void;
 
 }
 

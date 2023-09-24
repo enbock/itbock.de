@@ -36,15 +36,26 @@ export class Start extends Component<Properties> implements RootComponent {
 
     render(): ShadowDomElement | ShadowDomElement[] {
         const model: StartModel = this.modelInstance;
+        let output: ShadowDomElement = this.getOutput(model);
 
+        return <>
+            {output}
+            {model.showThinking ? <h3>Ich denke, bitte warten..</h3> : <></>}
+            {model.showAudioSpooling ? <h3>Audiospur wird geladen, bitte warten..</h3> : <></>}
+        </>;
+    }
+
+    private getOutput(model: StartModel): ShadowDomElement {
         if (model.showStart) return <>
             <button style="font-size: 3rem" onClick={this.onStartClickHandler}>Start</button>
         </>;
 
-        return <>
-            <Audio/>
+        if (model.showApplication == true) return <>
             <Welcome/>
+            <Audio/>
         </>;
+
+        return <></>;
     }
 
     private onStartClickHandler: () => void = () => this.onStartClick();

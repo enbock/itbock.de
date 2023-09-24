@@ -23,6 +23,9 @@ export default class Input implements RootComponent {
         return;
     }
 
+    private onAudioEnd: Callback<() => void> = () => this.debouncedAudioEnd();
+    private onResult: Callback<(e: Event) => void> = (e: Event) => this.recognitionResult(e);
+
     private recognitionResult(event: any): any {
         const text: string = (((event['results'] || [])[0] || [])[0] || {}).transcript || '';
         if (!text) return;
@@ -32,7 +35,9 @@ export default class Input implements RootComponent {
 
     private stop(): void {
         if (!this.recognition) return;
-        this.recognition.stop();
+        this.recognition.abort();
+        this.recognition.removeEventListener('result', this.onResult);
+        this.recognition.removeEventListener('audioend', this.onAudioEnd);
         this.recognition = undefined;
         this.isListening = false;
     }
@@ -47,12 +52,19 @@ export default class Input implements RootComponent {
         this.recognition = new (this.recognitionClass)();
         if (!this.recognition) return;
         this.recognition.lang = 'de-DE';
-        this.recognition.addEventListener('result', (e) => this.recognitionResult(e));
-        this.recognition.addEventListener('audioend', () => {
-            this.stop();
-            this.start();
-        });
+        this.recognition.addEventListener('result', this.onResult);
+        this.recognition.addEventListener('audioend', this.onAudioEnd);
         this.recognition.start();
         this.isListening = true;
+    }
+
+    private debouncedAudioEnd(): void {
+        setTimeout(() => this.restartInput(), 1000);
+    };
+
+    private restartInput(): void {
+        if (!this.recognition) return;
+        this.stop();
+        this.start();
     }
 }

@@ -9,6 +9,7 @@ import OldHomepageUseCase from 'Core/Welcome/OldHomepageUseCase/OldHomepageUseCa
 import StateUseCase from 'Core/Welcome/StateUseCase/StateUseCase';
 import StateResponse from 'Application/Welcome/Controller/StateResponse';
 import WelcomePresenter from 'Application/Welcome/View/WelcomePresenter';
+import StartControllerBus from 'Application/Start/Controller/StartControllerBus';
 
 export default class Controller implements ModuleController {
     private view?: RootComponent;
@@ -20,7 +21,8 @@ export default class Controller implements ModuleController {
         private handlers: Array<ControllerHandler>,
         private oldHomepageUseCase: OldHomepageUseCase,
         private stateUseCase: StateUseCase,
-        private welcomePresenter: WelcomePresenter
+        private welcomePresenter: WelcomePresenter,
+        private startControllerBus: StartControllerBus
     ) {
         viewTemplate.componentReceiver = this;
     }
@@ -32,11 +34,20 @@ export default class Controller implements ModuleController {
     public async init(): Promise<void> {
         this.oldHomepageUseCase.initialize();
 
-        const boundPresentData: Callback = () => this.presentData();
+        const boundPresentData: Callback = () => this.presentAndRefresh();
         this.handlers.forEach(h => h.init(boundPresentData));
-        await this.conversationUseCase.startConversation();
+        
+        await this.conversationUseCase.startConversation({
+            onStateChange: () => this.startControllerBus.refresh()
+        });
 
+        await this.presentAndRefresh();
+    }
+
+    public async presentAndRefresh(): Promise<void> {
+        await this.presentData();
         await this.audioControllerBus.refresh();
+        await this.startControllerBus.refresh();
     }
 
     public async presentData(): Promise<void> {
@@ -45,6 +56,5 @@ export default class Controller implements ModuleController {
         const response: StateResponse = new StateResponse();
         this.stateUseCase.getState(response);
         this.view.model = this.welcomePresenter.present(response);
-        await this.audioControllerBus.refresh();
     }
 }

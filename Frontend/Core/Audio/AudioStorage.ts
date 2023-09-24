@@ -14,4 +14,8 @@ export default interface AudioStorage {
     getMicrophoneMuted(): boolean;
 
     setMicrophoneMuted(muted: boolean): void;
+
+    getLoading(): boolean;
+
+    setLoading(isLoading: boolean): void;
 }

@@ -10,6 +10,7 @@ interface Properties {
 
 export default class Audio extends Component<Properties> implements RootComponent {
     private modelInstance: AudioModel = new AudioModel();
+    private outputCache: string = '';
 
     constructor(
         props: Properties,
@@ -25,23 +26,37 @@ export default class Audio extends Component<Properties> implements RootComponen
 
     public set model(value: AudioModel) {
         this.modelInstance = value;
-        this.renderShadow();
+        this.input.model = value.audioInput;
     }
 
     render(): ShadowDomElement | ShadowDomElement[] {
-        const model: AudioModel = this.model;
-        this.input.model = model.audioInput;
-        return model.showAudio ? <audio
-            autoplay={true}
-            src={encodeURI(model.audioSource)}
-            aria-hidden={true}
-            onEnded={this.boundComplete}
-        /> : <></>;
+        return <>
+            <audio
+                autoplay={true}
+                src={this.outputCache}
+                aria-hidden={true}
+                onEnded={this.onComplete}
+                onCanplay={this.onLoaded}
+            />
+        </>;
     }
 
-    private boundComplete: Callback = () => this.onComplete();
+    protected renderShadow(): void {
+        const cache: string = this.outputCache;
+        this.outputCache = this.model.audioSource;
+        if (this.model.showAudio == false || this.model.audioSource == cache) return;
+        super.renderShadow();
+    }
 
-    private async onComplete(): Promise<void> {
+    private onComplete: Callback = () => this.runComplete();
+    private onLoaded: Callback = () => this.runLoaded();
+
+    private async runLoaded(): Promise<void> {
+        if (this.model.isLoading == false) return;
+        await this.adapter.audioLoaded();
+    }
+
+    private async runComplete(): Promise<void> {
         await this.adapter.audioFinished();
     }
 }

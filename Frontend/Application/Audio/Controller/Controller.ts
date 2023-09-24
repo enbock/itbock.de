@@ -22,18 +22,17 @@ export default class Controller implements ShadowComponentReceiver {
     public setComponent(view: Audio): void {
         this.view = view;
         void this.initializeController();
-        this.presentData();
+        void this.presentData();
     }
 
     private async initializeController(): Promise<void> {
         const boundPresentData: Callback = async () => this.presentData();
         this.audioControllerBus.refresh = boundPresentData;
         this.handlers.forEach(h => h.init(boundPresentData));
-        this.stateUseCase.initialize();
-        this.presentData();
+        await this.presentData();
     }
 
-    private presentData(): void {
+    private async presentData(): Promise<void> {
         if (!this.view) return;
 
         const stateResponse: StateResponse = new StateResponse();

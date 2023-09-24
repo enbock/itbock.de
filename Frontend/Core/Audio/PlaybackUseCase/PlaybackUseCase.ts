@@ -8,5 +8,10 @@ export default class PlaybackUseCase {
 
     public endPlayback(): void {
         this.audioStorage.setPlaying(false);
+        this.audioStorage.setLoading(false);
+    }
+
+    public playbackLoaded(): void {
+        this.audioStorage.setLoading(false);
     }
 }

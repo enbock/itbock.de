@@ -11,13 +11,10 @@ export default class StateUseCase {
     ) {
     }
 
-    public initialize(): void {
-        this.startStorage.setApplicationStarted(false);
-    }
-
     public getState(response: Response): void {
-        if (this.startStorage.getApplicationStarted()) return;
+        if (this.startStorage.getApplicationStarted() == false) return;
         this.takeAudioText(response);
+        response.isLoading = this.audioStorage.getLoading();
     }
 
     private takeAudioText(response: Response): void {
