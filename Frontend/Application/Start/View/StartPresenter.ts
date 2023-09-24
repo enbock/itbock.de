@@ -9,6 +9,8 @@ export default class StartPresenter {
         model.showThinking = data.gptState.isLoading == true;
         model.showApplication = data.startState.applicationStarted == true;
         model.showAudioSpooling = data.audioState.isLoading == true;
+        model.showAudioText = data.audioState.isPlaying == true && data.audioState.isLoading == false;
+        model.audioText = data.audioState.textOutput;
 
         return model;
     }

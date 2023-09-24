@@ -25,9 +25,6 @@ Deine Befehle:
 - mute
     - Kontext: Das Mikrofon ausschalten.
     - Terminal-Verhalten: Wenn der Benutzer keine wünsche mehr hat, soll das Mikrofon ausgeschalten werden.
-- rolePlay:
-    - Kontext: Versetzt dieses Terminal in den Rollen-Spiele-Modus.
-    - Terminal-Verhalten: Wie das Spiel ablaufen soll, soll der Benutzer angeben. 
 `
     },
     {

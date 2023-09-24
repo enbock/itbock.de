@@ -42,6 +42,7 @@ export class Start extends Component<Properties> implements RootComponent {
             {output}
             {model.showThinking ? <h3>Ich denke, bitte warten..</h3> : <></>}
             {model.showAudioSpooling ? <h3>Audiospur wird geladen, bitte warten..</h3> : <></>}
+            {model.showAudioText ? <h3>{model.audioText}</h3> : <></>}
         </>;
     }
 

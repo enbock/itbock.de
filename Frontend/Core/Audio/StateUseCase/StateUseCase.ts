@@ -13,12 +13,10 @@ export default class StateUseCase {
 
     public getState(response: Response): void {
         if (this.startStorage.getApplicationStarted() == false) return;
-        this.takeAudioText(response);
-        response.isLoading = this.audioStorage.getLoading();
-    }
 
-    private takeAudioText(response: Response): void {
         response.textOutput = this.audioService.getAudioText();
         response.audioInputEnabled = this.audioStorage.getListening() == true && this.audioStorage.getMicrophoneMuted() == false;
+        response.isLoading = this.audioStorage.getLoading();
+        response.isPlaying = this.audioStorage.getPlaying();
     }
 }

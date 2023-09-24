@@ -22,6 +22,7 @@ export default class AudioOutputHandler implements ControllerHandler {
     private async handleFinishing(): Promise<void> {
         this.playbackUseCase.endPlayback();
         await this.presentData();
+        await this.startControllerBus.refresh();
     }
 
     private async handleLoaded(): Promise<void> {
