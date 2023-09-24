@@ -2,7 +2,6 @@
 // noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
 
 import CoreWelcomeOldHomepageUseCaseOldHomepageUseCase from 'Core/Welcome/OldHomepageUseCase/OldHomepageUseCase';
-import CoreAudioAudioStorage from 'Core/Audio/AudioStorage';
 import CoreAudioInputUseCaseInputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
 import AudioControllerAudioControllerBus from 'Application/Audio/Controller/AudioControllerBus';
 import AudioViewInputInputPresenter from 'Application/Audio/View/Input/InputPresenter';
@@ -10,6 +9,7 @@ import AudioViewAudioPresenter from 'Application/Audio/View/AudioPresenter';
 import CoreAudioStateUseCaseStateUseCase from 'Core/Audio/StateUseCase/StateUseCase';
 import StartAdapter from 'Application/Start/Adapter';
 import CoreStartStartUseCaseStartUseCase from 'Core/Start/StartUseCase/StartUseCase';
+import CoreAudioAudioStorage from 'Core/Audio/AudioStorage';
 import AudioAdapter from 'Application/Audio/Adapter';
 import CoreAudioPlaybackUseCasePlaybackUseCase from 'Core/Audio/PlaybackUseCase/PlaybackUseCase';
 import StartControllerStartControllerBus from 'Application/Start/Controller/StartControllerBus';
@@ -174,13 +174,6 @@ class Container {
         else
             return this._welcomeControllerHandlerCommandOldHomepageHandler = new WelcomeControllerHandlerCommandOldHomepageHandler(this.coreWelcomeOldHomepageUseCaseOldHomepageUseCase);
     }
-    private _coreAudioInputUseCaseInputUseCase?: CoreAudioInputUseCaseInputUseCase;
-    public get coreAudioInputUseCaseInputUseCase(): CoreAudioInputUseCaseInputUseCase {
-        if (this._coreAudioInputUseCaseInputUseCase)
-            return this._coreAudioInputUseCaseInputUseCase;
-        else
-            return this._coreAudioInputUseCaseInputUseCase = new CoreAudioInputUseCaseInputUseCase(this.coreAudioAudioStorage);
-    }
     private _welcomeControllerHandlerCommandMuteHandler?: WelcomeControllerHandlerCommandMuteHandler;
     public get welcomeControllerHandlerCommandMuteHandler(): WelcomeControllerHandlerCommandMuteHandler {
         if (this._welcomeControllerHandlerCommandMuteHandler)
@@ -279,6 +272,13 @@ class Container {
         else
             return this._audioViewInputInput = new AudioViewInputInput(this.manualInjections.audioViewInputInputRecognitionClass, this.audioAdapter);
     }
+    private _coreAudioInputUseCaseInputUseCase?: CoreAudioInputUseCaseInputUseCase;
+    public get coreAudioInputUseCaseInputUseCase(): CoreAudioInputUseCaseInputUseCase {
+        if (this._coreAudioInputUseCaseInputUseCase)
+            return this._coreAudioInputUseCaseInputUseCase;
+        else
+            return this._coreAudioInputUseCaseInputUseCase = new CoreAudioInputUseCaseInputUseCase(this.coreAudioAudioStorage);
+    }
     private _audioAdapter?: AudioAdapter;
     public get audioAdapter(): AudioAdapter {
         if (this._audioAdapter)
@@ -291,7 +291,7 @@ class Container {
         if (this._audioControllerHandlerAudioInputHandler)
             return this._audioControllerHandlerAudioInputHandler;
         else
-            return this._audioControllerHandlerAudioInputHandler = new AudioControllerHandlerAudioInputHandler(this.audioAdapter, this.welcomeControllerWelcomeBus);
+            return this._audioControllerHandlerAudioInputHandler = new AudioControllerHandlerAudioInputHandler(this.audioAdapter, this.welcomeControllerWelcomeBus, this.coreAudioInputUseCaseInputUseCase);
     }
     private _welcomeControllerWelcomeBus?: WelcomeControllerWelcomeBus;
     public get welcomeControllerWelcomeBus(): WelcomeControllerWelcomeBus {

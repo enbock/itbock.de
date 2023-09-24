@@ -60,7 +60,7 @@ const config = {
         })
     ],
     output: {
-        filename: 'bundle.[hash].js',
+        filename: 'bundle.[fullhash].js',
         path: path.resolve(__dirname, 'build'),
         clean: true
     },

@@ -6,6 +6,10 @@ export default class InputUseCase {
     ) {
     }
 
+    public inputFinished(): void {
+        this.audioStorage.setListening(false);
+    }
+
     public mute(): void {
         this.audioStorage.setMicrophoneMuted(true);
     }

@@ -42,7 +42,7 @@ export default class Network implements GptBackend {
         try {
             data = JSON.parse(gptMessage?.content);
         } catch (parseError) {
-            console.error('JSON-GPT-Decode-Error:', parseError);
+            console.warn('JSON-GPT-Decode-Error:', parseError);
             return this.checkForSingleText(gptMessage);
         }
         return data;

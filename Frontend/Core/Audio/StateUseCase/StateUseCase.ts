@@ -19,6 +19,6 @@ export default class StateUseCase {
 
     private takeAudioText(response: Response): void {
         response.textOutput = this.audioService.getAudioText();
-        response.audioInputEnabled = this.audioStorage.getPlaying() == false && this.audioStorage.getMicrophoneMuted() == false;
+        response.audioInputEnabled = this.audioStorage.getListening() == true && this.audioStorage.getMicrophoneMuted() == false;
     }
 }

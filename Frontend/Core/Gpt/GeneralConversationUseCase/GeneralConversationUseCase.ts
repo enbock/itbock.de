@@ -46,7 +46,10 @@ export default class GeneralConversationUseCase {
         if (response) response.command = record.command;
 
         const gptText: string = record.text.trim();
-        if (gptText == '') return;
+        if (gptText == '') {
+            this.audioService.continueWithoutText();
+            return;
+        }
 
         conversations.push(record);
         this.conversationStorage.setConversations(conversations);

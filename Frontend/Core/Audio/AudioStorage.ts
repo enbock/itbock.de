@@ -18,4 +18,8 @@ export default interface AudioStorage {
     getLoading(): boolean;
 
     setLoading(isLoading: boolean): void;
+
+    getListening(): boolean;
+
+    setListening(isListening: boolean): void;
 }

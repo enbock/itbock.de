@@ -13,14 +13,15 @@ export default class Fake implements GptClient {
         const result: ConversationRecordEntity = new ConversationRecordEntity();
         console.log('[GPT-Emulation] Start', conversations.length > 0 ? conversations[conversations.length - 1] : '<NONE>');
         await sleep(1000);
-        
+
         for (let fc of this.cases) {
             if (fc.support(conversations) == false) continue;
             fc.run(conversations, result);
-            console.log('GPT-Emulation:', result);
+            console.log('[GPT-Emulation] Result', result);
             break;
         }
 
+        console.log('[GPT-Emulation] End', result);
         return result;
     }
 

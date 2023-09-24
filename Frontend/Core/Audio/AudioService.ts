@@ -26,4 +26,8 @@ export default class AudioService {
         buffer.push(text);
         this.audioStorage.setBuffer(buffer);
     }
+
+    public continueWithoutText(): void {
+        this.audioStorage.setListening(true);
+    }
 }
