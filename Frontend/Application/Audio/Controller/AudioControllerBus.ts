@@ -1,3 +1,3 @@
-export default class StartControllerBus {
+export default class AudioControllerBus {
     public refresh: BusCallback = () => <never>false;
 }

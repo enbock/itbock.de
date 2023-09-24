@@ -1,13 +1,11 @@
-import Adapter from 'Application/Start/Adapter';
-import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 import ControllerHandler from 'Application/ControllerHandler';
+import PlaybackUseCase from 'Core/Audio/PlaybackUseCase/PlaybackUseCase';
+import Adapter from 'Application/Audio/Adapter';
 
 export default class AudioOutputHandler implements ControllerHandler {
-    private presentData: Callback = () => <never>false;
-
     constructor(
         private adapter: Adapter,
-        private startUseCase: StartUseCase
+        private playbackUseCase: PlaybackUseCase
     ) {
     }
 
@@ -16,8 +14,10 @@ export default class AudioOutputHandler implements ControllerHandler {
         this.adapter.audioFinished = () => this.handleFinishing();
     }
 
+    private presentData: Callback = () => <never>false;
+
     private async handleFinishing(): Promise<void> {
-        this.startUseCase.endPlayback();
+        this.playbackUseCase.endPlayback();
         await this.presentData();
     }
 }

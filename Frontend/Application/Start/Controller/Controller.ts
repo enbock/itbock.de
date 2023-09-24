@@ -1,16 +1,13 @@
 import start, {Start} from 'Application/Start/View/Start';
-import Component, {ShadowComponentReceiver} from '@enbock/ts-jsx/Component';
-import RootComponent from 'Application/RootComponent';
+import {ShadowComponentReceiver} from '@enbock/ts-jsx/Component';
 import StateResponse from 'Application/Start/Controller/StateResponse';
 import StartPresenter from 'Application/Start/View/StartPresenter';
-import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
-import Adapter from 'Application/Start/Adapter';
-import StartControllerBus from 'Application/Start/Controller/StartControllerBus';
 import ModuleController from 'Application/ModuleController';
 import ControllerHandler from 'Application/ControllerHandler';
+import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 
 export default class Controller implements ShadowComponentReceiver {
-    private view?: RootComponent;
+    private startView?: Start;
 
     constructor(
         private document: Document,
@@ -19,22 +16,18 @@ export default class Controller implements ShadowComponentReceiver {
         private startUseCase: StartUseCase,
         private presenter: StartPresenter,
         private moduleControllers: Array<ModuleController>,
-        private adapter: Adapter,
-        private bus: StartControllerBus,
         private handlers: Array<ControllerHandler>
     ) {
         view.componentReceiver = this;
     }
 
-    public setComponent(view: Component & RootComponent): void {
-        this.view = view;
+    public setComponent(view: Start): void {
+        this.startView = view;
         this.presentData();
     }
 
     public start(): void {
         void this.initializeController();
-        this.adapter.closeStart = () => this.handleStart();
-        this.bus.refresh = async () => this.presentData();
 
         this.initializeApplicationView(this.document);
     }
@@ -52,15 +45,10 @@ export default class Controller implements ShadowComponentReceiver {
     }
 
     private presentData(): void {
-        if (!this.view) return;
+        if (!this.startView) return;
 
         const stateResponse: StateResponse = new StateResponse();
         this.startUseCase.getState(stateResponse);
-        this.view.model = this.presenter.presentData(stateResponse);
-    }
-
-    private async handleStart(): Promise<void> {
-        this.startUseCase.startApplication();
-        this.presentData();
+        this.startView.model = this.presenter.presentData(stateResponse);
     }
 }

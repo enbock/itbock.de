@@ -43,7 +43,23 @@ export default class Network implements GptBackend {
             data = JSON.parse(gptMessage?.content);
         } catch (parseError) {
             console.error('JSON-GPT-Decode-Error:', parseError);
+            return this.checkForSingleText(gptMessage);
         }
         return data;
+    }
+
+    private checkForSingleText(gptMessage: ChatCompletionMessage): Json {
+        const messageContent: string = gptMessage?.content;
+        if (messageContent.indexOf('{') > -1) {
+            console.error('GPT-Message not parsable.');
+            return {};
+        }
+
+        console.log('Use message as plain text');
+
+        return {
+            say: messageContent,
+            command: ''
+        };
     }
 }

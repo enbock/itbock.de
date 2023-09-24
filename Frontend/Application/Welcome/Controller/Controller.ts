@@ -2,11 +2,13 @@ import Welcome from 'Application/Welcome/View/Welcome';
 import RootComponent from 'Application/RootComponent';
 import ModuleController from 'Application/ModuleController';
 import GeneralConversationUseCase from 'Core/Gpt/GeneralConversationUseCase/GeneralConversationUseCase';
-import StartControllerBus from 'Application/Start/Controller/StartControllerBus';
+import AudioControllerBus from 'Application/Audio/Controller/AudioControllerBus';
 import Component from '@enbock/ts-jsx/Component';
 import ControllerHandler from 'Application/ControllerHandler';
-import StartStorage from 'Core/Start/StartStorage';
-import WelcomeModel from 'Application/Welcome/View/WelcomeModel';
+import OldHomepageUseCase from 'Core/Welcome/OldHomepageUseCase/OldHomepageUseCase';
+import StateUseCase from 'Core/Welcome/StateUseCase/StateUseCase';
+import StateResponse from 'Application/Welcome/Controller/StateResponse';
+import WelcomePresenter from 'Application/Welcome/View/WelcomePresenter';
 
 export default class Controller implements ModuleController {
     private view?: RootComponent;
@@ -14,9 +16,11 @@ export default class Controller implements ModuleController {
     constructor(
         viewTemplate: typeof Welcome,
         private conversationUseCase: GeneralConversationUseCase,
-        private startControllerBus: StartControllerBus,
+        private audioControllerBus: AudioControllerBus,
         private handlers: Array<ControllerHandler>,
-        private startStorage: StartStorage
+        private oldHomepageUseCase: OldHomepageUseCase,
+        private stateUseCase: StateUseCase,
+        private welcomePresenter: WelcomePresenter
     ) {
         viewTemplate.componentReceiver = this;
     }
@@ -26,19 +30,21 @@ export default class Controller implements ModuleController {
     }
 
     public async init(): Promise<void> {
+        this.oldHomepageUseCase.initialize();
+
         const boundPresentData: Callback = () => this.presentData();
         this.handlers.forEach(h => h.init(boundPresentData));
-        await this.conversationUseCase.runConversation({conversation: ''});
-        await this.startControllerBus.refresh();
+        await this.conversationUseCase.startConversation();
+
+        await this.audioControllerBus.refresh();
     }
 
     public async presentData(): Promise<void> {
         if (!this.view) return;
 
-        // TODO: Usecase, storage and presenter einbauen
-        const welcomeModel: WelcomeModel = new WelcomeModel();
-        welcomeModel.showOldHomepages = this.startStorage.getShowLinks();
-        this.view.model = welcomeModel;
-        await this.startControllerBus.refresh();
+        const response: StateResponse = new StateResponse();
+        this.stateUseCase.getState(response);
+        this.view.model = this.welcomePresenter.present(response);
+        await this.audioControllerBus.refresh();
     }
 }

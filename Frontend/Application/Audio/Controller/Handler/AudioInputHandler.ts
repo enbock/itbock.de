@@ -1,22 +1,19 @@
 import ControllerHandler from 'Application/ControllerHandler';
-import Adapter from 'Application/Start/Adapter';
 import WelcomeBus from 'Application/Welcome/Controller/WelcomeBus';
+import Adapter from 'Application/Audio/Adapter';
 
 export default class AudioInputHandler implements ControllerHandler {
-    private presentData: Callback = () => <never>false;
-
     constructor(
         private adapter: Adapter,
-        private bus: WelcomeBus
+        private welcomeBus: WelcomeBus
     ) {
     }
 
     public init(presentData: Callback): void {
-        this.presentData = presentData;
         this.adapter.speechInput = (text: string) => this.handleInput(text);
     }
 
     private async handleInput(text: string): Promise<void> {
-        await this.bus.newInput(text);
+        await this.welcomeBus.newInput(text);
     }
 }

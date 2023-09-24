@@ -1,24 +1,36 @@
 import Component from '@enbock/ts-jsx/Component';
 import {ShadowDomElement} from '@enbock/ts-jsx/ShadowDom';
 import AudioModel from 'Application/Audio/View/AudioModel';
-import StartAdapter from 'Application/Start/Adapter';
+import Input from 'Application/Audio/View/Input/Input';
+import RootComponent from 'Application/RootComponent';
+import Adapter from 'Application/Audio/Adapter';
 
 interface Properties {
-    model: AudioModel;
 }
 
-export default class Audio extends Component<Properties> {
+export default class Audio extends Component<Properties> implements RootComponent {
+    private modelInstance: AudioModel = new AudioModel();
+
     constructor(
         props: Properties,
-        private adapter: StartAdapter
+        private adapter: Adapter,
+        private input: Input
     ) {
         super(props);
     }
 
-    private boundComplete: Callback = () => this.onComplete();
+    public get model(): AudioModel {
+        return this.modelInstance;
+    }
+
+    public set model(value: AudioModel) {
+        this.modelInstance = value;
+        this.renderShadow();
+    }
 
     render(): ShadowDomElement | ShadowDomElement[] {
-        const model: AudioModel = this.props.model;
+        const model: AudioModel = this.model;
+        this.input.model = model.audioInput;
         return model.showAudio ? <audio
             autoplay={true}
             src={encodeURI(model.audioSource)}
@@ -26,6 +38,8 @@ export default class Audio extends Component<Properties> {
             onEnded={this.boundComplete}
         /> : <></>;
     }
+
+    private boundComplete: Callback = () => this.onComplete();
 
     private async onComplete(): Promise<void> {
         await this.adapter.audioFinished();

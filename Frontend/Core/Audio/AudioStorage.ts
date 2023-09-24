@@ -3,7 +3,15 @@ export default interface AudioStorage {
 
     setBuffer(buffer: Array<string>): void;
 
+    getPlayingText(): string;
+
+    setPlayingText(text: string): void;
+
     setPlaying(playing: boolean): void;
 
     getPlaying(): boolean;
+
+    getMicrophoneMuted(): boolean;
+
+    setMicrophoneMuted(muted: boolean): void;
 }

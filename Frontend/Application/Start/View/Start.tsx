@@ -6,8 +6,6 @@ import StartModel from 'Application/Start/View/StartModel';
 import RootComponent from 'Application/RootComponent';
 import Adapter from 'Application/Start/Adapter';
 import Welcome from 'Application/Welcome/View/Welcome';
-import AudioInput from 'Application/Audio/Input/Input';
-import Container from 'Application/DependencyInjection/Container';
 
 interface Properties {
 }
@@ -22,8 +20,7 @@ export class Start extends Component<Properties> implements RootComponent {
 
     constructor(
         props: Readonly<Properties>,
-        private adapter: Adapter,
-        private audioInput: AudioInput
+        private adapter: Adapter
     ) {
         super(props);
     }
@@ -34,41 +31,25 @@ export class Start extends Component<Properties> implements RootComponent {
 
     public set model(value: StartModel) {
         this.modelInstance = value;
-        this.audioInput.model = value.audioInput;
         this.renderShadow();
     }
 
     render(): ShadowDomElement | ShadowDomElement[] {
         const model: StartModel = this.modelInstance;
 
-        const debug: ShadowDomElement = <p>
-            <b>Debug:</b><br/>
-            {Object.keys(model.bypass).map(x => <>
-                <b>{x}</b>
-                <div
-                    style={'margin-left: 1rem; padding: 0.2rem; border: 1px solid black; font-family: monospace'}
-                >{(model.bypass as any)[x] || 'false'}</div>
-                <br/>
-            </>)}
-
-            <b>Conversation:</b><br/>
-            {Container.coreGptConversationStorage.getConversations().map(x => [
-                <i>Role: {x.role}</i>,
-                <div
-                    style="margin-left: 1rem; padding: 0.2rem; border: 1px solid black; font-family: monospace"
-                >{x.text}</div>
-            ])}
-        </p>;
-
         if (model.showStart) return <>
-            <button style="font-size: 3rem" onClick={this.adapter.closeStart}>Start</button>
-            {debug}
+            <button style="font-size: 3rem" onClick={this.onStartClickHandler}>Start</button>
         </>;
 
         return <>
-            <Audio model={model.audio}/>
+            <Audio/>
             <Welcome/>
-            {debug}
         </>;
+    }
+
+    private onStartClickHandler: () => void = () => this.onStartClick();
+
+    private onStartClick(): void {
+        void this.adapter.closeStart();
     }
 }

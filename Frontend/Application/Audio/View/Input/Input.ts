@@ -1,6 +1,6 @@
 import RootComponent from 'Application/RootComponent';
-import InputModel from 'Application/Audio/Input/InputModel';
-import Adapter from 'Application/Start/Adapter';
+import InputModel from 'Application/Audio/View/Input/InputModel';
+import Adapter from 'Application/Audio/Adapter';
 
 export default class Input implements RootComponent {
     private isListening: boolean = false;
@@ -13,9 +13,18 @@ export default class Input implements RootComponent {
     ) {
     }
 
+    public set model(model: InputModel) {
+        this.modelInstance = model;
+        if (!this.canPlay()) {
+            this.stop();
+            return;
+        }
+        this.start();
+        return;
+    }
+
     private recognitionResult(event: any): any {
         const text: string = (((event['results'] || [])[0] || [])[0] || {}).transcript || '';
-        console.log('>>>??', text, event);
         if (!text) return;
         this.stop();
         void this.adapter.speechInput(text);
@@ -28,18 +37,8 @@ export default class Input implements RootComponent {
         this.isListening = false;
     }
 
-    public set model(model: InputModel) {
-        this.modelInstance = model;
-        if (!this.canPlay()) {
-            this.stop();
-            return;
-        }
-        this.start();
-        return;
-    }
-
     private canPlay(): boolean {
-        return this.modelInstance.takeSpeech == true && this.isListening == false;
+        return this.modelInstance.doListening == true && this.isListening == false;
     }
 
     private start(): void {

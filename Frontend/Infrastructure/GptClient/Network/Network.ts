@@ -3,7 +3,7 @@ import FetchHelper from 'Infrastructure/ApiHelper/FetchHelper';
 import ConversationRecordEntity, {Role} from 'Core/Gpt/ConversationRecordEntity';
 import Method from 'Infrastructure/ApiHelper/Method';
 import ParseHelper from 'Infrastructure/ParseHelper';
-import Encoder from 'Infrastructure/GptClient/Encoder';
+import Encoder from 'Infrastructure/GptClient/Network/Encoder';
 
 export default class Network implements GptClient {
     constructor(

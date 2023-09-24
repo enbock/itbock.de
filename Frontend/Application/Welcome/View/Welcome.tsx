@@ -9,12 +9,13 @@ interface Properties {
 export default class Welcome extends Component<Properties> implements RootComponent {
     private modelInstance: WelcomeModel = new WelcomeModel();
 
-    public set model(model: WelcomeModel) {
-        this.modelInstance = model;
-    }
-
     public get model(): WelcomeModel {
         return this.modelInstance;
+    }
+
+    public set model(model: WelcomeModel) {
+        this.modelInstance = model;
+        this.renderShadow();
     }
 
     public render(): ShadowDomElement | ShadowDomElement[] {
