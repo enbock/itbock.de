@@ -43,7 +43,7 @@ export default class GeneralConversationUseCase {
     private async executeConversation(conversations: Array<ConversationRecordEntity>, response?: ConversationResponse): Promise<void> {
         const record: ConversationRecordEntity = await this.gptClient.generalConversation(conversations);
 
-        if (response) response.command = record.command;
+        if (response) response.commands = record.commands;
 
         const gptText: string = record.text.trim();
         if (gptText == '') {

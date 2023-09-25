@@ -3,11 +3,19 @@ x.handler({
     body: JSON.stringify({
         messages: [
             {
-                content: "Herzlich Willkommen bei Bock Laboratories! Derzeit befinde ich mich noch in der Entwicklung und kann daher Ihre Eingaben noch nicht bearbeiten. Allerdings ist die Verlinkung zur alten Homepage aus dem Jahr 2020 aktiv und kann von Ihnen genutzt werden.",
+                content: "Das Terminal ist betriebsbereit und nimmt nun Spracheingaben entgegen.",
                 role: "assistant"
             },
             {
-                content: "Ja, dann lass uns zu der alten Homepage gehen.",
+                content: "bitte zur alten Homepage gehen",
+                role: "user"
+            },
+            {
+                content: "Sehr gerne. Bitte klicken Sie auf den folgenden Link, um zur Homepage von 2020 zu gelangen.",
+                role: "assistant"
+            },
+            {
+                content: "okay",
                 role: "user"
             }
         ]

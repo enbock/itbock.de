@@ -33,46 +33,45 @@ export default class Input implements RootComponent {
         if (this.isListening || this.model.doListening == false) return;
         this.isListening = true;
 
-        if (!this.recognition) {
-            this.recognition = new (this.recognitionClass)();
-            if (!this.recognition) return;
-            this.recognition.lang = 'de-DE';
-            this.recognition.addEventListener('result', this.onResult);
-            this.recognition.addEventListener('end', this.onEnd);
-        }
+        this.createRecognitionInput();
+        this.recognition!.start();
+    }
 
-        this.recognition.start();
+    private createRecognitionInput(): void {
+        if (this.recognition) return;
+
+        this.recognition = new (this.recognitionClass)();
+        if (!this.recognition) throw new Error('SpeechRecognition not found');
+
+        this.recognition.lang = 'de-DE';
+        this.recognition.addEventListener('result', this.onResult);
+        this.recognition.addEventListener('end', this.onEnd);
     }
 
     private recognitionResult(event: any): any {
         const text: string = (((event['results'] || [])[0] || [])[0] || {}).transcript || '';
-        if (!text) {
-            return;
-        }
+        if (!text) return;
+
         this.lastResult = text;
         this.stop();
     }
 
-
     private stop(): void {
         if (!this.recognition || !this.isListening) return;
         this.recognition.stop();
-        this.isListening = false;
     }
 
     private completeInput(): void {
+        this.isListening = false;
+
         if (this.lastResult == '') {
             this.start();
             return;
         }
 
-        if (this.recognition) {
-            this.recognition.removeEventListener('result', this.onResult);
-            this.recognition.removeEventListener('end', this.onEnd);
-        }
-        this.recognition = undefined;
-
-        console.log('Erkannte Eingabe: %c' + this.lastResult, 'font-style: italic; color: green');
-        void this.adapter.speechInput(this.lastResult);
+        const result: string = this.lastResult;
+        this.lastResult = '';
+        console.log('Erkannte Eingabe: %c' + result, 'font-style: italic; color: green');
+        void this.adapter.speechInput(result);
     }
 }

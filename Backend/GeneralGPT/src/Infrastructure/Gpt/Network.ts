@@ -31,7 +31,7 @@ export default class Network implements GptBackend {
         const result: GptEntity = new GptEntity();
 
         result.say = String(data.say || '');
-        result.command = String(data.command || '');
+        result.commands = (data.commands || []).map(x => String(x));
         result.role = gptMessage.role;
 
         return result;

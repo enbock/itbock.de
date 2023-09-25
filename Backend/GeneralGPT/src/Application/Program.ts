@@ -25,7 +25,7 @@ export default class Program {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    command: gpt.command || '',
+                    commands: gpt.commands || '',
                     say: gpt.say,
                     role: gpt.role
                 })

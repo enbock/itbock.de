@@ -1,3 +1,3 @@
 export default interface ConversationResponse {
-    command: string;
+    commands: Array<string>;
 }

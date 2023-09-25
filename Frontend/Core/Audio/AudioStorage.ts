@@ -22,4 +22,8 @@ export default interface AudioStorage {
     getListening(): boolean;
 
     setListening(isListening: boolean): void;
+
+    getSuspended(): boolean;
+
+    setSuspended(suspend: boolean): void;
 }

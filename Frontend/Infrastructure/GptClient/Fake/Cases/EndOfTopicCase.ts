@@ -1,15 +1,18 @@
-import ConversationRecordEntity from 'Core/Gpt/ConversationRecordEntity';
 import FakeCase from 'Infrastructure/GptClient/Fake/Cases/FakeCase';
+import ConversationRecordEntity from 'Core/Gpt/ConversationRecordEntity';
 
-export default class MuteMicrophone implements FakeCase {
+export default class EndOfTopicCase implements FakeCase {
     public support(conversations: Array<ConversationRecordEntity>): boolean {
         const lastUser: ConversationRecordEntity | undefined = conversations.findLast(x => x.role == 'user');
-        return lastUser !== undefined && lastUser.text.toLocaleLowerCase().indexOf('stumm') > -1;
+        return lastUser !== undefined && (
+            lastUser.text.toLocaleLowerCase().indexOf('standby') > -1 ||
+            lastUser.text.toLocaleLowerCase().indexOf('inaktiv') > -1
+        );
     }
 
     public run(conversations: Array<ConversationRecordEntity>, result: ConversationRecordEntity): void {
-        result.text = 'Mikrofon wird ausgeschalten.';
+        result.text = '';
         result.role = 'assistant';
-        result.commands = ['mute'];
+        result.commands = ['topicEnd'];
     }
 }

@@ -1,13 +1,13 @@
 import ControllerHandler from 'Application/ControllerHandler';
-import WelcomeBus from 'Application/Welcome/Controller/WelcomeBus';
 import GeneralConversationUseCase from 'Core/Gpt/GeneralConversationUseCase/GeneralConversationUseCase';
 import ConversationResponse from 'Application/Welcome/Controller/Handler/ConversationResponse';
-import CommandHandler from 'Application/Welcome/Controller/Handler/Command/CommandHandler';
+import CommandHandler from 'Application/Command/CommandHandler';
 import ConversationRequest from 'Core/Gpt/GeneralConversationUseCase/Request/ConversationRequest';
+import Channel from 'Core/Audio/InputUseCase/Channel';
+import AudioInputReceiverHandler from 'Application/Audio/Controller/Handler/AudioInputReceiverHandler';
 
-export default class ConversationInputHandler implements ControllerHandler {
+export default class ConversationInputHandler implements ControllerHandler, AudioInputReceiverHandler {
     constructor(
-        private welcomeBus: WelcomeBus,
         private conversationUseCase: GeneralConversationUseCase,
         private commandHandler: Array<CommandHandler>
     ) {
@@ -15,7 +15,14 @@ export default class ConversationInputHandler implements ControllerHandler {
 
     public init(presentData: Callback): void {
         this.presentData = presentData;
-        this.welcomeBus.newInput = (text: string) => this.handleInput(text);
+    }
+
+    public support(channel: Channel): boolean {
+        return channel == Channel.DEFAULT;
+    }
+
+    public async receiveText(text: string): Promise<void> {
+        await this.handleInput(text);
     }
 
     private presentData: Callback = () => <never>false;
@@ -27,7 +34,9 @@ export default class ConversationInputHandler implements ControllerHandler {
             onStateChange: () => this.presentData()
         };
         await this.conversationUseCase.runConversation(request, response);
-        this.commandHandler.forEach(ch => ch.support(response.command) && ch.run());
+        response.commands.forEach(
+            command => this.commandHandler.forEach(ch => ch.support(command) && ch.run())
+        );
         await this.presentData();
     }
 }
