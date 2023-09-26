@@ -1,0 +1,79 @@
+main-title {
+    grid-area: main-title;
+
+    display: grid;
+    grid-template-areas:
+"button content content content content content"
+"splitter-1 content content content content content"
+"splitter-1 splitter-2 splitter-3 splitter-4 splitter-5 splitter-6";
+    grid-template-rows: var(--size-4) calc(var(--size-5) - var(--size-2) - var(--spacer-1)) calc(var(--size-2) - var(--spacer-1));
+    grid-template-columns: var(--menu-with) 1fr var(--size-3) var(--size-6) 1fr var(--size-4);
+
+    & button--block {
+        grid-area: button;
+        background: var(--color-7);
+        margin-bottom: var(--spacer-1);
+    }
+
+    & content {
+        grid-area: content;
+        background: var(--color-0);
+        position: relative;
+        border-bottom-left-radius: var(--radius-2);
+
+        text-align: right;
+        font-size: var(--typography-size-1);
+
+        &:after {
+            content: '';
+            background-color: var(--color-1);
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+        }
+
+        & page--title {
+            font-size: var(--typography-size-2);
+            font-weight: bolder;
+        }
+    }
+
+    & splitter-1 {
+        grid-area: splitter-1;
+        background: var(--color-1);
+        border-bottom-left-radius: var(--radius-1);
+    }
+
+    & splitter-2 {
+        grid-area: splitter-2;
+        background: var(--color-1);
+        margin-right: var(--spacer-1);
+        min-width: var(--radius-1);
+    }
+
+    & splitter-3 {
+        grid-area: splitter-3;
+        background: var(--color-5);
+        margin-right: var(--spacer-1);
+    }
+
+    & splitter-4 {
+        grid-area: splitter-4;
+        background: var(--color-2);
+        margin-right: var(--spacer-1);
+    }
+
+    & splitter-5 {
+        grid-area: splitter-5;
+        background: var(--color-3);
+        margin-right: var(--spacer-1);
+    }
+
+    & splitter-6 {
+        grid-area: splitter-6;
+        background: var(--color-7);
+    }
+}

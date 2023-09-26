@@ -1,0 +1,67 @@
+button {
+    --button-border-size: 0.2rem;
+    user-select: none;
+
+    background-color: var(--color-2);
+    font-size: var(--typography-size-1);
+    line-height: var(--typography-size-1);
+    padding-left: var(--spacer-3);
+    padding-right: var(--spacer-3);
+    height: var(--button-height);
+
+    border-radius: var(--button-border-radius);
+    border-color: var(--color-2);
+    border-width: var(--button-border-size);
+    border-style: solid;
+
+    &:active {
+        padding-top: var(--button-border-size);
+        padding-right: calc(var(--spacer-3) - var(--button-border-size));
+        padding-left: calc(var(--spacer-3) + var(--button-border-size));
+        padding-bottom: calc(-1 * var(--button-border-size));
+        border-style: inset;
+
+        &[right] {
+            padding-right: calc(var(--spacer-1));
+
+            &:after {
+                border-style: inset;
+                height: calc(var(--button-height) - var(--button-border-size) * 1.5);
+                width: calc(var(--button-border-radius) + var(--spacer-2) - var(--button-border-size) * 0.5);
+                transform: translate(
+                        calc(var(--spacer-2) + var(--button-border-size) * 0.5),
+                        calc(-1 * (var(--button-height) - var(--typography-size-1) - var(--spacer-2) + (var(--button-border-size) / 2)))
+                );
+            }
+        }
+    }
+
+    &[right] {
+        padding-right: var(--spacer-1);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: 0;
+
+        &:after {
+            padding: 0;
+            margin: 0;
+            display: inline-block;
+            position: absolute;
+            content: "";
+            width: calc(var(--button-border-radius) + var(--spacer-2));
+            height: calc(var(--button-height) - var(--button-border-size) * 1.5);
+            background-color: var(--color-2);
+            transform: translate(
+                    calc(var(--spacer-2) + var(--button-border-size)),
+                    calc(-1 * (var(--button-height) - var(--typography-size-1) - var(--spacer-2)))
+            );
+            border-top-right-radius: var(--button-border-radius);
+            border-bottom-right-radius: var(--button-border-radius);
+            border-color: var(--color-2);
+            border-width: var(--button-border-size);
+            border-left-width: 0;
+            border-style: solid;
+        }
+
+    }
+}

@@ -1,0 +1,49 @@
+:root {
+    /** LCARS colors * /
+    --color-0: rgb(0, 0, 0);
+    --color-1: rgb(186, 239, 255);
+    --color-2: rgb(136, 170, 255);
+    --color-3: rgb(153, 153, 204);
+    --color-4: rgb(204, 101, 102);
+    --color-5: rgb(255, 170, 1);
+    --color-6: rgb(255, 204, 102);
+    --color-7: rgb(255, 221, 35);
+    --color-8: rgb(255, 255, 170);
+    /***/
+
+    --color-0: rgb(0, 0, 0);
+    --color-1: rgb(181, 238, 255);
+    --color-2: rgb(196, 213, 255);
+    --color-3: rgb(175, 175, 204);
+    --color-4: rgb(204, 153, 153);
+    --color-5: rgb(255, 213, 128);
+    --color-6: rgb(255, 230, 179);
+    --color-7: rgb(255, 239, 145);
+    --color-8: rgb(255, 255, 214);
+
+    --spacer-1: 0.5rem;
+    --spacer-2: 0.75rem;
+    --spacer-3: 2.5rem;
+
+    --radius-1: 7.5rem;
+    --radius-2: 6rem;
+    --radius-3: 2.25rem;
+
+    --size-1: 0.9rem;
+    --size-2: 1.8rem;
+    --size-3: 4.5rem;
+    --size-4: 6rem;
+    --size-5: 7.5rem;
+    --size-6: 13.5rem;
+    --size-7: 15rem;
+
+    --button-height: calc(var(--typography-size-1) + var(--spacer-2) * 2);
+    --button-border-radius: calc(var(--button-height) / 2);
+    --button-gap: var(--spacer-1);
+
+    --typography-size-1: 2rem;
+    --typography-size-2: 4rem;
+
+    --background: var(--color-0);
+    --text-color: rgb(255, 221, 35);
+}

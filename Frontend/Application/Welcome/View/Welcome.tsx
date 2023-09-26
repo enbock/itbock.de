@@ -19,20 +19,17 @@ export default class Welcome extends Component<Properties> implements RootCompon
     }
 
     public render(): ShadowDomElement | ShadowDomElement[] {
-        const archivedHomepages: ShadowDomElement = this.model.showOldHomepages ? (
-            <archived-homepages>
-                Alte Homepages:
-                <ul>
-                    <li>
-                        <a href={'https://www.itbock.de/2020/index.html'}>Homepage von 2020</a>
-                    </li>
-                </ul>
-            </archived-homepages>
-        ) : '';
-
         return <>
-            <h1>Bock Laboratories - Terminal</h1>
-            {archivedHomepages}
+            {this.model.showOldHomepages ? (
+                <archived-homepages>
+                    Alte Homepages:
+                    <ul>
+                        <li>
+                            <a href={'https://www.itbock.de/2020/index.html'}>Homepage von 2020</a>
+                        </li>
+                    </ul>
+                </archived-homepages>
+            ) : ''}
         </>;
     }
 }

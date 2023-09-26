@@ -1,0 +1,35 @@
+@import "theme/Start/MainTitle.css";
+@import "theme/Element/Button.css";
+
+:host {
+    --menu-with: var(--size-6);
+    --devider-height: var(--size-2);
+    --devider-height-sub: var(--size-1);
+    --deiver-gap: var(--spacer-2);
+
+    display: grid;
+    grid-template-areas:
+    "main-title main-title"
+    "menu sub-header"
+    "menu page";
+    grid-template-rows: var(--size-6)var(--size-4) 1fr;
+    grid-template-columns: var(--menu-with) 1fr;
+    height: 100%;
+
+    /*overflow: hidden;*/
+}
+
+menu-section {
+    background: green;
+    grid-area: menu;
+}
+
+sub-header {
+    background: blue;
+    grid-area: sub-header;
+}
+
+page-section {
+    background: darkslategrey;
+    grid-area: page;
+}
