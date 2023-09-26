@@ -3,8 +3,8 @@ button {
     user-select: none;
 
     background-color: var(--color-2);
-    font-size: var(--typography-size-1);
-    line-height: var(--typography-size-1);
+    font-size: var(--button-font-size);
+    line-height: var(--button-font-size);
     padding-left: var(--spacer-3);
     padding-right: var(--spacer-3);
     height: var(--button-height);
@@ -26,11 +26,11 @@ button {
 
             &:after {
                 border-style: inset;
-                height: calc(var(--button-height) - var(--button-border-size) * 1.5);
-                width: calc(var(--button-border-radius) + var(--spacer-2) - var(--button-border-size) * 0.5);
+                height: calc(var(--button-height) - var(--button-border-size) * 1.75);
+                width: calc(var(--button-border-radius) + var(--spacer-2) - var(--button-border-size));
                 transform: translate(
-                        calc(var(--spacer-2) + var(--button-border-size) * 0.5),
-                        calc(-1 * (var(--button-height) - var(--typography-size-1) - var(--spacer-2) + (var(--button-border-size) / 2)))
+                        calc(var(--spacer-2) + var(--button-border-size)),
+                        calc(-1 * (var(--button-height) - var(--button-font-size) - var(--spacer-2) + (var(--button-border-size) * 0.5)))
                 );
             }
         }
@@ -49,11 +49,11 @@ button {
             position: absolute;
             content: "";
             width: calc(var(--button-border-radius) + var(--spacer-2));
-            height: calc(var(--button-height) - var(--button-border-size) * 1.5);
+            height: calc(var(--button-height) - var(--button-border-size) * 1.75);
             background-color: var(--color-2);
             transform: translate(
                     calc(var(--spacer-2) + var(--button-border-size)),
-                    calc(-1 * (var(--button-height) - var(--typography-size-1) - var(--spacer-2)))
+                    calc(-1 * (var(--button-height) - var(--button-font-size) - var(--spacer-2)))
             );
             border-top-right-radius: var(--button-border-radius);
             border-bottom-right-radius: var(--button-border-radius);

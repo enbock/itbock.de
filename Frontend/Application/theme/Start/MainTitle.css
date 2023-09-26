@@ -36,7 +36,7 @@ main-title {
         }
 
         & page--title {
-            font-size: var(--typography-size-2);
+            font-size: var(--typography-size-3);
             font-weight: bolder;
         }
     }

@@ -37,12 +37,15 @@
     --size-6: 13.5rem;
     --size-7: 15rem;
 
-    --button-height: calc(var(--typography-size-1) + var(--spacer-2) * 2);
+    --typography-size-1: 2rem;
+    --typography-size-2: 2.8rem;
+    --typography-size-3: 3.8rem;
+
+    --button-font-size: var(--typography-size-2);
+    --button-height: calc(var(--button-font-size) + var(--spacer-2) * 2);
     --button-border-radius: calc(var(--button-height) / 2);
     --button-gap: var(--spacer-1);
 
-    --typography-size-1: 2rem;
-    --typography-size-2: 4rem;
 
     --background: var(--color-0);
     --text-color: rgb(255, 221, 35);
