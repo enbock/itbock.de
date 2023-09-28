@@ -5,9 +5,7 @@ export default class StartPresenter {
     public presentData(data: DataCollection): StartModel {
         const model: StartModel = new StartModel();
 
-        model.showStart = data.startState.applicationStarted == false && data.gptState.isLoading == false;
         model.showThinking = data.gptState.isLoading == true;
-        model.showApplication = data.startState.applicationStarted == true;
         model.showAudioSpooling = data.audioState.isLoading == true;
         model.showAudioText = data.audioState.isPlaying == true && data.audioState.isLoading == false;
         model.audioText = data.audioState.textOutput;

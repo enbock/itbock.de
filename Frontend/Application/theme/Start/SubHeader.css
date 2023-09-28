@@ -1,32 +1,27 @@
-main-title {
-    grid-area: main-title;
+sub-header {
+    grid-area: sub-header;
+
+    overflow: hidden;
+
     display: grid;
     grid-template-areas:
-"button content content content content content"
-"splitter-1 content content content content content"
 "splitter-1 splitter-2 splitter-3 splitter-4 splitter-5 splitter-6"
-"empty empty empty empty empty empty";
-    grid-template-rows: 1fr calc(var(--size-5) - var(--size-1) - var(--spacer-1)) var(--size-1) var(--spacer-1);
+"splitter-1 content content content content content";
+    grid-template-rows: var(--size-1) 1fr;
     grid-template-columns: var(--size-7) 1fr var(--size-3) var(--size-7) 1fr var(--size-4);
-
-    & button--block {
-        grid-area: button;
-        background: var(--color-7);
-        margin-bottom: var(--spacer-1);
-    }
 
     & content {
         grid-area: content;
         background: var(--color-0);
         position: relative;
-        border-bottom-left-radius: var(--radius-2);
+        border-top-left-radius: var(--radius-2);
 
         text-align: right;
-        font-size: var(--typography-size-2);
+        font-size: var(--typography-size-1);
 
         &:after {
             content: '';
-            background-color: var(--color-1);
+            background-color: var(--color-4);
             position: absolute;
             left: 0;
             top: 0;
@@ -43,37 +38,38 @@ main-title {
 
     & splitter-1 {
         grid-area: splitter-1;
-        background: var(--color-1);
-        border-bottom-left-radius: var(--radius-1);
+        background: var(--color-4);
+        border-top-left-radius: var(--radius-1);
     }
 
     & splitter-2 {
         grid-area: splitter-2;
-        background: var(--color-1);
+        background: var(--color-4);
         margin-right: var(--spacer-1);
         min-width: var(--radius-1);
     }
 
     & splitter-3 {
         grid-area: splitter-3;
-        background: var(--color-5);
+        background: var(--color-7);
         margin-right: var(--spacer-1);
     }
 
     & splitter-4 {
         grid-area: splitter-4;
-        background: var(--color-2);
+        background: var(--color-1);
         margin-right: var(--spacer-1);
+        height: 50%
     }
 
     & splitter-5 {
         grid-area: splitter-5;
-        background: var(--color-3);
+        background: var(--color-6);
         margin-right: var(--spacer-1);
     }
 
     & splitter-6 {
         grid-area: splitter-6;
-        background: var(--color-7);
+        background: var(--color-2);
     }
 }

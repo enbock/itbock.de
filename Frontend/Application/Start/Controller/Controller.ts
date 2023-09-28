@@ -27,7 +27,7 @@ export default class Controller implements ShadowComponentReceiver {
 
     public setComponent(view: Start): void {
         this.startView = view;
-        this.presentData();
+        void this.presentData();
     }
 
     public start(): void {
@@ -43,8 +43,7 @@ export default class Controller implements ShadowComponentReceiver {
         this.handlers.forEach(h => h.init(boundPresentData));
 
         this.startUseCase.initialize();
-        this.presentData();
-
+        await this.presentData();
         await this.startModules();
     }
 
@@ -54,7 +53,7 @@ export default class Controller implements ShadowComponentReceiver {
         await Promise.all(callStack);
     }
 
-    private presentData(): void {
+    private async presentData(): Promise<void> {
         if (!this.startView) return;
 
         const data: DataCollection = this.dataCollector.getData();

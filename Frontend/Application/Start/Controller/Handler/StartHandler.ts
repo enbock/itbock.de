@@ -1,11 +1,11 @@
 import ControllerHandler from 'Application/ControllerHandler';
-import Adapter from 'Application/Start/Adapter';
 import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 import AudioControllerBus from 'Application/Audio/Controller/AudioControllerBus';
+import StartControllerBus from 'Application/Start/Controller/StartControllerBus';
 
 export default class StartHandler implements ControllerHandler {
     constructor(
-        private adapter: Adapter,
+        private startControllerBus: StartControllerBus,
         private startUseCase: StartUseCase,
         private audioControllerBus: AudioControllerBus
     ) {
@@ -13,7 +13,7 @@ export default class StartHandler implements ControllerHandler {
 
     public init(presentData: Callback): void {
         this.presentData = presentData;
-        this.adapter.closeStart = () => this.handleStart();
+        this.startControllerBus.start = () => this.handleStart();
     }
 
     private presentData: Callback = () => <never>false;

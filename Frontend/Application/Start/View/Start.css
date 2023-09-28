@@ -1,0 +1,21 @@
+@import "theme/Start/MainTitle.css";
+@import "theme/Start/SubHeader.css";
+@import "theme/Start/Menu.css";
+
+:host {
+    display: grid;
+    grid-template-areas:
+    "main-title main-title"
+    "sub-header sub-header"
+    "menu page";
+    grid-template-rows: var(--size-6) var(--size-5) 1fr;
+    grid-template-columns: var(--size-7) 1fr;
+    height: 100%;
+
+    overflow: hidden;
+}
+
+page-section {
+    grid-area: page;
+    margin-left: var(--spacer-2);
+}
