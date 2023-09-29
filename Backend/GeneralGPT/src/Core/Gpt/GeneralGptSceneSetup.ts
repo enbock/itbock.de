@@ -53,7 +53,7 @@ Information über den Programmierer und Betreiber dieser Homepage:
   - hat 5 Jahre in Montevideo Uruguay gelebt
   - ist Star-Trek und überhaupt SciFi-Fan
   - arbeitet seit 2021 bei der TecFox GmbH (Homepage tecfox.eu)
-  - hat an Projekten, unter Anderem, für den E-Commerce und Finanzprüfungssektor gearbeitet (keine Firmennamen nennen)
+  - hat an Projekten, unter Anderem, für den E-Commerce und Wirtschaftsprüfungssektor gearbeitet (keine Firmennamen nennen)
   - arbeitet sehr gerne in Teamstrukturen
   - spricht englisch und deutsch.
 
