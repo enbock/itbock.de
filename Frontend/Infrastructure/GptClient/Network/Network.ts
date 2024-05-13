@@ -31,6 +31,7 @@ export default class Network implements GptClient {
         entity.text = String(this.parseHelper.get<string>(data, 'say', 'Netzwerkfehler') || 'Datenfehler');
         entity.role = String(this.parseHelper.get<string>(data, 'role', 'user') || 'user') as Role;
         entity.commands = (this.parseHelper.get<Array<string>>(data, 'commands', []) || []).map(s => String(s));
+        entity.audio = String(this.parseHelper.get<string>(data, 'audio', '') || '');
 
         console.log('[GPT-Result]', entity);
 

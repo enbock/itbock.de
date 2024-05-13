@@ -10,7 +10,8 @@ interface Properties {
 
 export default class Audio extends Component<Properties> implements RootComponent {
     private modelInstance: AudioModel = new AudioModel();
-    private outputCache: string = '';
+    private outputText: string = '';
+    private outputUrl: string = '';
 
     constructor(
         props: Properties,
@@ -31,9 +32,10 @@ export default class Audio extends Component<Properties> implements RootComponen
 
     render(): ShadowDomElement | ShadowDomElement[] {
         return <>
+            <a href={this.outputUrl}>DL</a>
             <audio
                 autoplay={true}
-                src={this.outputCache}
+                src={this.outputUrl}
                 aria-hidden={true}
                 onEnded={this.onComplete}
                 onCanplay={this.onLoaded}
@@ -42,9 +44,10 @@ export default class Audio extends Component<Properties> implements RootComponen
     }
 
     protected renderShadow(): void {
-        const cache: string = this.outputCache;
-        this.outputCache = this.model.audioSource;
-        if (this.model.showAudio == false || this.model.audioSource == cache) return;
+        const text: string = this.outputText;
+        this.outputText = this.model.outputText;
+        if (this.model.showAudio == false || this.model.outputText == text) return;
+        this.outputUrl = window.URL.createObjectURL(this.model.outputAudio);
         super.renderShadow();
     }
 
@@ -57,6 +60,7 @@ export default class Audio extends Component<Properties> implements RootComponen
     }
 
     private async runComplete(): Promise<void> {
+        window.URL.revokeObjectURL(this.outputUrl);
         await this.adapter.audioFinished();
     }
 }

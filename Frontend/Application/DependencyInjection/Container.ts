@@ -85,7 +85,6 @@ interface ManualInjections {
     welcomeControllerControllerViewTemplate: typeof Welcome;
     startControllerControllerInitializeApplicationView: typeof renderApplication;
     startControllerControllerDocument: Document;
-    audioViewAudioPresenterSoundServiceUrl: string;
     ViewInjection: typeof ViewInjection;
     fetchHelper: FetchHelper;
     parseHelper: ParseHelper;
@@ -127,7 +126,6 @@ class Container {
         welcomeControllerControllerViewTemplate: Welcome,
         startControllerControllerDocument: document,
         startControllerControllerInitializeApplicationView: renderApplication,
-        audioViewAudioPresenterSoundServiceUrl: "https://api.itbock.de/speech",
         ViewInjection: ViewInjection,
         fetchHelper: new FetchHelper(),
         parseHelper: new ParseHelper(),
@@ -262,7 +260,7 @@ class Container {
         if (this._audioViewAudioPresenter)
             return this._audioViewAudioPresenter;
         else
-            return this._audioViewAudioPresenter = new AudioViewAudioPresenter(this.manualInjections.audioViewAudioPresenterSoundServiceUrl, this.audioViewInputInputPresenter);
+            return this._audioViewAudioPresenter = new AudioViewAudioPresenter(this.audioViewInputInputPresenter);
     }
     private _audioControllerController?: AudioControllerController;
     public get audioControllerController(): AudioControllerController {

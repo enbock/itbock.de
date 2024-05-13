@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AI-Homepage-2024.iml" filepath="$PROJECT_DIR$/AI-Homepage-2024.iml" />
       <module fileurl="file://$PROJECT_DIR$/GeneralGPT.iml" filepath="$PROJECT_DIR$/GeneralGPT.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SpeechSevice.iml" filepath="$PROJECT_DIR$/SpeechSevice.iml" />
     </modules>
   </component>
 </project>

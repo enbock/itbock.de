@@ -1,11 +1,16 @@
+export interface AudioBuffer {
+    text: string,
+    audio: string
+}
+
 export default interface AudioStorage {
-    getBuffer(): Array<string>;
+    getBuffer(): Array<AudioBuffer>;
 
-    setBuffer(buffer: Array<string>): void;
+    setBuffer(buffer: Array<AudioBuffer>): void;
 
-    getPlayingText(): string;
+    getPlayingText(): AudioBuffer;
 
-    setPlayingText(text: string): void;
+    setPlayingText(text: AudioBuffer): void;
 
     setPlaying(playing: boolean): void;
 

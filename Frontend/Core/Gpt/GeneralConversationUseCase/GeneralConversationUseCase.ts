@@ -53,7 +53,7 @@ export default class GeneralConversationUseCase {
 
         conversations.push(record);
         this.conversationStorage.setConversations(conversations);
-        this.audioService.addAudioText(gptText);
+        this.audioService.addAudioContent(gptText, record.audio);
     }
 
     private changeToLoadingState(onStateChange: Callback): void {

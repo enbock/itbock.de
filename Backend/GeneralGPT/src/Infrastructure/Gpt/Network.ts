@@ -13,7 +13,7 @@ export default class Network implements GptBackend {
     public async runChatCompletion(messages: Array<ChatCompletionMessageParam>): Promise<GptEntity> {
         const response: ChatCompletion = await this.openai.chat.completions.create({
             stream: false,
-            model: 'gpt-4',
+            model: 'gpt-4o',
             max_tokens: 256,
             presence_penalty: 0,
             frequency_penalty: 0,

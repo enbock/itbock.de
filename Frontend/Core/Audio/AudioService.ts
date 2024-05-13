@@ -1,4 +1,4 @@
-import AudioStorage from 'Core/Audio/AudioStorage';
+import AudioStorage, {AudioBuffer} from 'Core/Audio/AudioStorage';
 
 export default class AudioService {
     constructor(
@@ -6,24 +6,24 @@ export default class AudioService {
     ) {
     }
 
-    public getAudioText(): string {
+    public getAudioContent(): AudioBuffer {
         if (this.audioStorage.getPlaying()) return this.audioStorage.getPlayingText();
 
-        const buffer: Array<string> = this.audioStorage.getBuffer();
-        if (buffer.length == 0) return '';
+        const buffer: Array<AudioBuffer> = this.audioStorage.getBuffer();
+        if (buffer.length == 0) return {text: '', audio: ''};
 
-        const text: string = buffer.join(' ');
+        const item: AudioBuffer = buffer.shift()!;
         this.audioStorage.setPlaying(true);
-        this.audioStorage.setPlayingText(text);
-        this.audioStorage.setBuffer([]);
+        this.audioStorage.setPlayingText(item);
+        this.audioStorage.setBuffer(buffer);
         this.audioStorage.setLoading(true);
 
-        return text;
+        return item;
     }
 
-    public addAudioText(text: string): void {
-        const buffer: Array<string> = this.audioStorage.getBuffer();
-        buffer.push(text);
+    public addAudioContent(text: string, audio: string): void {
+        const buffer: Array<AudioBuffer> = this.audioStorage.getBuffer();
+        buffer.push({text: text, audio: audio});
         this.audioStorage.setBuffer(buffer);
     }
 

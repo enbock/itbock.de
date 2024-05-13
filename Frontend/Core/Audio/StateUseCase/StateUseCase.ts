@@ -14,7 +14,7 @@ export default class StateUseCase {
     public getState(response: Response): void {
         if (this.startStorage.getApplicationStarted() == false) return;
 
-        response.textOutput = this.audioService.getAudioText();
+        response.audioOutput = this.audioService.getAudioContent();
         response.audioInputEnabled = this.audioStorage.getListening() == true && this.audioStorage.getMicrophoneMuted() == false;
         response.isLoading = this.audioStorage.getLoading();
         response.isPlaying = this.audioStorage.getPlaying();

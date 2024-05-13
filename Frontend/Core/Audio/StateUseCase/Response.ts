@@ -1,6 +1,8 @@
+import {AudioBuffer} from 'Core/Audio/AudioStorage';
+
 export default interface Response {
     isLoading: boolean;
     audioInputEnabled: boolean;
-    textOutput: string;
+    audioOutput: AudioBuffer;
     isPlaying: boolean;
 }

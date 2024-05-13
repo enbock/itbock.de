@@ -4,4 +4,5 @@ export default class ConversationRecordEntity {
     public role: Role = 'user';
     public text: string = '';
     public commands: Array<string> = [];
+    public audio: string = '';
 }

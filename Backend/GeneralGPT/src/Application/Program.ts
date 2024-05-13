@@ -2,6 +2,30 @@ import GptUseCase from '../Core/Gpt/GptUseCase';
 import GptEntity from '../Core/Gpt/GptEntity';
 import BodyParser from './BodyParser';
 import {ChatCompletionMessageParam} from 'openai/src/resources/chat/completions';
+import {
+    PollyClient,
+    SynthesizeSpeechCommand,
+    SynthesizeSpeechCommandInput,
+    SynthesizeSpeechCommandOutput
+} from '@aws-sdk/client-polly';
+
+const client: PollyClient = new PollyClient();
+
+async function speech(inputText: string): Promise<string> {
+    const input: SynthesizeSpeechCommandInput = {
+        Engine: 'neural',
+        LanguageCode: 'de-DE',
+        OutputFormat: 'mp3',
+        SampleRate: '24000',
+        Text: inputText,
+        TextType: 'text',
+        VoiceId: 'Vicki'
+    };
+    const command: SynthesizeSpeechCommand = new SynthesizeSpeechCommand(input);
+    const response: SynthesizeSpeechCommandOutput = await client.send(command);
+
+    return await response.AudioStream.transformToString('base64');
+}
 
 export default class Program {
     constructor(
@@ -17,6 +41,7 @@ export default class Program {
 
         try {
             let gpt: GptEntity = await this.gptUseCase.execute(pastConversation);
+            const audio:string = gpt.say ? await speech(gpt.say) : '';
 
             return {
                 statusCode: 200,
@@ -27,7 +52,8 @@ export default class Program {
                 body: JSON.stringify({
                     commands: gpt.commands || '',
                     say: gpt.say,
-                    role: gpt.role
+                    role: gpt.role,
+                    audio: audio
                 })
             };
         } catch (error) {

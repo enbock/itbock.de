@@ -1,27 +1,27 @@
-import AudioStorage from 'Core/Audio/AudioStorage';
+import AudioStorage, {AudioBuffer} from 'Core/Audio/AudioStorage';
 
 export default class Memory implements AudioStorage {
-    private buffer: Array<string> = [];
-    private playBuffer: string = '';
+    private buffer: Array<AudioBuffer> = [];
+    private playBuffer: AudioBuffer = {text: '', audio: ''};
     private playing: boolean = false;
     private microphoneMuted: boolean = false;
     private loading: boolean = false;
     private listening: boolean = false;
     private suspended: boolean = false;
 
-    public getBuffer(): Array<string> {
+    public getBuffer(): Array<AudioBuffer> {
         return this.buffer;
     }
 
-    public setBuffer(buffer: Array<string>): void {
+    public setBuffer(buffer: Array<AudioBuffer>): void {
         this.buffer = buffer;
     }
 
-    public getPlayingText(): string {
+    public getPlayingText(): AudioBuffer {
         return this.playBuffer;
     }
 
-    public setPlayingText(text: string): void {
+    public setPlayingText(text: AudioBuffer): void {
         this.playBuffer = text;
     }
 

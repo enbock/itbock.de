@@ -13,6 +13,7 @@
     "openai": "*"
   },
   "devDependencies": {
+    "@aws-sdk/client-polly": "*",
     "@types/aws-sdk": "*",
     "@types/node": "*",
     "ts-node": "*",
