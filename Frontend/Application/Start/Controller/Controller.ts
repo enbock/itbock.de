@@ -37,12 +37,13 @@ export default class Controller implements ShadowComponentReceiver {
     }
 
     private async initializeController(): Promise<void> {
+        this.startUseCase.initialize();
+        
         const boundPresentData: Callback = async () => this.presentData();
 
         this.startControllerBus.refresh = boundPresentData;
         this.handlers.forEach(h => h.init(boundPresentData));
 
-        this.startUseCase.initialize();
         await this.presentData();
         await this.startModules();
     }

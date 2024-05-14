@@ -3,4 +3,5 @@ export default class StartModel {
     public showAudioSpooling: boolean = false;
     public showAudioText: boolean = false;
     public audioText: string = '';
+    public language: string = '';
 }

@@ -9,6 +9,7 @@ export default class StartPresenter {
         model.showAudioSpooling = data.audioState.isLoading == true;
         model.showAudioText = data.audioState.isPlaying == true && data.audioState.isLoading == false;
         model.audioText = data.audioState.audioOutput.text;
+        model.language = data.audioState.language;
 
         return model;
     }

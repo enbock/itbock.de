@@ -59,6 +59,7 @@ import StartMemory from 'Infrastructure/Storage/Start/Memory';
 import AudioMemory from 'Infrastructure/Storage/Audio/Memory';
 import env from '../config/env.json';
 import GptClient from 'Core/Gpt/GptClient';
+import ModuleController from 'Application/ModuleController';
 
 function getEnv(key: string): string {
     return (env as any)[key] || '';
@@ -167,7 +168,16 @@ class Container {
         this.welcomeViewWelcomePresenter,
         this.welcomeControllerDataCollector
     );
-    private startControllerControllerArray = [
+    public audioControllerController: AudioControllerController = new AudioControllerController(
+        this.audioControllerControllerViewComponent,
+        this.audioViewAudioPresenter,
+        this.audioControllerControllerHandler,
+        this.coreAudioStateUseCaseStateUseCase,
+        this.audioControllerAudioControllerBus
+    );
+
+    private startControllerControllerArray: Array<ModuleController> = [
+        this.audioControllerController,
         this.welcomeControllerController
     ];
     public startControllerController: StartControllerController = new StartControllerController(
@@ -180,13 +190,6 @@ class Container {
         this.startControllerControllerArrayHandler,
         this.startControllerStartControllerBus,
         this.startControllerDataCollector
-    );
-    public audioControllerController: AudioControllerController = new AudioControllerController(
-        this.audioControllerControllerViewComponent,
-        this.audioViewAudioPresenter,
-        this.audioControllerControllerHandler,
-        this.coreAudioStateUseCaseStateUseCase,
-        this.audioControllerAudioControllerBus
     );
 
     constructor() {

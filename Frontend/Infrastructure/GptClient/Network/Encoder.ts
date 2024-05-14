@@ -11,7 +11,8 @@ export default class Encoder {
     private encodeConversation(conversation: ConversationRecordEntity): Json {
         return {
             content: conversation.text,
-            role: conversation.role
+            role: conversation.role,
+            language: conversation.language
         };
     }
 }

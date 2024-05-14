@@ -30,11 +30,12 @@ export default class Network implements GptBackend {
         const data: Json = this.parseGeneratedData(gptMessage);
         const result: GptEntity = new GptEntity();
 
-        result.say = String(data.say || '');
+        result.say = String(data.content || '');
         result.commands = (data.commands || []).map(x => String(x));
         result.role = gptMessage.role;
         result.language = data.language || 'de_DE';
 
+        console.log('>>>', result, data);
         return result;
     }
 
@@ -56,11 +57,12 @@ export default class Network implements GptBackend {
             return {};
         }
 
-        // console.log('Use message as plain text');
+        console.log('Use message as plain text');
 
         return {
             say: messageContent,
-            command: ''
+            command: '',
+            language: ''
         };
     }
 }

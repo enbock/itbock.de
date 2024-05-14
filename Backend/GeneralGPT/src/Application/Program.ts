@@ -80,7 +80,10 @@ export default class Program {
 
         try {
             let gpt: GptEntity = await this.gptUseCase.execute(pastConversation);
+            console.log('Response:', gpt);
+
             const audio: string = gpt.say ? await openAiSpeech(gpt.say) : '';
+            console.log('Audio-Length:', audio.length);
 
             return {
                 statusCode: 200,

@@ -36,9 +36,11 @@ export default class GeneralConversationUseCase {
 
     private addConversationInput(request: ConversationRequest, conversations: Array<ConversationRecordEntity>): void {
         if (request.conversation == '') return;
+
         const record: ConversationRecordEntity = new ConversationRecordEntity();
         record.role = 'user';
         record.text = request.conversation;
+        record.language = this.startStorage.getLanguage();
         conversations.push(record);
     }
 

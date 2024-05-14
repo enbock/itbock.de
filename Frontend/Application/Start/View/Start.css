@@ -19,3 +19,8 @@ page-section {
     grid-area: page;
     margin-left: var(--spacer-2);
 }
+
+button--block {
+    color: var(--color-0);
+    padding: 1rem;
+}

@@ -22,7 +22,10 @@ export default class BodyParser {
     private parse(data: Json): ChatCompletionMessageParam {
         return {
             role: String(this.parseHelper.get<Role>(data, 'role', 'user') || '') as Role,
-            content: String(this.parseHelper.get<string>(data, 'content', '') || '')
+            content: JSON.stringify({
+                language: String(this.parseHelper.get<string>(data, 'language', '') || 'de_DE'),
+                content: String(this.parseHelper.get<string>(data, 'content', '') || '')
+            })
         };
     }
 }

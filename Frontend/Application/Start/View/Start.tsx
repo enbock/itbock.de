@@ -45,7 +45,9 @@ export class Start extends Component<Properties> implements RootComponent {
                     {model.showThinking ? <h3>Ich denke, bitte warten...</h3> : <></>}
                     {model.showAudioSpooling ? <h3>Audiospur wird geladen, bitte warten...</h3> : <></>}
                 </content>
-                <button--block/>
+                <button--block>
+                    {model.language}
+                </button--block>
                 <splitter-1/>
                 <splitter-2/>
                 <splitter-3/>
