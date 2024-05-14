@@ -18,7 +18,12 @@ export default class GeneralConversationUseCase {
 
     public async startConversation(request: StartConversationRequest): Promise<void> {
         this.changeToLoadingState(request.onStateChange);
-        await this.executeConversation([]);
+        const setupConversation: ConversationRecordEntity = new ConversationRecordEntity();
+        setupConversation.language = this.startStorage.getLanguage();
+        setupConversation.role = 'assistant';
+        await this.executeConversation([
+            setupConversation
+        ]);
         this.changeToFinishedState();
     }
 

@@ -20,7 +20,8 @@ export default class Controller implements ShadowComponentReceiver {
         private moduleControllers: Array<ModuleController>,
         private handlers: Array<ControllerHandler>,
         private startControllerBus: StartControllerBus,
-        private dataCollector: DataCollector
+        private dataCollector: DataCollector,
+        private defaultLanguage: string
     ) {
         view.componentReceiver = this;
     }
@@ -37,8 +38,8 @@ export default class Controller implements ShadowComponentReceiver {
     }
 
     private async initializeController(): Promise<void> {
-        this.startUseCase.initialize();
-        
+        this.startUseCase.initialize(this.defaultLanguage);
+
         const boundPresentData: Callback = async () => this.presentData();
 
         this.startControllerBus.refresh = boundPresentData;

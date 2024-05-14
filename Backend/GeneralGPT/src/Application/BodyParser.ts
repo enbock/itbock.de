@@ -23,7 +23,7 @@ export default class BodyParser {
         return {
             role: String(this.parseHelper.get<Role>(data, 'role', 'user') || '') as Role,
             content: JSON.stringify({
-                language: String(this.parseHelper.get<string>(data, 'language', '') || 'de_DE'),
+                language: String(this.parseHelper.get<string>(data, 'language', '') || 'de-DE'),
                 content: String(this.parseHelper.get<string>(data, 'content', '') || '')
             })
         };

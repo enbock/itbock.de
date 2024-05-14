@@ -33,9 +33,8 @@ export default class Network implements GptBackend {
         result.say = String(data.content || '');
         result.commands = (data.commands || []).map(x => String(x));
         result.role = gptMessage.role;
-        result.language = data.language || 'de_DE';
+        result.language = data.language || 'de-DE';
 
-        console.log('>>>', result, data);
         return result;
     }
 

@@ -15,8 +15,8 @@ export default class StartUseCase {
         response.applicationStarted = this.startStorage.getApplicationStarted();
     }
 
-    public initialize(): void {
+    public initialize(defaultLanguage: string): void {
         this.startStorage.setApplicationStarted(false);
-        this.startStorage.setLanguage('de_DE');
+        this.startStorage.setLanguage(defaultLanguage);
     }
 }

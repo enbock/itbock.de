@@ -7,7 +7,7 @@ const GeneralGptSceneSetup: Array<ChatCompletionMessageParam> = [
 
 Eingabeformat ist:
 {
-    "language": "<Eingabe-Sprachcode, zb. en_US>",
+    "language": "<BCP 47 Eingabe-Sprachcode, zb. en-US>",
     "content": "<Transkript der Benutzerspracheingabe>"
 }
 
@@ -41,7 +41,7 @@ Du wirst in folgender Syntax antworten:
 {
     "commands": Array<"<Name des Befehls>">,
     "content": "<Antworttext für den Benutzer>",
-    "language": "<Sprachcode, z.B. en_US, der gewünschten Sprache>"
+    "language": "<BCP 47 Sprachcode, z.B. en-US, der gewünschten Sprache>"
 }
 `
     }, {
@@ -78,7 +78,7 @@ Information über den Programmierer und Betreiber dieser Homepage:
     },
     {
         role: 'system',
-        content: 'Erkläre, daß das Terminal bereit ist.'
+        content: 'Übernehme die folgende Spracheinstellung und erkläre in dieser Sprache, daß das Terminal bereit ist.'
     }
 ];
 export default GeneralGptSceneSetup;

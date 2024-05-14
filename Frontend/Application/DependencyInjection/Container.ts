@@ -189,7 +189,8 @@ class Container {
         this.startControllerControllerArray,
         this.startControllerControllerArrayHandler,
         this.startControllerStartControllerBus,
-        this.startControllerDataCollector
+        this.startControllerDataCollector,
+        navigator.language
     );
 
     constructor() {
