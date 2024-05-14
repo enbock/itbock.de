@@ -5,6 +5,7 @@ export default class InputPresenter {
     public present(data: StateResponse): InputModel {
         const input: InputModel = new InputModel();
         input.doListening = data.audioInputEnabled == true;
+        input.language = data.language;
         return input;
     }
 }

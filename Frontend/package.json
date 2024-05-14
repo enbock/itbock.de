@@ -21,7 +21,6 @@
     "start": "webpack serve --open --mode development --no-open --no-live-reload --no-hot --stats-error-details",
     "build": "webpack --mode production",
     "deploy:clean": "aws s3 rm s3://www.itbock.de/ --recursive --exclude \"*\" --include \"bundle.*\"",
-    "deploy:copy": "aws s3 sync build s3://www.itbock.de/",
-    "generate-container": "npx @enbock/ts-di-container-generator Application index"
+    "deploy:copy": "aws s3 sync build s3://www.itbock.de/"
   }
 }

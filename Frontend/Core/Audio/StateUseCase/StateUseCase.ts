@@ -18,5 +18,6 @@ export default class StateUseCase {
         response.audioInputEnabled = this.audioStorage.getListening() == true && this.audioStorage.getMicrophoneMuted() == false;
         response.isLoading = this.audioStorage.getLoading();
         response.isPlaying = this.audioStorage.getPlaying();
+        response.language = this.startStorage.getLanguage();
     }
 }

@@ -5,4 +5,5 @@ export default class ConversationRecordEntity {
     public text: string = '';
     public commands: Array<string> = [];
     public audio: string = '';
+    public language: string = '';
 }

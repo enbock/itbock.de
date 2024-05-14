@@ -19,7 +19,7 @@ export default class AudioPresenter {
     }
 
     private presentTextToAudio(model: AudioModel, data: StateResponse): void {
-        const doAudioOutput: boolean = data.audioOutput.text != '';
+        const doAudioOutput: boolean = data.audioOutput.text != '' && data.audioOutput.audio != '';
 
         if (doAudioOutput) {
             model.outputText = data.audioOutput.text;

@@ -21,7 +21,7 @@ export default class Network implements GptBackend {
             top_p: 1,
             messages: messages
         });
-        console.log('GPT-Result:', response.choices);
+        // console.log('GPT-Result:', response.choices);
         return this.parseResult(response);
     }
 
@@ -33,6 +33,7 @@ export default class Network implements GptBackend {
         result.say = String(data.say || '');
         result.commands = (data.commands || []).map(x => String(x));
         result.role = gptMessage.role;
+        result.language = data.language || 'de_DE';
 
         return result;
     }
@@ -55,7 +56,7 @@ export default class Network implements GptBackend {
             return {};
         }
 
-        console.log('Use message as plain text');
+        // console.log('Use message as plain text');
 
         return {
             say: messageContent,

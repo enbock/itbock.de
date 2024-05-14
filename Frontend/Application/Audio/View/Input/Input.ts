@@ -34,6 +34,8 @@ export default class Input implements RootComponent {
         this.isListening = true;
 
         this.createRecognitionInput();
+        
+        this.recognition!.lang = this.model.language;
         this.recognition!.start();
     }
 
@@ -42,8 +44,6 @@ export default class Input implements RootComponent {
 
         this.recognition = new (this.recognitionClass)();
         if (!this.recognition) throw new Error('SpeechRecognition not found');
-
-        this.recognition.lang = 'de-DE';
         this.recognition.addEventListener('result', this.onResult);
         this.recognition.addEventListener('end', this.onEnd);
     }

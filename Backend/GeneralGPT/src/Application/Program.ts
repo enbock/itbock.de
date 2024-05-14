@@ -9,9 +9,10 @@ import {
     SynthesizeSpeechCommandOutput
 } from '@aws-sdk/client-polly';
 
-const client: PollyClient = new PollyClient();
+const pollyClient: PollyClient = new PollyClient();
 
-async function speech(inputText: string): Promise<string> {
+/** Experimental area */
+async function pollySpeech(inputText: string): Promise<string> {
     const input: SynthesizeSpeechCommandInput = {
         Engine: 'neural',
         LanguageCode: 'de-DE',
@@ -22,10 +23,48 @@ async function speech(inputText: string): Promise<string> {
         VoiceId: 'Vicki'
     };
     const command: SynthesizeSpeechCommand = new SynthesizeSpeechCommand(input);
-    const response: SynthesizeSpeechCommandOutput = await client.send(command);
+    const response: SynthesizeSpeechCommandOutput = await pollyClient.send(command);
 
     return await response.AudioStream.transformToString('base64');
 }
+
+async function openAiSpeech(inputText: string): Promise<string> {
+    const apiUrl: string = 'https://api.openai.com/v1/audio/speech';
+    const headers: Record<string, string> = {
+        'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY || '',
+        'Content-Type': 'application/json'
+    };
+
+    const data: Object = {
+        model: 'tts-1',
+        input: inputText,
+        voice: 'nova',
+        speed: 1
+    };
+
+    try {
+        const response: Response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok == false) {
+            console.error(new Error(`Error: ${response.statusText}`));
+            return '';
+        }
+
+        const audioBuffer: ArrayBuffer = await response.arrayBuffer();
+
+        const buffer: Buffer = Buffer.from(audioBuffer);
+        return buffer.toString('base64');
+    } catch (error) {
+        console.error('Error generating speech:', error);
+        return '';
+    }
+}
+
+/** End of experimental area */
 
 export default class Program {
     constructor(
@@ -41,7 +80,7 @@ export default class Program {
 
         try {
             let gpt: GptEntity = await this.gptUseCase.execute(pastConversation);
-            const audio:string = gpt.say ? await speech(gpt.say) : '';
+            const audio: string = gpt.say ? await openAiSpeech(gpt.say) : '';
 
             return {
                 statusCode: 200,
@@ -53,6 +92,7 @@ export default class Program {
                     commands: gpt.commands || '',
                     say: gpt.say,
                     role: gpt.role,
+                    language: gpt.language,
                     audio: audio
                 })
             };

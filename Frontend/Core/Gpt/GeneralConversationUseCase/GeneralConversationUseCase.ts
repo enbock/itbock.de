@@ -5,12 +5,14 @@ import ConversationStorage from 'Core/Gpt/ConversationStorage';
 import ConversationRequest from 'Core/Gpt/GeneralConversationUseCase/Request/ConversationRequest';
 import ConversationResponse from 'Core/Gpt/GeneralConversationUseCase/ConversationResponse';
 import StartConversationRequest from 'Core/Gpt/GeneralConversationUseCase/Request/StartConversationRequest';
+import StartStorage from 'Core/Start/StartStorage';
 
 export default class GeneralConversationUseCase {
     constructor(
         private gptClient: GptClient,
         private audioService: AudioService,
-        private conversationStorage: ConversationStorage
+        private conversationStorage: ConversationStorage,
+        private startStorage: StartStorage
     ) {
     }
 
@@ -51,6 +53,7 @@ export default class GeneralConversationUseCase {
             return;
         }
 
+        this.startStorage.setLanguage(record.language);
         conversations.push(record);
         this.conversationStorage.setConversations(conversations);
         this.audioService.addAudioContent(gptText, record.audio);

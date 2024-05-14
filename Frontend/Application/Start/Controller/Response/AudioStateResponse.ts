@@ -6,4 +6,5 @@ export default class AudioStateResponse implements StateResponse {
     public isLoading: boolean = false;
     public audioOutput: AudioBuffer = {audio: '', text: ''};
     public isPlaying: boolean = false;
+    public language: string = '';
 }

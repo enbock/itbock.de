@@ -4,7 +4,6 @@
   "author": "Endre Bock",
   "license": "MIT",
   "scripts": {
-    "generate-container": "npx @enbock/ts-di-container-generator src index",
     "build": "tsc",
     "deploy": "node scripts/deploy.js",
     "test:run": "node ./localRun.js"

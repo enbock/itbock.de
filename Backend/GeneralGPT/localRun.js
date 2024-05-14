@@ -9,14 +9,6 @@ x.handler({
             {
                 content: "bitte zur alten Homepage gehen",
                 role: "user"
-            },
-            {
-                content: "Sehr gerne. Bitte klicken Sie auf den folgenden Link, um zur Homepage von 2020 zu gelangen.",
-                role: "assistant"
-            },
-            {
-                content: "okay",
-                role: "user"
             }
         ]
     })
