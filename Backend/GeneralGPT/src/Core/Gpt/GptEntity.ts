@@ -7,4 +7,5 @@ export default class GptEntity {
     public say: string = '';
     public role: Role = 'user';
     public language: string = 'de-DE';
+    public audio: string = '';
 }

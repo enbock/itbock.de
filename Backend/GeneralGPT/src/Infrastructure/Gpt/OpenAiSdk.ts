@@ -1,10 +1,10 @@
 import {ChatCompletion, ChatCompletionMessageParam} from 'openai/src/resources/chat/completions';
-import GptEntity from '../../Core/Gpt/GptEntity';
 import {ChatCompletionMessage} from 'openai/resources/chat';
 import OpenAI from 'openai';
+import GptEntity from '../../Core/Gpt/GptEntity';
 import GptBackend from '../../Core/Gpt/GptBackend';
 
-export default class Network implements GptBackend {
+export default class OpenAiSdk implements GptBackend {
     constructor(
         private openai: OpenAI
     ) {
