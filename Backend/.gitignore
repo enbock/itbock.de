@@ -1,2 +1,4 @@
 bode_modules
 build
+patch*
+.serverless

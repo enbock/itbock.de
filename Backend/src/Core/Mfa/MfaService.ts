@@ -1,28 +1,27 @@
-import {CryptoClient} from '../CryptoClient';
-import {TokenStorage} from '../TokenStorage';
-import {totp} from 'otplib';
+import {authenticator} from 'otplib';
+import {TOTPOptions} from '@otplib/core';
+import TokenStorage from '../TokenStorage';
 
-export class MfaService {
+export default class MfaService {
     constructor(
-        private cryptoClient: CryptoClient,
-        private tokenStore: TokenStorage
-    ) {
-        totp.options = {
+        private appName: string,
+        private tokenStore: TokenStorage,
+        private authenticatorLibrary: typeof authenticator,
+        totpConfig: Partial<TOTPOptions> = {
             digits: 6,
             step: 30,
             window: 1
-        };
+        }
+    ) {
+        this.authenticatorLibrary.options = totpConfig;
     }
 
-    public generateSecret(): string {
-        return this.cryptoClient.generateRandomBytes(20);
-    }
-
-    public async createToken(userId: string, secret: string): Promise<string> {
-        const token: string = totp.generate(secret);
+    public async createToken(userId: string): Promise<string> {
+        const secret: string = this.authenticatorLibrary.generateSecret();
         await this.tokenStore.setToken(userId, secret);
+        const token: string = this.authenticatorLibrary.generate(secret);
         console.log(`Generated token for user ${userId}: ${token}`);
-        return token;
+        return this.authenticatorLibrary.keyuri(userId, this.appName, secret);
     }
 
     public async validateToken(userId: string, token: string): Promise<boolean> {
@@ -32,6 +31,6 @@ export class MfaService {
             return false;
         }
 
-        return totp.check(token, secret);
+        return this.authenticatorLibrary.check(token, secret);
     }
 }

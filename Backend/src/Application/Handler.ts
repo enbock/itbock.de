@@ -1,14 +1,13 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult, Context} from 'aws-lambda';
-import {MfaService} from '../Core/Mfa/MfaService';
-import {TokenPresenter} from './TokenPresenter';
+import MfaService from '../Core/Mfa/MfaService';
+import TokenPresenter from './TokenPresenter';
 
-export class Handler {
-    private mfaService: MfaService;
-    private tokenPresenter: TokenPresenter;
+export default class Handler {
 
-    constructor(mfaService: MfaService, tokenPresenter: TokenPresenter) {
-        this.mfaService = mfaService;
-        this.tokenPresenter = tokenPresenter;
+    constructor(
+        private mfaService: MfaService,
+        private tokenPresenter: TokenPresenter
+    ) {
     }
 
     public async generateTokenHandler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
@@ -29,15 +28,11 @@ export class Handler {
             };
         }
 
-        const secret = this.mfaService.generateSecret();
-        const token = await this.mfaService.createToken(userId, secret);
-        const issuer = 'YourAppName';
-
-        const response = this.tokenPresenter.formatTokenResponse(token, secret, userId, issuer);
+        const uri: string = await this.mfaService.createToken(userId);
 
         return {
             statusCode: 200,
-            body: response
+            body: this.tokenPresenter.formatTokenResponse(uri)
         };
     }
 

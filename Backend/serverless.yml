@@ -1,25 +1,35 @@
-service: itbock.de-backend
+service: WebpageBackend
 
 frameworkVersion: '3'
 
 provider:
+  architecture: arm64
   name: aws
   runtime: nodejs20.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "lambda:*"
+        - "logs:*"
+        - "s3:*"
+        - "iam:PassRole"
+      Resource: "*"
   region: eu-west-1
   stage: dev
   environment:
     S3_BUCKET_NAME: api.itbock.de
+    S3_TOKEN_PATH: tokens/
 
 functions:
   generateToken:
-    handler: src/lambda.generateTokenHandler
+    handler: build/lambda.generateTokenHandler
     events:
       - http:
           path: generate-token
           method: post
           cors: true
   validateToken:
-    handler: src/lambda.validateTokenHandler
+    handler: build/lambda.validateTokenHandler
     events:
       - http:
           path: validate-token
@@ -35,5 +45,6 @@ custom:
 
 package:
   exclude:
-    - node_modules/**
-    - src/**/*.test.ts
+    - ./**
+  include:
+    - build/**

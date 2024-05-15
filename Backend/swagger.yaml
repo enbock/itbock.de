@@ -1,0 +1,98 @@
+openapi: 3.0.0
+info:
+  title: MFA Backend API
+  description: API zur Generierung und Validierung von TOTP Tokens.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/dev/
+    description: Local Server
+
+paths:
+  /generate-token:
+    post:
+      summary: Generiert einen neuen TOTP-Token für einen Benutzer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: "user123"
+      responses:
+        '200':
+          description: Token erfolgreich generiert
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token generated
+                  token:
+                    type: string
+                    example: 123456
+                  otpauth:
+                    type: string
+                    example: "otpauth://totp/YourAppName:user123?secret=SECRET_KEY&issuer=YourAppName"
+        '400':
+          description: Ungültige Anfrage
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User ID is required
+
+  /validate-token:
+    post:
+      summary: Validiert einen TOTP-Token für einen Benutzer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: "user123"
+                token:
+                  type: string
+                  example: "123456"
+      responses:
+        '200':
+          description: Token ist gültig
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token is valid
+        '400':
+          description: Ungültige Anfrage
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User ID and token are required
+        '401':
+          description: Token ist ungültig
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid token

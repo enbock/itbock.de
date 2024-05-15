@@ -1,7 +1,7 @@
-import {CryptoClient} from '../../Core/CryptoClient';
+import CryptoClient from '../../Core/CryptoClient';
 import crypto from 'crypto';
 
-export class Crypto implements CryptoClient {
+export default class Crypto implements CryptoClient {
     constructor(
         private cryptoLibrary: typeof crypto
     ) {
