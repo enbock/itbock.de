@@ -1,4 +1,4 @@
 bode_modules
 build
-patch*
+*diff
 .serverless
