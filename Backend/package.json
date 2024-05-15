@@ -1,0 +1,26 @@
+{
+  "name": "itebock.de-backend",
+  "version": "1.0.0",
+  "description": "The backend of the webpage",
+  "main": "src/handler.ts",
+  "scripts": {
+    "build": "tsc",
+    "deploy": "serverless deploy",
+    "offline": "serverless offline"
+  },
+  "author": "Dein Name",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2",
+    "otplib": "^12"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8",
+    "@types/crypto-js": "^4",
+    "@types/node": "^20",
+    "@types/otplib": "^10",
+    "serverless": "^3",
+    "serverless-offline": "^13",
+    "typescript": "^5"
+  }
+}

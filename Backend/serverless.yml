@@ -1,0 +1,39 @@
+service: itbock.de-backend
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-west-1
+  stage: dev
+  environment:
+    S3_BUCKET_NAME: api.itbock.de
+
+functions:
+  generateToken:
+    handler: src/lambda.generateTokenHandler
+    events:
+      - http:
+          path: generate-token
+          method: post
+          cors: true
+  validateToken:
+    handler: src/lambda.validateTokenHandler
+    events:
+      - http:
+          path: validate-token
+          method: post
+          cors: true
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+
+package:
+  exclude:
+    - node_modules/**
+    - src/**/*.test.ts
