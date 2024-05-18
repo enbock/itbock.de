@@ -9,5 +9,6 @@ export default class StateUseCase {
 
     public getState(response: Response): void {
         response.isLoading = this.conversationStorage.getLoading();
+        response.conversations = this.conversationStorage.getConversations();
     }
 }

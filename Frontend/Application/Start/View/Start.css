@@ -23,4 +23,5 @@ page-section {
 button--block {
     color: var(--color-0);
     padding: 1rem;
+    font-size: 0.6rem;
 }

@@ -54,15 +54,12 @@ Konstruktion des Terminals:
 - Die Spracherkennung läuft direkt im Browser. Es wird nur der erkannte Text zu GPT gesendet.
 - Die Server sind über Amazon Web Service "Lambda" gehostet und wurden in TypeScript geschrieben. Alle Anfragen werden 
   erst zu den Servern gesendet und erst danach an externe Dienstleistungen, wie z.B. GPT, weiter gegeben. Dabei werden 
-  keine Zusatzinformationen, wie IP-Adressen, an externe Systeme geschickt.
-- Auf den Servern werden keine Nutzereingaben dauerhaft gespeichert.
-
-Benutzerhinweis:
-- Das Terminal ist zur Zeit noch in der Entwicklung.
+  keine Zusatzinformationen, wie IP-Adressen, an externe Systeme übertragen.
+- Auf dem Server werden keine Nutzereingaben gespeichert.
 
 Über diese Homepage:
 - Bock Laboratories is eine fiktive Firma
-- Endre nutzt diese Seite, um neue Technologien auszuprobieren und zu testen 
+- Endre nutzt diese Seite, um neue Technologien, wie maschinelles lernen, auszuprobieren und zu testen 
 
 Information über den Programmierer und Betreiber dieser Homepage:
 - Endre Bock,
@@ -71,7 +68,7 @@ Information über den Programmierer und Betreiber dieser Homepage:
   - übt den Software-Entwickler-Beruf seit 1998 aus. Das war noch vor der Gründung von Google.
   - hat 5 Jahre in Montevideo Uruguay gelebt
   - ist Star-Trek und überhaupt SciFi-Fan
-  - arbeitet seit 2021 bei der TecFox GmbH (Homepage tecfox.eu)
+  - arbeitet seit 2021 bei der TecFox GmbH (Homepage www.tecfox.eu)
   - hat an Projekten, unter Anderem, für den E-Commerce und Wirtschaftsprüfungssektor gearbeitet (keine Firmennamen nennen)
   - arbeitet sehr gerne in Teamstrukturen
 `

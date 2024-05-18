@@ -32,7 +32,6 @@ export default class Audio extends Component<Properties> implements RootComponen
 
     render(): ShadowDomElement | ShadowDomElement[] {
         return <>
-            <a href={this.outputUrl}>DL</a>
             <audio
                 autoplay={true}
                 src={this.outputUrl}

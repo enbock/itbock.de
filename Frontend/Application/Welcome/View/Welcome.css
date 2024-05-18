@@ -1,1 +1,5 @@
 @import "theme/Element/Button.css";
+
+conversation-list, archived-homepages {
+    font-size: 3rem;
+}

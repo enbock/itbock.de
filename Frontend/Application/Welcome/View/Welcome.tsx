@@ -32,6 +32,7 @@ export default class Welcome extends Component<Properties> implements RootCompon
             <style>{Style}</style>
             {this.renderStartButton()}
             {this.renderOldHomepage()}
+            {this.renderConversation()}
         </>;
     }
 
@@ -62,5 +63,16 @@ export default class Welcome extends Component<Properties> implements RootCompon
         </>;
 
         return <></>;
+    }
+
+    private renderConversation(): ShadowDomElement {
+        if (!this.model.showConversation) return <></>;
+        return <>
+            <conversation-list>
+                <ul>
+                    {this.model.conversations.map(s => <li>{s}</li>)}
+                </ul>
+            </conversation-list>
+        </>;
     }
 }
