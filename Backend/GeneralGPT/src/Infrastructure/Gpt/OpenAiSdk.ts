@@ -27,6 +27,7 @@ export default class OpenAiSdk implements GptBackend {
 
     private parseResult(response: ChatCompletion): GptEntity {
         const gptMessage: ChatCompletionMessage = response.choices[0]?.message;
+        console.log('GPT-Dump:', gptMessage);
         const data: Json = this.parseGeneratedData(gptMessage);
         const result: GptEntity = new GptEntity();
 

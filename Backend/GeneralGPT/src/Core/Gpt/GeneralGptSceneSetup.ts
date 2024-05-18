@@ -37,7 +37,7 @@ Verfügbare Befehle:
     - Benutzerhinweis ausgeben: Das Terminal kann mit dem Wort "Computer" oder "Terminal" wieder aufgeweckt werden.
     - Dieser Befehl soll ausgeführt werden, wenn das Thema beendet wurde oder keine weitere Eingabe wünscht.
 
-Du wirst in folgender Syntax antworten:
+Deine Ausgabe wird maschinell verarbeitet. Daher Antworte unbedingt immer in folgender Syntax:
 {
     "commands": Array<"<Name des Befehls>">,
     "content": "<Antworttext für den Benutzer>",
