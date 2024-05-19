@@ -18,6 +18,7 @@
     "webpack-dev-server": "*"
   },
   "scripts": {
+    "dev:ai": "npx ai-code-writer",
     "start": "webpack serve --open --mode development --no-open --no-live-reload --no-hot --stats-error-details",
     "build": "webpack --mode production",
     "deploy:clean": "aws s3 rm s3://www.itbock.de/ --recursive --exclude \"*\" --include \"bundle.*\"",

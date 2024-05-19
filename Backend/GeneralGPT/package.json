@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "deploy": "node scripts/deploy.js",
-    "test:run": "node ./localRun.js"
+    "test:run": "node ./localRun.js",
+    "dev:ai": "npx ai-code-writer"
   },
   "dependencies": {
     "openai": "*"
