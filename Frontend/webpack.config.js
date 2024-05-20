@@ -51,6 +51,10 @@ const config = {
                 {
                     from: 'Application/theme',
                     to: 'theme'
+                },
+                {
+                    from: 'Infrastructure/AudioTransformClient/worklet-processor.js',
+                    to: 'worklet-processor.js'
                 }
             ]
         }),

@@ -8,6 +8,8 @@ export default class Input implements RootComponent {
     private mediaRecorder?: MediaRecorder;
     private audioChunks: Array<Blob> = [];
     private silenceTimeoutId?: number;
+    private initialRMSList: Array<number> = [];
+    private initialRMS: number = 1;
 
     constructor(
         private adapter: Adapter
@@ -39,6 +41,8 @@ export default class Input implements RootComponent {
             const mediaRecorder: MediaRecorder = new MediaRecorder(stream);
             this.mediaRecorder = mediaRecorder;
             this.mediaRecorder.start();
+
+            await this.calculateInitialRMS(stream);
 
             this.mediaRecorder.ondataavailable = (event: BlobEvent) => {
                 this.audioChunks.push(event.data);
@@ -99,6 +103,27 @@ export default class Input implements RootComponent {
         }
 
         const averageRMS: number = sum / samples;
-        return averageRMS > 0.009;
+        console.log('Mute detection: avgRMS > initRMS?', averageRMS, this.initialRMS);
+        return averageRMS > this.initialRMS;
+    }
+
+    private async calculateInitialRMS(stream: MediaStream): Promise<void> {
+        const audioContext: AudioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        await audioContext.audioWorklet.addModule('worklet-processor.js');
+        const source: MediaStreamAudioSourceNode = audioContext.createMediaStreamSource(stream);
+        const audioWorkletNode: AudioWorkletNode = new AudioWorkletNode(audioContext, 'rms-processor');
+
+        source.connect(audioWorkletNode);
+        audioWorkletNode.port.onmessage = (event: MessageEvent) => {
+            const rms: number = event.data;
+            console.log('Initial RMS:', rms);
+            if (rms > 0) {
+                this.initialRMSList.push(rms);
+                if (this.initialRMSList.length < 10) return;
+                this.initialRMS = this.initialRMSList.reduce((sum, r) => sum + r, 0) / this.initialRMSList.length;
+                audioWorkletNode.disconnect();
+                source.disconnect();
+            }
+        };
     }
 }
