@@ -1,4 +1,6 @@
+// noinspection JSUnresolvedReference
 class RMSProcessor extends AudioWorkletProcessor {
+    // noinspection JSUnusedLocalSymbols
     process(inputs, outputs, parameters) {
         const input = inputs[0];
         const inputChannel = input[0];
@@ -19,4 +21,5 @@ class RMSProcessor extends AudioWorkletProcessor {
     }
 }
 
+// noinspection JSUnresolvedReference
 registerProcessor('rms-processor', RMSProcessor);
