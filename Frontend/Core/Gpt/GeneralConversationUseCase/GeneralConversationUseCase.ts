@@ -37,7 +37,7 @@ export default class GeneralConversationUseCase {
         const conversations: Array<ConversationRecordEntity> = this.conversationStorage.getConversations();
         const wasConversationAdded: boolean = this.addConversationInput(request, conversations);
         if (wasConversationAdded) await this.executeConversation(conversations, response);
-        else this.changeToFinishedState();
+        else this.audioService.continueWithoutText();
     }
 
     private addConversationInput(request: ConversationRequest, conversations: Array<ConversationRecordEntity>): boolean {
