@@ -1,72 +1,26 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult, Context} from 'aws-lambda';
-import MfaService from '../Core/Mfa/MfaService';
-import TokenPresenter from './TokenPresenter';
+import GenerateTokenController from './Mfa/GenerateTokenController';
+import ValidateTokenController from './Mfa/ValidateTokenController';
+import GptController from './Gpt/GptController';
 
 export default class Handler {
 
     constructor(
-        private mfaService: MfaService,
-        private tokenPresenter: TokenPresenter
+        private generateTokenController: GenerateTokenController,
+        private validateTokenController: ValidateTokenController,
+        private gptController: GptController
     ) {
     }
 
     public async generateTokenHandler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
-        if (!event.body) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({message: 'User ID is required'})
-            };
-        }
-
-        const body = JSON.parse(event.body);
-        const userId = body.userId;
-
-        if (!userId) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({message: 'User ID is required'})
-            };
-        }
-
-        const uri: string = await this.mfaService.createToken(userId);
-
-        return {
-            statusCode: 200,
-            body: this.tokenPresenter.formatTokenResponse(uri)
-        };
+        return await this.generateTokenController.handle(event, context);
     }
 
     public async validateTokenHandler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
-        if (!event.body) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({message: 'User ID and token are required'})
-            };
-        }
+        return await this.validateTokenController.handle(event, context);
+    }
 
-        const body = JSON.parse(event.body);
-        const userId = body.userId;
-        const token = body.token;
-
-        if (!userId || !token) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({message: 'User ID and token are required'})
-            };
-        }
-
-        const isValid = await this.mfaService.validateToken(userId, token);
-
-        if (isValid) {
-            return {
-                statusCode: 200,
-                body: JSON.stringify({message: 'Token is valid'})
-            };
-        } else {
-            return {
-                statusCode: 401,
-                body: JSON.stringify({message: 'Invalid token'})
-            };
-        }
+    public async generalGptHandler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
+        return await this.gptController.main(event, context);
     }
 }

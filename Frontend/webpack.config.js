@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const fs = require("fs");
+const Dotenv = require('dotenv-webpack');
 
 const config = {
     entry: './Application/index.ts',
@@ -57,6 +57,11 @@ const config = {
 
         new HtmlWebpackPlugin({
             template: 'Application/public/index.html'
+        }),
+
+        new Dotenv({
+            file: './.env',
+            defaults: './.env.dist'
         })
     ],
     output: {
@@ -82,20 +87,7 @@ const config = {
     }
 };
 
-
+// noinspection JSUnusedLocalSymbols
 module.exports = (env, argv) => {
-    const configDir = path.resolve(__dirname, "Application/config")
-    if (argv.mode === 'development') {
-        config.devtool = 'inline-source-map';
-        fs.copyFileSync(
-            path.resolve(configDir, "env.dev.json"),
-            path.resolve(configDir, "env.json"),
-        );
-    } else {
-        fs.copyFileSync(
-            path.resolve(configDir, "env.dist.json"),
-            path.resolve(configDir, "env.json"),
-        );
-    }
     return config;
 };

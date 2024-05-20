@@ -1,6 +1,6 @@
 import {ChatCompletionMessageParam} from 'openai/src/resources/chat/completions';
-import ParseHelper from '../ParseHelper';
-import {Role} from '../Core/Gpt/GptEntity';
+import ParseHelper from '../../ParseHelper';
+import {Role} from '../../Core/Gpt/GptEntity';
 
 export default class BodyParser {
     constructor(
@@ -20,7 +20,7 @@ export default class BodyParser {
     }
 
     private parse(data: Json): ChatCompletionMessageParam {
-        return {
+        return <ChatCompletionMessageParam>{
             role: String(this.parseHelper.get<Role>(data, 'role', 'user') || '') as Role,
             content: JSON.stringify({
                 language: String(this.parseHelper.get<string>(data, 'language', '') || 'de-DE'),

@@ -2,3 +2,4 @@ bode_modules
 build
 *diff
 .serverless
+.env

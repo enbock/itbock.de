@@ -4,6 +4,7 @@
  */
 
 export default class ParseHelper {
+    // noinspection RegExpRedundantEscape
     private isDeepProperty: RegExp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/;
     private isPlainProperty: RegExp = /^\w*$/;
     private propertyDelimiter: string = '.';

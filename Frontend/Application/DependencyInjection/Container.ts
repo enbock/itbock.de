@@ -1,5 +1,3 @@
-// noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
-
 import WelcomeAdapter from 'Application/Welcome/Adapter';
 import CoreGptGeneralConversationUseCaseGeneralConversationUseCase
     from 'Core/Gpt/GeneralConversationUseCase/GeneralConversationUseCase';
@@ -57,24 +55,16 @@ import ViewInjection from '@enbock/ts-jsx/ViewInjection';
 import ConversationMemory from 'Infrastructure/Conversation/Memory';
 import StartMemory from 'Infrastructure/Storage/Start/Memory';
 import AudioMemory from 'Infrastructure/Storage/Audio/Memory';
-import env from '../config/env.json';
 import GptClient from 'Core/Gpt/GptClient';
 import ModuleController from 'Application/ModuleController';
-
-function getEnv(key: string): string {
-    return (env as any)[key] || '';
-}
 
 class Container {
     private startControllerControllerView = Start;
     private audioControllerControllerViewComponent = Audio;
     private welcomeControllerControllerViewTemplate = Welcome;
     private startControllerControllerDocument = document;
-    private startControllerControllerInitializeApplicationView = renderApplication;
-    private ViewInjection = ViewInjection;
     private fetchHelper: FetchHelper = new FetchHelper();
     private parseHelper: ParseHelper = new ParseHelper();
-    private infrastructureGptClientNetworkNetworkServiceUrl: string = 'https://api.itbock.de/gpt/general';
     private audioViewInputInputRecognitionClass = (window as any)['SpeechRecognition'] || (window as any)['webkitSpeechRecognition'] || (window as any)['speechRecognition'];
     private coreAudioInputUseCaseInputUseCaseArray = [
         'computer',
@@ -110,7 +100,12 @@ class Container {
     private audioControllerAudioControllerBus: AudioControllerAudioControllerBus = new AudioControllerAudioControllerBus();
     private welcomeControllerHandlerCommandMuteHandler: WelcomeControllerHandlerCommandMuteHandler = new WelcomeControllerHandlerCommandMuteHandler(this.coreAudioInputUseCaseInputUseCase, this.audioControllerAudioControllerBus, this.coreGptConversationResetUseCaseConversationResetUseCase);
     private infrastructureGptClientNetworkEncoder: InfrastructureGptClientNetworkEncoder = new InfrastructureGptClientNetworkEncoder();
-    private infrastructureGptClientNetworkNetwork: InfrastructureGptClientNetworkNetwork = new InfrastructureGptClientNetworkNetwork(this.fetchHelper, this.parseHelper, this.infrastructureGptClientNetworkNetworkServiceUrl, this.infrastructureGptClientNetworkEncoder);
+    private infrastructureGptClientNetworkNetwork: InfrastructureGptClientNetworkNetwork = new InfrastructureGptClientNetworkNetwork(
+        this.fetchHelper,
+        this.parseHelper,
+        String(process.env.API_GPT_CLIENT_URL || ''),
+        this.infrastructureGptClientNetworkEncoder
+    );
     private coreWelcomeStateUseCaseStateUseCase: CoreWelcomeStateUseCaseStateUseCase = new CoreWelcomeStateUseCaseStateUseCase(this.coreWelcomeStateStorage);
     private welcomeViewWelcomePresenter: WelcomeViewWelcomePresenter = new WelcomeViewWelcomePresenter();
     private coreWelcomeOldHomepageUseCaseOldHomepageUseCase: CoreWelcomeOldHomepageUseCaseOldHomepageUseCase = new CoreWelcomeOldHomepageUseCaseOldHomepageUseCase(this.coreWelcomeStateStorage);
@@ -122,7 +117,7 @@ class Container {
         this.welcomeControllerHandlerCommandSuspendCommand
     ];
     private coreAudioAudioService: CoreAudioAudioService = new CoreAudioAudioService(this.coreAudioAudioStorage);
-    private coreGptGptClient: GptClient = getEnv('FAKE') ? this.infrastructureGptClientFakeFake : this.infrastructureGptClientNetworkNetwork;
+    private coreGptGptClient: GptClient = String(process.env.FAKE || '') === 'true' ? this.infrastructureGptClientFakeFake : this.infrastructureGptClientNetworkNetwork;
     public coreGptGeneralConversationUseCaseGeneralConversationUseCase: CoreGptGeneralConversationUseCaseGeneralConversationUseCase = new CoreGptGeneralConversationUseCaseGeneralConversationUseCase(
         this.coreGptGptClient,
         this.coreAudioAudioService,
@@ -182,7 +177,7 @@ class Container {
     ];
     public startControllerController: StartControllerController = new StartControllerController(
         this.startControllerControllerDocument,
-        this.startControllerControllerInitializeApplicationView,
+        renderApplication,
         this.startControllerControllerView,
         this.coreStartStartUseCaseStartUseCase,
         this.startViewStartPresenter,

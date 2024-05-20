@@ -1,11 +1,10 @@
 import TokenStorage from '../../Core/TokenStorage';
-import AWS, {S3} from 'aws-sdk';
-import {PromiseResult} from 'aws-sdk/lib/request';
-import {AWSError} from 'aws-sdk/lib/error';
+import {GetObjectCommandInput, PutObjectCommandInput, S3} from '@aws-sdk/client-s3';
+import {GetObjectCommandOutput} from '@aws-sdk/client-s3/dist-types/commands/GetObjectCommand';
 
 export default class S3TokenStore implements TokenStorage {
     constructor(
-        private s3: AWS.S3,
+        private s3: S3,
         private bucketName: string,
         private path: string
     ) {
@@ -13,12 +12,12 @@ export default class S3TokenStore implements TokenStorage {
 
     public async getToken(userId: string): Promise<string | undefined> {
         try {
-            const params: S3.Types.GetObjectRequest = {
+            const params: GetObjectCommandInput = {
                 Bucket: this.bucketName,
                 Key: `${this.path}${userId}`
             };
-            const result: PromiseResult<S3.Types.GetObjectOutput, AWSError> = await this.s3.getObject(params).promise();
-            return result.Body?.toString('utf-8');
+            const result: GetObjectCommandOutput = await this.s3.getObject(params);
+            return result.Body?.toString();
         } catch (error) {
             if ((<any>error).code === 'NoSuchKey') {
                 return undefined;
@@ -28,13 +27,13 @@ export default class S3TokenStore implements TokenStorage {
     }
 
     public async setToken(userId: string, token: string): Promise<void> {
-        const params: S3.Types.PutObjectRequest = {
+        const params: PutObjectCommandInput = {
             Bucket: this.bucketName,
             Key: `${this.path}${userId}`,
             Body: token,
             ContentType: 'text/plain'
         };
-        await this.s3.putObject(params).promise();
+        await this.s3.putObject(params);
     }
 
     public async deleteToken(userId: string): Promise<void> {
@@ -42,6 +41,6 @@ export default class S3TokenStore implements TokenStorage {
             Bucket: this.bucketName,
             Key: `${this.path}${userId}`
         };
-        await this.s3.deleteObject(params).promise();
+        await this.s3.deleteObject(params);
     }
 }

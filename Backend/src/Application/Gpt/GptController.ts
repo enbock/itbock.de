@@ -1,11 +1,11 @@
-import GptUseCase from '../Core/Gpt/GptUseCase';
-import GptEntity from '../Core/Gpt/GptEntity';
+import GptUseCase from '../../Core/Gpt/GptUseCase';
+import GptEntity from '../../Core/Gpt/GptEntity';
 import BodyParser from './BodyParser';
 import {ChatCompletionMessageParam} from 'openai/src/resources/chat/completions';
-import Presenter from './Presenter';
+import Presenter from './GptPresenter';
 
 
-export default class Controller {
+export default class GptController {
     constructor(
         private gptUseCase: GptUseCase,
         private bodyParser: BodyParser,

@@ -1,6 +1,6 @@
-import GptEntity from '../Core/Gpt/GptEntity';
+import GptEntity from '../../Core/Gpt/GptEntity';
 
-export default class Presenter {
+export default class GptPresenter {
     public presentBod(gpt: GptEntity): string {
         return JSON.stringify({
             commands: gpt.commands || '',

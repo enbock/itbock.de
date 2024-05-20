@@ -1,6 +1,4 @@
-service: WebpageBackend
-
-frameworkVersion: '3'
+service: itbock-de-backend
 
 provider:
   architecture: arm64
@@ -17,8 +15,11 @@ provider:
   region: eu-west-1
   stage: dev
   environment:
-    S3_BUCKET_NAME: api.itbock.de
-    S3_TOKEN_PATH: tokens/
+    S3_BUCKET_NAME: ${env:S3_BUCKET_NAME}
+    S3_TOKEN_PATH: ${env:S3_TOKEN_PATH}
+    OPENAI_API_KEY: ${env:OPENAI_API_KEY}
+    OPENAI_API_ORG: ${env:OPENAI_API_ORG}
+  logRetentionInDays: 7
 
 functions:
   generateToken:
@@ -27,21 +28,72 @@ functions:
       - http:
           path: generate-token
           method: post
-          cors: true
+          cors:
+            origins:
+              - 'http://localhost:3000'
+              - 'https://www.itbock.de'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
   validateToken:
     handler: build/lambda.validateTokenHandler
     events:
       - http:
           path: validate-token
           method: post
-          cors: true
+          cors:
+            origins:
+              - 'http://localhost:3000'
+              - 'https://www.itbock.de'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
+  generalGpt:
+    handler: build/lambda.gptHandler
+    events:
+      - http:
+          path: gpt
+          method: post
+          cors:
+            origins:
+              - 'http://localhost:3000'
+              - 'https://www.itbock.de'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
 
 plugins:
   - serverless-offline
+  - serverless-domain-manager
 
 custom:
   serverless-offline:
     httpPort: 3000
+
+  customDomain:
+    domainName: api.itbock.de
+    basePath: ""
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+    certificateName: "*.itbock.de"
+    endpointType: "regional"
+
+useDotenv: true
 
 package:
   exclude:

@@ -17,11 +17,10 @@ export default class OpenAiSdk implements GptBackend {
             max_tokens: 256,
             presence_penalty: 0,
             frequency_penalty: 0,
-            temperature: 1,
+            temperature: 0.8,
             top_p: 1,
             messages: messages
         });
-        // console.log('GPT-Result:', response.choices);
         return this.parseResult(response);
     }
 
@@ -32,7 +31,7 @@ export default class OpenAiSdk implements GptBackend {
         const result: GptEntity = new GptEntity();
 
         result.say = String(data.content || '');
-        result.commands = (data.commands || []).map(x => String(x));
+        result.commands = (data.commands || []).map((x: any) => String(x));
         result.role = gptMessage.role;
         result.language = data.language || 'de-DE';
 
@@ -42,7 +41,7 @@ export default class OpenAiSdk implements GptBackend {
     private parseGeneratedData(gptMessage: ChatCompletionMessage): Json {
         let data: Json = {};
         try {
-            data = JSON.parse(gptMessage?.content);
+            data = JSON.parse(gptMessage?.content || '');
         } catch (parseError) {
             console.warn('JSON-GPT-Decode-Error:', parseError);
             return this.checkForSingleText(gptMessage);
@@ -51,7 +50,7 @@ export default class OpenAiSdk implements GptBackend {
     }
 
     private checkForSingleText(gptMessage: ChatCompletionMessage): Json {
-        const messageContent: string = gptMessage?.content;
+        const messageContent: string = gptMessage?.content || '';
         if (messageContent.indexOf('{') > -1) {
             console.error('GPT-Message not parsable.');
             return {};

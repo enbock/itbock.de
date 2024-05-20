@@ -15,7 +15,7 @@ export default class OpenAi implements AudioSyntheseClient {
             'Content-Type': 'application/json'
         };
 
-        const data: Object = {
+        const data: Record<string, any> = {
             model: 'tts-1',
             input: inputText,
             voice: 'nova',

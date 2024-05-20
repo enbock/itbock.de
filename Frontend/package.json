@@ -21,7 +21,13 @@
     "dev:ai": "npx ai-code-writer",
     "start": "webpack serve --open --mode development --no-open --no-live-reload --no-hot --stats-error-details",
     "build": "webpack --mode production",
+    "deploy": "npm-run-all --serial build deploy:clean deploy:copy",
     "deploy:clean": "aws s3 rm s3://www.itbock.de/ --recursive --exclude \"*\" --include \"bundle.*\"",
     "deploy:copy": "aws s3 sync build s3://www.itbock.de/"
+  },
+  "devDependencies": {
+    "dotenv": "*",
+    "dotenv-webpack": "*",
+    "npm-run-all": "^4.1.5"
   }
 }

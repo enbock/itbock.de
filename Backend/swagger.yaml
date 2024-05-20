@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: MFA Backend API
-  description: API zur Generierung und Validierung von TOTP Tokens.
+  title: Homepage Backend API
+  description: API zur Generierung und Validierung von TOTP Tokens sowie GPT-Funktionalität.
   version: 1.0.0
 servers:
   - url: http://localhost:3000/dev/
@@ -96,3 +96,69 @@ paths:
                   message:
                     type: string
                     example: Invalid token
+
+  /gpt:
+    post:
+      summary: Führt eine GPT-Abfrage durch und liefert eine Antwort.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                        example: "user"
+                      content:
+                        type: string
+                        example: "Hello, how are you?"
+      responses:
+        '200':
+          description: GPT-Antwort erfolgreich
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  commands:
+                    type: array
+                    items:
+                      type: string
+                  say:
+                    type: string
+                    example: "Hello, I am fine."
+                  role:
+                    type: string
+                    example: "assistant"
+                  language:
+                    type: string
+                    example: "en-US"
+                  audio:
+                    type: string
+                    example: "/+MYxAAGe2oYEABNogG//mMbyAMY5AgUZ5Oz0wcBhBBDCaZ4DHn2An..."
+        '400':
+          description: Ungültige Anfrage
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid input"
+        '500':
+          description: Serverfehler
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unexpected error: <error_message>"
