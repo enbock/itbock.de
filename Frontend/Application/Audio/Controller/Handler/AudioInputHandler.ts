@@ -3,23 +3,27 @@ import Adapter from 'Application/Audio/Adapter';
 import InputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
 import AudioInputReceiverHandler from 'Application/Audio/Controller/Handler/AudioInputReceiverHandler';
 import InputResponse from 'Application/Audio/Controller/Handler/InputResponse';
+import AudioTransformUseCase from 'Core/Audio/InputUseCase/AudioTransformUseCase';
 
 export default class AudioInputHandler implements ControllerHandler {
     constructor(
         private adapter: Adapter,
         private inputUseCase: InputUseCase,
+        private audioTransformUseCase: AudioTransformUseCase,
         private receivers: Array<AudioInputReceiverHandler>
     ) {
     }
 
     public init(presentData: Callback): void {
         this.presentData = presentData;
-        this.adapter.speechInput = (text: string) => this.handleInput(text);
+        this.adapter.audioBlobInput = (audioBlob: Blob) => this.handleAudioBlob(audioBlob);
     }
 
     private presentData: Callback = () => <never>false;
 
-    private async handleInput(text: string): Promise<void> {
+    public async handleAudioBlob(audioBlob: Blob): Promise<void> {
+        const text: string = await this.audioTransformUseCase.transcribeAudio(audioBlob);
+
         const response: InputResponse = new InputResponse();
         this.inputUseCase.inputFinished({text: text}, response);
 

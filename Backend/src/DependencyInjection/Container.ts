@@ -15,6 +15,9 @@ import OpenAiAudioSyntheseClient from '../Infrastructure/AudioSyntheseClient/Ope
 import GptPresenter from '../Application/Gpt/GptPresenter';
 import GenerateTokenController from '../Application/Mfa/GenerateTokenController';
 import ValidateTokenController from '../Application/Mfa/ValidateTokenController';
+import AudioTransformController from '../Application/Audio/AudioTransformController';
+import AudioTransformUseCase from '../Core/Audio/AudioTransformUseCase';
+import OpenAiAudioTransform from '../Infrastructure/AudioTransformClient/OpenAiAudioTransform';
 
 
 export class Container {
@@ -51,9 +54,19 @@ export class Container {
         this.gptPresenter
     );
 
-    public handler: Handler = new Handler(this.generateTokenController, this.validateTokenController, this.gptController);
+    private audioTransformClient: OpenAiAudioTransform = new OpenAiAudioTransform(
+        this.openAi
+    );
+    private audioTransformUseCase: AudioTransformUseCase = new AudioTransformUseCase(this.audioTransformClient);
+    private audioTransformController: AudioTransformController = new AudioTransformController(this.audioTransformUseCase);
+
+    public handler: Handler = new Handler(
+        this.generateTokenController,
+        this.validateTokenController,
+        this.gptController,
+        this.audioTransformController
+    );
 }
 
 const DependencyInjectionContainer: Container = new Container();
 export default DependencyInjectionContainer;
-

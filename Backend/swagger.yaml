@@ -162,3 +162,49 @@ paths:
                   message:
                     type: string
                     example: "Unexpected error: <error_message>"
+
+  /audio-transform:
+    post:
+      summary: Transkribiert eine hochgeladene WAV-Audiodatei.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Die hochzuladende WAV-Audiodatei.
+      responses:
+        '200':
+          description: Die Audiodatei wurde erfolgreich transkribiert.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transcript:
+                    type: string
+                    example: "Dies ist die transkribierte Audiodatei."
+        '400':
+          description: Ungültige Anfrage
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "File upload failed"
+        '500':
+          description: Serverfehler
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unexpected error: <error_message>"

@@ -30,7 +30,7 @@ functions:
           method: post
           cors:
             origins:
-              - 'http://localhost:3000'
+              - 'http://localhost:3001'
               - 'https://www.itbock.de'
             headers:
               - Content-Type
@@ -48,7 +48,7 @@ functions:
           method: post
           cors:
             origins:
-              - 'http://localhost:3000'
+              - 'http://localhost:3001'
               - 'https://www.itbock.de'
             headers:
               - Content-Type
@@ -66,7 +66,25 @@ functions:
           method: post
           cors:
             origins:
-              - 'http://localhost:3000'
+              - 'http://localhost:3001'
+              - 'https://www.itbock.de'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
+  audioTransform:
+    handler: build/lambda.audioTransformHandler
+    events:
+      - http:
+          path: audio-transform
+          method: post
+          cors:
+            origins:
+              - 'http://localhost:3001'
               - 'https://www.itbock.de'
             headers:
               - Content-Type
@@ -100,3 +118,4 @@ package:
     - ./**
   include:
     - build/**
+

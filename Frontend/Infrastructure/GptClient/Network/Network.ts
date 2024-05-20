@@ -38,5 +38,4 @@ export default class Network implements GptClient {
 
         return entity;
     }
-
 }

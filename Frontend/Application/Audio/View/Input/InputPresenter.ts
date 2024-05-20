@@ -6,6 +6,7 @@ export default class InputPresenter {
         const input: InputModel = new InputModel();
         input.doListening = data.audioInputEnabled == true;
         input.language = data.language;
+        input.useMicrophone = true;
         return input;
     }
 }

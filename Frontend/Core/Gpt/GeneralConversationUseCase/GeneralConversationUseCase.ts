@@ -35,18 +35,21 @@ export default class GeneralConversationUseCase {
 
     private async applyConversation(request: ConversationRequest, response: ConversationResponse): Promise<void> {
         const conversations: Array<ConversationRecordEntity> = this.conversationStorage.getConversations();
-        this.addConversationInput(request, conversations);
-        await this.executeConversation(conversations, response);
+        const wasConversationAdded: boolean = this.addConversationInput(request, conversations);
+        if (wasConversationAdded) await this.executeConversation(conversations, response);
+        else this.changeToFinishedState();
     }
 
-    private addConversationInput(request: ConversationRequest, conversations: Array<ConversationRecordEntity>): void {
-        if (request.conversation == '') return;
+    private addConversationInput(request: ConversationRequest, conversations: Array<ConversationRecordEntity>): boolean {
+        if (request.conversation == '') return false;
 
         const record: ConversationRecordEntity = new ConversationRecordEntity();
         record.role = 'user';
         record.text = request.conversation;
         record.language = this.startStorage.getLanguage();
         conversations.push(record);
+
+        return true;
     }
 
     private async executeConversation(conversations: Array<ConversationRecordEntity>, response?: ConversationResponse): Promise<void> {

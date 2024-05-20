@@ -28,5 +28,4 @@ export default class Fake implements GptClient {
         console.log('[GPT-Emulation] End', result);
         return result;
     }
-
 }

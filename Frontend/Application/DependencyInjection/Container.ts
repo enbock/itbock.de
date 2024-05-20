@@ -4,6 +4,7 @@ import CoreGptGeneralConversationUseCaseGeneralConversationUseCase
 import AudioControllerAudioControllerBus from 'Application/Audio/Controller/AudioControllerBus';
 import StartControllerStartControllerBus from 'Application/Start/Controller/StartControllerBus';
 import CoreAudioInputUseCaseInputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
+import CoreAudioInputUseCaseAudioTransformUseCase from 'Core/Audio/InputUseCase/AudioTransformUseCase';
 import CoreGptConversationResetUseCaseConversationResetUseCase
     from 'Core/Gpt/ConversationResetUseCase/ConversationResetUseCase';
 import CoreWelcomeOldHomepageUseCaseOldHomepageUseCase from 'Core/Welcome/OldHomepageUseCase/OldHomepageUseCase';
@@ -51,12 +52,15 @@ import Audio from 'Application/Audio/View/Audio';
 import FakeCase from 'Infrastructure/GptClient/Fake/Cases/FakeCase';
 import renderApplication, {Start} from 'Application/Start/View/Start';
 import Welcome from 'Application/Welcome/View/Welcome';
-import ViewInjection from '@enbock/ts-jsx/ViewInjection';
 import ConversationMemory from 'Infrastructure/Conversation/Memory';
 import StartMemory from 'Infrastructure/Storage/Start/Memory';
 import AudioMemory from 'Infrastructure/Storage/Audio/Memory';
 import GptClient from 'Core/Gpt/GptClient';
+import NetworkAudioTransformClient from 'Infrastructure/AudioTransformClient/Network';
 import ModuleController from 'Application/ModuleController';
+import ControllerHandler from 'Application/ControllerHandler';
+import AudioInputReceiverHandler from 'Application/Audio/Controller/Handler/AudioInputReceiverHandler';
+import ViewInjection from '@enbock/ts-jsx/ViewInjection';
 
 class Container {
     private startControllerControllerView = Start;
@@ -65,11 +69,6 @@ class Container {
     private startControllerControllerDocument = document;
     private fetchHelper: FetchHelper = new FetchHelper();
     private parseHelper: ParseHelper = new ParseHelper();
-    private audioViewInputInputRecognitionClass = (window as any)['SpeechRecognition'] || (window as any)['webkitSpeechRecognition'] || (window as any)['speechRecognition'];
-    private coreAudioInputUseCaseInputUseCaseArray = [
-        'computer',
-        'terminal'
-    ];
     private infrastructureStorageWelcomeMemory: InfrastructureStorageWelcomeMemory = new InfrastructureStorageWelcomeMemory();
     private coreStartStartStorage = new StartMemory();
     private coreAudioAudioStorage = new AudioMemory();
@@ -92,11 +91,22 @@ class Container {
     ];
     private infrastructureGptClientFakeFake: InfrastructureGptClientFakeFake = new InfrastructureGptClientFakeFake(this.infrastructureGptClientFakeFakeArray);
     private coreAudioPlaybackUseCasePlaybackUseCase: CoreAudioPlaybackUseCasePlaybackUseCase = new CoreAudioPlaybackUseCasePlaybackUseCase(this.coreAudioAudioStorage);
-    private coreAudioInputUseCaseInputUseCase: CoreAudioInputUseCaseInputUseCase = new CoreAudioInputUseCaseInputUseCase(this.coreAudioAudioStorage, this.coreAudioInputUseCaseInputUseCaseArray);
+    private coreAudioInputUseCaseInputUseCase: CoreAudioInputUseCaseInputUseCase = new CoreAudioInputUseCaseInputUseCase(
+        this.coreAudioAudioStorage,
+        [
+            'computer',
+            'terminal'
+        ]
+    );
+    private coreAudioInputUseCaseAudioTransformUseCase: CoreAudioInputUseCaseAudioTransformUseCase = new CoreAudioInputUseCaseAudioTransformUseCase(
+        new NetworkAudioTransformClient(
+            this.fetchHelper,
+            String(process.env.API_AUDIO_TRANSFORM_URL || ''))
+    );
     private audioControllerHandlerStandbyReceiver: AudioControllerHandlerStandbyReceiver = new AudioControllerHandlerStandbyReceiver(this.coreAudioInputUseCaseInputUseCase);
     private audioControllerHandlerCommandSuspendCommand: AudioControllerHandlerCommandSuspendCommand = new AudioControllerHandlerCommandSuspendCommand(this.coreAudioInputUseCaseInputUseCase);
     private audioAdapter: AudioAdapter = new AudioAdapter();
-    private audioViewInputInput: AudioViewInputInput = new AudioViewInputInput(this.audioViewInputInputRecognitionClass, this.audioAdapter);
+    private audioViewInputInput: AudioViewInputInput = new AudioViewInputInput(this.audioAdapter);
     private audioControllerAudioControllerBus: AudioControllerAudioControllerBus = new AudioControllerAudioControllerBus();
     private welcomeControllerHandlerCommandMuteHandler: WelcomeControllerHandlerCommandMuteHandler = new WelcomeControllerHandlerCommandMuteHandler(this.coreAudioInputUseCaseInputUseCase, this.audioControllerAudioControllerBus, this.coreGptConversationResetUseCaseConversationResetUseCase);
     private infrastructureGptClientNetworkEncoder: InfrastructureGptClientNetworkEncoder = new InfrastructureGptClientNetworkEncoder();
@@ -131,23 +141,23 @@ class Container {
     private welcomeControllerHandlerStartHandler: WelcomeControllerHandlerStartHandler = new WelcomeControllerHandlerStartHandler(this.welcomeAdapter, this.coreGptGeneralConversationUseCaseGeneralConversationUseCase, this.audioControllerAudioControllerBus, this.startControllerStartControllerBus);
     private audioControllerHandlerAudioOutputHandler: AudioControllerHandlerAudioOutputHandler = new AudioControllerHandlerAudioOutputHandler(this.audioAdapter, this.coreAudioPlaybackUseCasePlaybackUseCase, this.startControllerStartControllerBus);
     private welcomeControllerHandlerConversationInputHandler: WelcomeControllerHandlerConversationInputHandler = new WelcomeControllerHandlerConversationInputHandler(this.coreGptGeneralConversationUseCaseGeneralConversationUseCase, this.welcomeControllerHandlerConversationInputHandlerArray, this.audioControllerAudioControllerBus, this.startControllerStartControllerBus);
-    private welcomeControllerControllerArray = [
+    private welcomeControllerControllerArray: Array<ControllerHandler> = [
         this.welcomeControllerHandlerConversationInputHandler,
         this.welcomeControllerHandlerStartHandler
     ];
-    private audioControllerHandlerAudioInputHandlerArray = [
+    private audioControllerHandlerAudioInputHandlerArray: Array<AudioInputReceiverHandler> = [
         this.audioControllerHandlerStandbyReceiver,
         this.welcomeControllerHandlerConversationInputHandler
     ];
-    private audioControllerHandlerAudioInputHandler: AudioControllerHandlerAudioInputHandler = new AudioControllerHandlerAudioInputHandler(this.audioAdapter, this.coreAudioInputUseCaseInputUseCase, this.audioControllerHandlerAudioInputHandlerArray);
-    private audioControllerControllerHandler = [
+    private audioControllerHandlerAudioInputHandler: AudioControllerHandlerAudioInputHandler = new AudioControllerHandlerAudioInputHandler(this.audioAdapter, this.coreAudioInputUseCaseInputUseCase, this.coreAudioInputUseCaseAudioTransformUseCase, this.audioControllerHandlerAudioInputHandlerArray);
+    private audioControllerControllerHandler: Array<ControllerHandler> = [
         this.audioControllerHandlerAudioInputHandler,
         this.audioControllerHandlerAudioOutputHandler
     ];
     private startViewStartPresenter: StartViewStartPresenter = new StartViewStartPresenter();
     private coreStartStartUseCaseStartUseCase: CoreStartStartUseCaseStartUseCase = new CoreStartStartUseCaseStartUseCase(this.coreStartStartStorage);
     private startControllerHandlerStartHandler: StartControllerHandlerStartHandler = new StartControllerHandlerStartHandler(this.startControllerStartControllerBus, this.coreStartStartUseCaseStartUseCase, this.audioControllerAudioControllerBus);
-    private startControllerControllerArrayHandler = [
+    private startControllerControllerArrayHandler: Array<ControllerHandler> = [
         this.startControllerHandlerStartHandler
     ];
     private welcomeControllerDataCollector: WelcomeControllerDataCollector = new WelcomeControllerDataCollector(

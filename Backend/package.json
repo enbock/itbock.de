@@ -15,11 +15,13 @@
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-s3": "*",
+    "busboy": "*",
     "openai": "*",
     "otplib": "*"
   },
   "devDependencies": {
     "@types/aws-lambda": "*",
+    "@types/busboy": "^1.5.4",
     "@types/crypto-js": "*",
     "@types/node": "*",
     "@types/otplib": "*",
