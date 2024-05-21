@@ -3,9 +3,12 @@ import StateResponse from 'Application/Audio/Controller/StateResponse';
 
 export default class InputPresenter {
     public present(data: StateResponse): InputModel {
-        const input: InputModel = new InputModel();
-        input.doListening = data.audioInputEnabled == true;
-        input.language = data.language;
-        return input;
+        const model: InputModel = new InputModel();
+
+        model.doListening = data.audioInputEnabled == true;
+        model.language = data.language;
+        model.microphoneEnabled = data.microphoneEnable == true;
+
+        return model;
     }
 }

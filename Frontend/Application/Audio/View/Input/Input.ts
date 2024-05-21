@@ -14,7 +14,7 @@ export default class Input implements RootComponent {
     private detectedStartOfSpeech: boolean = false;
     private stream?: MediaStream;
     private silentCounter: number = 0;
-    private maxSilentCounter: number = 60;
+    private maxSilentCounter: number = 30;
 
     constructor(
         private adapter: Adapter
@@ -28,6 +28,8 @@ export default class Input implements RootComponent {
     public set model(model: InputModel) {
         this.modelInstance = model;
 
+        console.log('AudioModel:', model);
+
         if (this.model.microphoneEnabled == false) this.disableMediaRecorder();
         else {
             if (this.model.doListening == true) this.start();
@@ -38,6 +40,7 @@ export default class Input implements RootComponent {
     private start(): void {
         if (this.isListening) return;
         this.isListening = true;
+        this.silentCounter = 0;
 
         void this.startRecording();
     }
@@ -63,6 +66,7 @@ export default class Input implements RootComponent {
                             this.detectedStartOfSpeech = false;
                             const fullAudioBlob: Blob = new Blob(this.allChunks, {type: 'audio/wav'});
                             this.allChunks = [];
+                            this.silentCounter = 0;
                             void this.adapter.audioBlobInput(fullAudioBlob);
                         } else {
                             this.allChunks = [];
@@ -74,6 +78,7 @@ export default class Input implements RootComponent {
                                 void this.adapter.audioAbort();
                         }
                     } else {
+                        this.silentCounter = 0;
                         this.detectedStartOfSpeech = true;
                         this.mediaRecorder!.start();
                     }
@@ -148,6 +153,17 @@ export default class Input implements RootComponent {
     }
 
     private disableMediaRecorder(): void {
-
+        this.stop();
+        this.stream?.getTracks().forEach(track => track.stop());
+        this.stream = undefined;
+        this.mediaRecorder = undefined;
+        this.isListening = false;
+        this.lastRecordedChunks = [];
+        this.allChunks = [];
+        this.silenceTimeoutId = undefined;
+        this.initialRMSList = [];
+        this.initialRMS = 1;
+        this.detectedStartOfSpeech = false;
+        this.silentCounter = 0;
     }
 }

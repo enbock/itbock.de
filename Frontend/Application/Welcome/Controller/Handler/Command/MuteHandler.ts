@@ -1,20 +1,17 @@
 import CommandHandler from 'Application/Command/CommandHandler';
-import AudioInputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
-import AudioControllerBus from 'Application/Audio/Controller/AudioControllerBus';
 import ConversationResetUseCase from 'Core/Gpt/ConversationResetUseCase/ConversationResetUseCase';
+import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 
 export default class MuteHandler implements CommandHandler {
     constructor(
-        private audioInputUseCase: AudioInputUseCase,
-        private audioControllerBus: AudioControllerBus,
-        private conversationResetUseCase: ConversationResetUseCase
+        private conversationResetUseCase: ConversationResetUseCase,
+        private startUseCase: StartUseCase
     ) {
     }
 
     public async run(): Promise<void> {
         this.conversationResetUseCase.resetConversation();
-        this.audioInputUseCase.mute();
-        await this.audioControllerBus.refresh();
+        this.startUseCase.initialize(navigator.language);
     }
 
     public support(command: string): boolean {

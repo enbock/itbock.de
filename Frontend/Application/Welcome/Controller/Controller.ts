@@ -7,6 +7,7 @@ import OldHomepageUseCase from 'Core/Welcome/OldHomepageUseCase/OldHomepageUseCa
 import WelcomePresenter from 'Application/Welcome/View/WelcomePresenter';
 import DataCollector from 'Application/Welcome/Controller/DataCollector';
 import DataCollection from 'Application/Welcome/Controller/DataCollection';
+import WelcomeControllerBus from 'Application/Welcome/Controller/WelcomeControllerBus';
 
 export default class Controller implements ModuleController {
     private view?: RootComponent;
@@ -16,7 +17,8 @@ export default class Controller implements ModuleController {
         private handlers: Array<ControllerHandler>,
         private oldHomepageUseCase: OldHomepageUseCase,
         private welcomePresenter: WelcomePresenter,
-        private dataCollector: DataCollector
+        private dataCollector: DataCollector,
+        private welcomeControllerBus: WelcomeControllerBus
     ) {
         viewTemplate.componentReceiver = this;
     }
@@ -29,6 +31,7 @@ export default class Controller implements ModuleController {
         this.oldHomepageUseCase.initialize();
 
         const boundPresentData: Callback = () => this.presentData();
+        this.welcomeControllerBus.refresh = boundPresentData;
         this.handlers.forEach(h => h.initialize(boundPresentData));
 
         await this.presentData();

@@ -2,7 +2,7 @@ import CommandHandler from 'Application/Command/CommandHandler';
 import AudioInputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
 import AudioControllerBus from 'Application/Audio/Controller/AudioControllerBus';
 
-export default class SuspendCommand implements CommandHandler {
+export default class MuteHandler implements CommandHandler {
     constructor(
         private audioInputUseCase: AudioInputUseCase,
         private audioControllerBus: AudioControllerBus
@@ -10,11 +10,11 @@ export default class SuspendCommand implements CommandHandler {
     }
 
     public support(command: string): boolean {
-        return command == 'topicEnd';
+        return command == 'mute';
     }
 
     public async run(): Promise<void> {
-        this.audioInputUseCase.suspend();
+        this.audioInputUseCase.mute();
         void this.audioControllerBus.refresh();
     }
 }

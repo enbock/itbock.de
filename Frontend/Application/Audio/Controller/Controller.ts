@@ -6,6 +6,7 @@ import StateUseCase from 'Core/Audio/StateUseCase/StateUseCase';
 import StateResponse from 'Application/Audio/Controller/StateResponse';
 import AudioControllerBus from 'Application/Audio/Controller/AudioControllerBus';
 import ModuleController from 'Application/ModuleController';
+import InputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
 
 export default class Controller implements ShadowComponentReceiver, ModuleController {
     private view?: Audio;
@@ -15,7 +16,8 @@ export default class Controller implements ShadowComponentReceiver, ModuleContro
         private audioPresenter: AudioPresenter,
         private handlers: Array<ControllerHandler>,
         private stateUseCase: StateUseCase,
-        private audioControllerBus: AudioControllerBus
+        private audioControllerBus: AudioControllerBus,
+        private inputUseCase: InputUseCase
     ) {
         viewComponent.componentReceiver = this;
     }
@@ -27,6 +29,8 @@ export default class Controller implements ShadowComponentReceiver, ModuleContro
 
 
     public async init(): Promise<void> {
+        this.inputUseCase.initialize();
+
         const boundPresentData: Callback = async () => this.presentData();
         this.audioControllerBus.refresh = boundPresentData;
         this.handlers.forEach(h => h.initialize(boundPresentData));

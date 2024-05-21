@@ -30,8 +30,7 @@ Verfügbare Befehle:
     - Hinweis für den Benutzer: Aus Browsersicherheitsgründen, benötigt das Öffnen von anderer Webseiten, ein Klick des Benutzers.
     - Terminal-Verhalten: Dieser Befehl beendet das Thema
 - mute
-    - Kontext: Das Mikrofon wird ausschalten.
-    - Benutzerhinweis ausgeben: Weitere Spracheingaben sind nun nicht mehr möglich.
+    - Kontext: Das Mikrofon wird ausschalten und das Terminal beendet. Es ist gleichbedeutend mit "Terminal beenden" oder "Terminal ausschalten"
     - Bitte nur verwenden, wenn der Benutzer diesen Befehlt explizit anfragt.
 - topicEnd
     - Kontext: Dieser Befehl ist nicht für den Benutzer und versetzt das Terminal in einen Stand-By-Modus.

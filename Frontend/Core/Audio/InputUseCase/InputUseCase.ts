@@ -21,6 +21,15 @@ export default class InputUseCase {
         response.channel = Channel.DEFAULT;
     }
 
+    public initialize(): void {
+        this.audioStorage.setMicrophoneMuted(false);
+        this.audioStorage.setListening(false);
+        this.audioStorage.setLoading(false);
+        this.audioStorage.setPlaying(false);
+        this.audioStorage.setBuffer([]);
+        this.audioStorage.setPlayingText({text: '', audio: ''});
+    }
+
     public mute(): void {
         this.audioStorage.setMicrophoneMuted(true);
     }
