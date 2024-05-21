@@ -165,18 +165,18 @@ paths:
 
   /audio-transform:
     post:
-      summary: Transkribiert eine hochgeladene WAV-Audiodatei.
+      summary: Transkribiert eine Base64-codierte Audiodatei, die als JSON hochgeladen wird.
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               properties:
-                file:
+                audio:
                   type: string
-                  format: binary
-                  description: Die hochzuladende WAV-Audiodatei.
+                  format: base64
+                  description: Die hochzuladende, Base64-codierte Audiodatei.
       responses:
         '200':
           description: Die Audiodatei wurde erfolgreich transkribiert.
@@ -197,7 +197,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "File upload failed"
+                    example: "Audio data is missing"
         '500':
           description: Serverfehler
           content:

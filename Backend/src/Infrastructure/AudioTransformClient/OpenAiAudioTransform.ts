@@ -19,6 +19,7 @@ export default class OpenAiAudioTransform implements AudioTransformClient {
                 response_format: 'json',
                 temperature: 0
             });
+
             return response.text;
         } catch (error) {
             console.log('Transcription-Error:', error);

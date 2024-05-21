@@ -1,6 +1,5 @@
 import AudioTransformUseCase from '../../Core/Audio/AudioTransformUseCase';
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
-import Busboy from 'busboy';
 
 export default class AudioTransformController {
     constructor(
@@ -10,59 +9,53 @@ export default class AudioTransformController {
 
     public async handle(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
         try {
-            const contentType = event.headers['content-type'] || event.headers['Content-Type'];
-            if (!contentType?.startsWith('multipart/form-data')) {
+            if (!event.body) {
                 return {
                     statusCode: 400,
-                    body: JSON.stringify({message: 'Content-Type header is missing or invalid'})
+                    body: JSON.stringify({message: 'Request body is missing'})
                 };
             }
 
-            const busboy = Busboy({headers: {'content-type': contentType}});
-            let fileBuffer: Buffer | null = null;
+            const requestBody = JSON.parse(event.body);
+            const audioBase64 = requestBody.audio;
+            if (!audioBase64) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({message: 'Audio data is missing'})
+                };
+            }
 
-            return new Promise<APIGatewayProxyResult>((resolve, reject) => {
-                busboy.on('file', (fieldname, file) => {
-                    const chunks: Buffer[] = [];
-                    file.on('data', chunk => {
-                        chunks.push(chunk);
-                    });
-                    file.on('end', () => {
-                        fileBuffer = Buffer.concat(chunks);
-                    });
-                });
+            const fileBuffer = Buffer.from(audioBase64, 'base64');
 
-                busboy.on('finish', async () => {
-                    if (!fileBuffer) {
-                        resolve({
-                            statusCode: 400,
-                            body: JSON.stringify({message: 'File upload failed'})
-                        });
-                        return;
-                    }
-
-                    try {
-                        const transcript: string = await this.audioTransformUseCase.execute(fileBuffer);
-                        resolve({
-                            statusCode: 200,
-                            body: JSON.stringify({transcript})
-                        });
-                    } catch (error) {
-                        console.error('Error processing audio file:', error);
-                        resolve({
-                            statusCode: 500,
-                            body: JSON.stringify({message: 'Unexpected error: ' + error})
-                        });
-                    }
-                });
-
-                busboy.write(event.body || '', event.isBase64Encoded ? 'base64' : 'binary');
-                busboy.end();
-            });
+            try {
+                const transcript: string = await this.audioTransformUseCase.execute(fileBuffer);
+                return {
+                    statusCode: 200,
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({transcript})
+                };
+            } catch (error) {
+                console.error('Error processing audio file:', error);
+                return {
+                    statusCode: 500,
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({message: 'Unexpected error: ' + error})
+                };
+            }
         } catch (error) {
-            console.error('Error processing audio file:', error);
+            console.error('Error processing request:', error);
             return {
                 statusCode: 500,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({message: 'Unexpected error: ' + error})
             };
         }
