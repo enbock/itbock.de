@@ -11,7 +11,7 @@ export default class StartHandler implements ControllerHandler {
     ) {
     }
 
-    public init(presentData: Callback): void {
+    public async initialize(presentData: Callback): Promise<void> {
         this.presentData = presentData;
         this.startControllerBus.start = () => this.handleStart();
     }

@@ -11,7 +11,7 @@ export default class AudioOutputHandler implements ControllerHandler {
     ) {
     }
 
-    public init(presentData: Callback): void {
+    public async initialize(presentData: Callback): Promise<void> {
         this.presentData = presentData;
         this.adapter.audioFinished = () => this.handleFinishing();
         this.adapter.audioLoaded = () => this.handleLoaded();

@@ -15,7 +15,7 @@ export default class StartHandler implements ControllerHandler {
     ) {
     }
 
-    public init(presentData: Callback): void {
+    public async initialize(presentData: Callback): Promise<void> {
         this.presentData = presentData;
         this.adapter.closeStart = () => this.handleStart();
     }
@@ -23,7 +23,7 @@ export default class StartHandler implements ControllerHandler {
     private async handleStart(): Promise<void> {
         await this.startControllerBus.start();
         await this.presentData();
-        
+
         await this.conversationUseCase.startConversation({
             onStateChange: () => this.startControllerBus.refresh()
         });

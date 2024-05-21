@@ -1,3 +1,5 @@
+export type PresentDataCallback = Callback;
+
 export default interface ControllerHandler {
-    init(presentData: Callback): void;
+    initialize(presentData: Callback): Promise<void>;
 }

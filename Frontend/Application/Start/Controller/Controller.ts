@@ -43,7 +43,7 @@ export default class Controller implements ShadowComponentReceiver {
         const boundPresentData: Callback = async () => this.presentData();
 
         this.startControllerBus.refresh = boundPresentData;
-        this.handlers.forEach(h => h.init(boundPresentData));
+        this.handlers.forEach(h => h.initialize(boundPresentData));
 
         await this.presentData();
         await this.startModules();

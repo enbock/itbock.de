@@ -29,7 +29,7 @@ export default class Controller implements ShadowComponentReceiver, ModuleContro
     public async init(): Promise<void> {
         const boundPresentData: Callback = async () => this.presentData();
         this.audioControllerBus.refresh = boundPresentData;
-        this.handlers.forEach(h => h.init(boundPresentData));
+        this.handlers.forEach(h => h.initialize(boundPresentData));
         await this.presentData();
     }
 

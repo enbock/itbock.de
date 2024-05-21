@@ -13,6 +13,8 @@ export default class Input implements RootComponent {
     private initialRMS: number = 1;
     private detectedStartOfSpeech: boolean = false;
     private stream?: MediaStream;
+    private silentCounter: number = 0;
+    private maxSilentCounter: number = 60;
 
     constructor(
         private adapter: Adapter
@@ -26,8 +28,11 @@ export default class Input implements RootComponent {
     public set model(model: InputModel) {
         this.modelInstance = model;
 
-        if (this.model.doListening == true) this.start();
-        else this.stop();
+        if (this.model.microphoneEnabled == false) this.disableMediaRecorder();
+        else {
+            if (this.model.doListening == true) this.start();
+            else this.stop();
+        }
     }
 
     private start(): void {
@@ -62,7 +67,11 @@ export default class Input implements RootComponent {
                         } else {
                             this.allChunks = [];
                             console.log('Silent audio detected, not sending for transcription');
-                            this.mediaRecorder!.start();
+                            this.silentCounter++;
+                            if (this.silentCounter < this.maxSilentCounter)
+                                this.mediaRecorder!.start();
+                            else
+                                void this.adapter.audioAbort();
                         }
                     } else {
                         this.detectedStartOfSpeech = true;
@@ -136,5 +145,9 @@ export default class Input implements RootComponent {
                 source.disconnect();
             }
         };
+    }
+
+    private disableMediaRecorder(): void {
+
     }
 }

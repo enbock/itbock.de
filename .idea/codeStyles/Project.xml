@@ -20,10 +20,6 @@
             <order>KEEP</order>
           </group>
           <group>
-            <type>TREAT_LAMBDA_INITIALIZED_FIELDS_AS_METHODS</type>
-            <order>KEEP</order>
-          </group>
-          <group>
             <type>OVERRIDDEN_METHODS</type>
             <order>KEEP</order>
           </group>

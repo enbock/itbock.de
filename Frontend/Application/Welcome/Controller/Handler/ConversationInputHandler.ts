@@ -17,7 +17,7 @@ export default class ConversationInputHandler implements ControllerHandler, Audi
     ) {
     }
 
-    public init(presentData: Callback): void {
+    public async initialize(presentData: Callback): Promise<void> {
         this.presentData = presentData;
     }
 

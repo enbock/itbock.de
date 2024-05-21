@@ -29,7 +29,7 @@ export default class Controller implements ModuleController {
         this.oldHomepageUseCase.initialize();
 
         const boundPresentData: Callback = () => this.presentData();
-        this.handlers.forEach(h => h.init(boundPresentData));
+        this.handlers.forEach(h => h.initialize(boundPresentData));
 
         await this.presentData();
     }

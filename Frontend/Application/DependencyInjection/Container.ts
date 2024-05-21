@@ -61,6 +61,7 @@ import ModuleController from 'Application/ModuleController';
 import ControllerHandler from 'Application/ControllerHandler';
 import AudioInputReceiverHandler from 'Application/Audio/Controller/Handler/AudioInputReceiverHandler';
 import ViewInjection from '@enbock/ts-jsx/ViewInjection';
+import AudioControllerAudioAbortHandler from 'Application/Audio/Controller/Handler/AudioAbortHandler';
 
 class Container {
     private startControllerControllerView = Start;
@@ -150,10 +151,6 @@ class Container {
         this.welcomeControllerHandlerConversationInputHandler
     ];
     private audioControllerHandlerAudioInputHandler: AudioControllerHandlerAudioInputHandler = new AudioControllerHandlerAudioInputHandler(this.audioAdapter, this.coreAudioInputUseCaseInputUseCase, this.coreAudioInputUseCaseAudioTransformUseCase, this.audioControllerHandlerAudioInputHandlerArray);
-    private audioControllerControllerHandler: Array<ControllerHandler> = [
-        this.audioControllerHandlerAudioInputHandler,
-        this.audioControllerHandlerAudioOutputHandler
-    ];
     private startViewStartPresenter: StartViewStartPresenter = new StartViewStartPresenter();
     private coreStartStartUseCaseStartUseCase: CoreStartStartUseCaseStartUseCase = new CoreStartStartUseCaseStartUseCase(this.coreStartStartStorage);
     private startControllerHandlerStartHandler: StartControllerHandlerStartHandler = new StartControllerHandlerStartHandler(this.startControllerStartControllerBus, this.coreStartStartUseCaseStartUseCase, this.audioControllerAudioControllerBus);
@@ -173,10 +170,19 @@ class Container {
         this.welcomeViewWelcomePresenter,
         this.welcomeControllerDataCollector
     );
+    private audioControllerAudioAbortHandler: AudioControllerAudioAbortHandler = new AudioControllerAudioAbortHandler(
+        this.audioAdapter,
+        this.coreAudioInputUseCaseInputUseCase,
+        this.coreGptConversationResetUseCaseConversationResetUseCase
+    );
     public audioControllerController: AudioControllerController = new AudioControllerController(
         this.audioControllerControllerViewComponent,
         this.audioViewAudioPresenter,
-        this.audioControllerControllerHandler,
+        [
+            this.audioControllerHandlerAudioInputHandler,
+            this.audioControllerHandlerAudioOutputHandler,
+            this.audioControllerAudioAbortHandler
+        ],
         this.coreAudioStateUseCaseStateUseCase,
         this.audioControllerAudioControllerBus
     );
