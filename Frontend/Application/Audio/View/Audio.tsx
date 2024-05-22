@@ -26,13 +26,10 @@ export default class Audio extends Component<Properties> implements RootComponen
 
     public set model(value: AudioModel) {
         this.modelInstance = value;
-        console.log('AudioModel:', value);
         this.renderShadow();
     }
 
     render(): ShadowDomElement | ShadowDomElement[] {
-        console.log('>>>RENDER', this.model);
-        // noinspection SpellCheckingInspection
         return <>
             <audio-input
                 {...(this.model.doListening ? {dolistening: ''} : {})}

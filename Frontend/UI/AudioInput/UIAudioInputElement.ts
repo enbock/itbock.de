@@ -168,6 +168,7 @@ export default class UIAudioInputElement extends HTMLElement {
         }
 
         const averageRMS: number = sum / samples;
+        this.innerText = averageRMS + '>=' + this.initialRMS;
         return averageRMS < this.initialRMS;
     }
 
@@ -182,8 +183,8 @@ export default class UIAudioInputElement extends HTMLElement {
             const rms: number = event.data;
             if (rms > 0) {
                 this.initialRMSList.push(rms);
-                if (this.initialRMSList.length < 10) return;
-                this.initialRMS = this.initialRMSList.reduce((sum, r) => sum + r, 0) / this.initialRMSList.length;
+                if (this.initialRMSList.length < 30) return;
+                this.initialRMS = (this.initialRMSList.reduce((sum, r) => sum + r, 0) / this.initialRMSList.length) * 0.8;
                 audioWorkletNode.disconnect();
                 source.disconnect();
             }

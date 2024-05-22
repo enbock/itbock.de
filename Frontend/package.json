@@ -19,10 +19,12 @@
   "scripts": {
     "dev:ai": "npx ai-code-writer",
     "start": "webpack serve --open --mode development --no-open --no-live-reload --no-hot --stats-error-details",
-    "deploy": "npm-run-all --serial build deploy:clean deploy:copy",
+    "deploy": "npm-run-all --serial build build:service-worker-manager:update deploy:clean deploy:copy",
     "build": "webpack --mode production",
     "deploy:clean": "aws s3 rm s3://www.itbock.de/ --recursive --exclude \"*\" --include \"bundle.*\"",
-    "deploy:copy": "aws s3 sync build s3://www.itbock.de/"
+    "deploy:copy": "aws s3 sync build s3://www.itbock.de/",
+    "build:service-worker-manager:compile": "tsc Application/ServiceWorkerManager.ts --module esnext --target esnext --moduleResolution node --outdir build",
+    "build:service-worker-manager:update": "node scripts/buildServiceWorker.js"
   },
   "devDependencies": {
     "dotenv": "*",

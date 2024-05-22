@@ -34,8 +34,6 @@ export default class Network implements GptClient {
         entity.audio = String(this.parseHelper.get<string>(data, 'audio', '') || '');
         entity.language = String(this.parseHelper.get<string>(data, 'language', '') || 'de-DE');
 
-        console.log('[GPT-Result]', entity);
-
         return entity;
     }
 }
