@@ -17,7 +17,7 @@ export default class OpenAiAudioTransform implements AudioTransformClient {
                 file: file,
                 model: 'whisper-1',
                 response_format: 'json',
-                temperature: 0
+                temperature: 0.1
             });
 
             return response.text;

@@ -1,19 +1,14 @@
 import AudioModel from 'Application/Audio/View/AudioModel';
 import StateResponse from 'Application/Audio/Controller/StateResponse';
-import InputPresenter from 'Application/Audio/View/Input/InputPresenter';
 
 export default class AudioPresenter {
-    constructor(
-        private inputPresenter: InputPresenter
-    ) {
-    }
-
     public present(data: StateResponse): AudioModel {
         const model: AudioModel = new AudioModel();
 
         this.presentTextToAudio(model, data);
-        model.audioInput = this.inputPresenter.present(data);
         model.isLoading = data.isLoading == true;
+        model.doListening = data.audioInputEnabled == true;
+        model.microphoneEnabled = data.microphoneEnable == true;
 
         return model;
     }
@@ -27,7 +22,6 @@ export default class AudioPresenter {
         }
         model.showAudio = doAudioOutput;
     }
-
 
     private base64ToBlob(base64: string): Blob {
         const byteCharacters: string = atob(base64);

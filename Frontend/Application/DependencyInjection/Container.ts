@@ -8,7 +8,6 @@ import CoreAudioInputUseCaseAudioTransformUseCase from 'Core/Audio/InputUseCase/
 import CoreGptConversationResetUseCaseConversationResetUseCase
     from 'Core/Gpt/ConversationResetUseCase/ConversationResetUseCase';
 import CoreWelcomeOldHomepageUseCaseOldHomepageUseCase from 'Core/Welcome/OldHomepageUseCase/OldHomepageUseCase';
-import AudioViewInputInputPresenter from 'Application/Audio/View/Input/InputPresenter';
 import AudioViewAudioPresenter from 'Application/Audio/View/AudioPresenter';
 import CoreAudioStateUseCaseStateUseCase from 'Core/Audio/StateUseCase/StateUseCase';
 import CoreStartStartUseCaseStartUseCase from 'Core/Start/StartUseCase/StartUseCase';
@@ -30,7 +29,6 @@ import InfrastructureGptClientNetworkNetwork from 'Infrastructure/GptClient/Netw
 import WelcomeControllerHandlerConversationInputHandler
     from 'Application/Welcome/Controller/Handler/ConversationInputHandler';
 import AudioControllerHandlerAudioInputHandler from 'Application/Audio/Controller/Handler/AudioInputHandler';
-import AudioViewInputInput from 'Application/Audio/View/Input/Input';
 import AudioControllerHandlerAudioOutputHandler from 'Application/Audio/Controller/Handler/AudioOutputHandler';
 import InfrastructureStorageWelcomeMemory from 'Infrastructure/Storage/Welcome/Memory';
 import StartControllerHandlerStartHandler from 'Application/Start/Controller/Handler/StartHandler';
@@ -81,8 +79,7 @@ class Container {
     private infrastructureGptClientFakeCasesEndOfTopicCase: InfrastructureGptClientFakeCasesEndOfTopicCase = new InfrastructureGptClientFakeCasesEndOfTopicCase();
     private coreGptConversationResetUseCaseConversationResetUseCase: CoreGptConversationResetUseCaseConversationResetUseCase = new CoreGptConversationResetUseCaseConversationResetUseCase(this.coreGptConversationStorage);
     private welcomeControllerHandlerCommandSuspendCommand: WelcomeControllerHandlerCommandSuspendCommand = new WelcomeControllerHandlerCommandSuspendCommand(this.coreGptConversationResetUseCaseConversationResetUseCase);
-    private audioViewInputInputPresenter: AudioViewInputInputPresenter = new AudioViewInputInputPresenter();
-    private audioViewAudioPresenter: AudioViewAudioPresenter = new AudioViewAudioPresenter(this.audioViewInputInputPresenter);
+    private audioViewAudioPresenter: AudioViewAudioPresenter = new AudioViewAudioPresenter();
     private infrastructureGptClientFakeCasesOldHomepage: InfrastructureGptClientFakeCasesOldHomepage = new InfrastructureGptClientFakeCasesOldHomepage();
     private infrastructureGptClientFakeCasesMuteMicrophone: InfrastructureGptClientFakeCasesMuteMicrophone = new InfrastructureGptClientFakeCasesMuteMicrophone();
     private infrastructureGptClientFakeCasesStartCase: InfrastructureGptClientFakeCasesStartCase = new InfrastructureGptClientFakeCasesStartCase();
@@ -108,7 +105,6 @@ class Container {
     );
     private audioControllerHandlerStandbyReceiver: AudioControllerHandlerStandbyReceiver = new AudioControllerHandlerStandbyReceiver(this.coreAudioInputUseCaseInputUseCase);
     private audioAdapter: AudioAdapter = new AudioAdapter();
-    private audioViewInputInput: AudioViewInputInput = new AudioViewInputInput(this.audioAdapter);
     private audioControllerAudioControllerBus: AudioControllerAudioControllerBus = new AudioControllerAudioControllerBus();
     private audioControllerHandlerCommandSuspendCommand: AudioControllerHandlerCommandSuspendCommand = new AudioControllerHandlerCommandSuspendCommand(
         this.coreAudioInputUseCaseInputUseCase,
@@ -169,7 +165,12 @@ class Container {
         this.audioControllerHandlerStandbyReceiver,
         this.welcomeControllerHandlerConversationInputHandler
     ];
-    private audioControllerHandlerAudioInputHandler: AudioControllerHandlerAudioInputHandler = new AudioControllerHandlerAudioInputHandler(this.audioAdapter, this.coreAudioInputUseCaseInputUseCase, this.coreAudioInputUseCaseAudioTransformUseCase, this.audioControllerHandlerAudioInputHandlerArray);
+    private audioControllerHandlerAudioInputHandler: AudioControllerHandlerAudioInputHandler = new AudioControllerHandlerAudioInputHandler(
+        this.audioAdapter,
+        this.coreAudioInputUseCaseInputUseCase,
+        this.coreAudioInputUseCaseAudioTransformUseCase,
+        this.audioControllerHandlerAudioInputHandlerArray
+    );
     private startControllerHandlerStartHandler: StartControllerHandlerStartHandler = new StartControllerHandlerStartHandler(
         this.startControllerStartControllerBus,
         this.coreStartStartUseCaseStartUseCase,
@@ -234,7 +235,7 @@ class Container {
 
     constructor() {
         ViewInjection(Start);
-        ViewInjection(Audio, this.audioAdapter, this.audioViewInputInput);
+        ViewInjection(Audio, this.audioAdapter);
         ViewInjection(Welcome, this.welcomeAdapter);
     }
 }

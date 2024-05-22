@@ -40,6 +40,9 @@
       ],
       "Infrastructure/*": [
         "Infrastructure/*"
+      ],
+      "UI/*": [
+        "UI/*"
       ]
     }
   },

@@ -1,3 +1,3 @@
 export default interface AudioTransformClient {
-    transcribeAudio(audioBlob: Blob): Promise<string>;
+    transcribeAudio(audioBase64: string): Promise<string>;
 }

@@ -18,11 +18,11 @@ export default class AudioInputHandler implements ControllerHandler {
 
     public async initialize(presentData: Callback): Promise<void> {
         this.presentData = presentData;
-        this.adapter.audioBlobInput = (audioBlob: Blob) => this.handleAudioBlob(audioBlob);
+        this.adapter.audioBlobInput = (audioBase64: string) => this.handleAudioBlob(audioBase64);
     }
 
-    public async handleAudioBlob(audioBlob: Blob): Promise<void> {
-        const text: string = await this.audioTransformUseCase.transcribeAudio(audioBlob);
+    public async handleAudioBlob(audioBase64: string): Promise<void> {
+        const text: string = await this.audioTransformUseCase.transcribeAudio(audioBase64);
 
         const response: InputResponse = new InputResponse();
         this.inputUseCase.inputFinished({text: text}, response);

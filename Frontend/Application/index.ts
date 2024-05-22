@@ -1,5 +1,6 @@
 import StartController from 'Application/Start/Controller/Controller';
 import DependencyInjectionContainer from 'Application/DependencyInjection/Container';
+import 'UI/Library';
 
 console.log(`
   ____             _      _           _                     _             _           

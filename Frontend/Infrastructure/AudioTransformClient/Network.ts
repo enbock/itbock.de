@@ -9,9 +9,8 @@ export default class Network implements AudioTransformClient {
     ) {
     }
 
-    public async transcribeAudio(audioBlob: Blob): Promise<string> {
-        const base64Audio: string = await this.blobToBase64(audioBlob);
-        const jsonBody: string = JSON.stringify({ audio: base64Audio });
+    public async transcribeAudio(audioBase64: string): Promise<string> {
+        const jsonBody: string = JSON.stringify({ audio: audioBase64 });
 
         const response: Response = await fetch(
             this.serviceUrl,
@@ -24,19 +23,5 @@ export default class Network implements AudioTransformClient {
 
         const data: Json = await response.json();
         return String(data.transcript || '');
-    }
-
-    private blobToBase64(blob: Blob): Promise<string> {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64String = (reader.result as string).split(',')[1]; // Remove the data type prefix
-                resolve(base64String);
-            };
-            reader.onerror = () => {
-                reject(new Error('Failed to convert blob to base64'));
-            };
-            reader.readAsDataURL(blob);
-        });
     }
 }

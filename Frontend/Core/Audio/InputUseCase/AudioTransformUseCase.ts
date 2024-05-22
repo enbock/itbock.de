@@ -6,7 +6,7 @@ export default class AudioTransformUseCase {
     ) {
     }
 
-    public async transcribeAudio(audioBlob: Blob): Promise<string> {
-        return await this.audioTransformClient.transcribeAudio(audioBlob);
+    public async transcribeAudio(audioBase64: string): Promise<string> {
+        return await this.audioTransformClient.transcribeAudio(audioBase64);
     }
 }

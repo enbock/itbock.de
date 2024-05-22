@@ -53,8 +53,8 @@ const config = {
                     to: 'theme'
                 },
                 {
-                    from: 'Infrastructure/AudioTransformClient/worklet-processor.js',
-                    to: 'worklet-processor.js'
+                    from: 'UI/AudioInput/ui-audio-input-processor.js',
+                    to: 'ui-audio-input-processor.js'
                 }
             ]
         }),
@@ -80,7 +80,8 @@ const config = {
         alias: {
             Application: path.resolve(__dirname, 'Application'),
             Core: path.resolve(__dirname, 'Core'),
-            Infrastructure: path.resolve(__dirname, 'Infrastructure')
+            Infrastructure: path.resolve(__dirname, 'Infrastructure'),
+            UI: path.resolve(__dirname, 'UI')
         }
     },
     devServer: {
