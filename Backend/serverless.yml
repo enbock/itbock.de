@@ -20,6 +20,7 @@ provider:
     OPENAI_API_KEY: ${env:OPENAI_API_KEY}
     OPENAI_API_ORG: ${env:OPENAI_API_ORG}
   logRetentionInDays: 7
+  timeout: 30
 
 functions:
   generateToken:
@@ -76,7 +77,6 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
               - X-Amzn-Trace-Id
-    timeout: 30
   audioTransform:
     handler: build/lambda.audioTransformHandler
     events:

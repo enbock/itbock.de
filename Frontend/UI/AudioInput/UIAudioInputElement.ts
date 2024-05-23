@@ -6,14 +6,15 @@ export default class UIAudioInputElement extends HTMLElement {
     private lastRecordedChunks: Array<Blob> = [];
     private allChunks: Array<Blob> = [];
     private silenceTimeoutId?: number;
-    private initialRMSList: Array<number> = [];
-    private initialRMS: number = 1;
     private detectedStartOfSpeech: boolean = false;
     private stream?: MediaStream;
     private silentCounter: number = 0;
     private maxSilentCounter: number = 30;
     private enabled: boolean = false;
     private doListening: boolean = false;
+    private highestRMS: number = 0;
+    private lowestRMS: number = Infinity;
+    private rmsThresholdFactor: number = 0.8;
 
     public static get observedAttributes(): Array<string> {
         return ['dolistening', 'enabled'];
@@ -71,7 +72,6 @@ export default class UIAudioInputElement extends HTMLElement {
             }
 
             this.startMediaRecording();
-            await this.calculateInitialRMS(this.stream);
         } catch (error) {
             console.error('Error accessing microphone', error);
         }
@@ -89,19 +89,34 @@ export default class UIAudioInputElement extends HTMLElement {
         this.allChunks.push(...this.lastRecordedChunks);
         this.lastRecordedChunks = [];
         try {
-            if (await this.isSilentAudio(audioBlob)) {
-                if (this.detectedStartOfSpeech) {
+            const rms: number = await this.calculateRMS(audioBlob);
+            this.updateRMSRange(rms);
+
+            const rmsThresholdHigh: number = this.highestRMS * this.rmsThresholdFactor;
+            const rmsThresholdLow: number = (this.lowestRMS * (2 - this.rmsThresholdFactor)) * 2;
+            const diffThreshold: number = 1 - (1 / this.highestRMS * this.lowestRMS);
+            const minGainDetected: boolean = diffThreshold > 0 && diffThreshold > this.rmsThresholdFactor;
+
+            this.innerText = rmsThresholdLow + ' || ' + rms + ' || ' + rmsThresholdHigh + ' >> ' + diffThreshold;
+
+            if (this.detectedStartOfSpeech) {
+                if (rms < rmsThresholdLow && minGainDetected) {
                     this.detectedStartOfSpeech = false;
                     const fullAudioBlob: Blob = new Blob(this.allChunks);
                     this.allChunks = [];
-                    this.silentCounter = 0;
                     const base64Audio: string = await this.blobToBase64(fullAudioBlob);
                     const audioInputEvent: CustomEvent<string> = new CustomEvent('audioinput', {detail: base64Audio});
                     this.dispatchEvent(audioInputEvent);
                     this.onaudioinput(audioInputEvent);
                     this.disableMediaRecorder();
                 } else {
-                    this.allChunks = [];
+                    this.startMediaRecording();
+                }
+            } else {
+                if (rms > rmsThresholdHigh || (rms > rmsThresholdLow && rmsThresholdLow < 0.1)) {
+                    this.detectedStartOfSpeech = true;
+                    this.startMediaRecording();
+                } else {
                     this.silentCounter++;
                     if (this.silentCounter < this.maxSilentCounter) {
                         this.startMediaRecording();
@@ -112,10 +127,6 @@ export default class UIAudioInputElement extends HTMLElement {
                         this.disableMediaRecorder();
                     }
                 }
-            } else {
-                this.silentCounter = 0;
-                this.detectedStartOfSpeech = true;
-                this.startMediaRecording();
             }
         } catch (error) {
             console.error('Audio decode error', error);
@@ -146,49 +157,26 @@ export default class UIAudioInputElement extends HTMLElement {
         }
     }
 
-    private async isSilentAudio(audioBlob: Blob): Promise<boolean> {
+    private async calculateRMS(audioBlob: Blob): Promise<number> {
         const audioContext: AudioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
         const arrayBuffer: ArrayBuffer = await audioBlob.arrayBuffer();
         const audioBuffer: AudioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
         const rawData: Float32Array = audioBuffer.getChannelData(0);
-        const samples: number = 100;
-        const blockSize: number = Math.floor(rawData.length / samples);
-        let sum: number = 0;
-
-        for (let i = 0; i < samples; i++) {
-            const blockStart: number = blockSize * i;
-            let sumOfSquares: number = 0;
-            for (let j = 0; j < blockSize; j++) {
-                const sample: number = rawData[blockStart + j];
-                sumOfSquares += sample * sample;
-            }
-            const rms: number = Math.sqrt(sumOfSquares / blockSize);
-            sum += rms;
+        let sumOfSquares: number = 0;
+        for (let i = 0; i < rawData.length; i++) {
+            sumOfSquares += rawData[i] * rawData[i];
         }
-
-        const averageRMS: number = sum / samples;
-        this.innerText = averageRMS + '>=' + this.initialRMS;
-        return averageRMS < this.initialRMS;
+        return Math.sqrt(sumOfSquares / rawData.length);
     }
 
-    private async calculateInitialRMS(stream: MediaStream): Promise<void> {
-        const audioContext: AudioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        await audioContext.audioWorklet.addModule('ui-audio-input-processor.js');
-        const source: MediaStreamAudioSourceNode = audioContext.createMediaStreamSource(stream);
-        const audioWorkletNode: AudioWorkletNode = new AudioWorkletNode(audioContext, 'rms-processor');
-
-        source.connect(audioWorkletNode);
-        audioWorkletNode.port.onmessage = (event: MessageEvent): void => {
-            const rms: number = event.data;
-            if (rms > 0) {
-                this.initialRMSList.push(rms);
-                if (this.initialRMSList.length < 30) return;
-                this.initialRMS = (this.initialRMSList.reduce((sum, r) => sum + r, 0) / this.initialRMSList.length) * 0.8;
-                audioWorkletNode.disconnect();
-                source.disconnect();
-            }
-        };
+    private updateRMSRange(rms: number): void {
+        if (rms > this.highestRMS) {
+            this.highestRMS = rms;
+        }
+        if (rms < this.lowestRMS) {
+            this.lowestRMS = rms;
+        }
     }
 
     private async blobToBase64(blob: Blob): Promise<string> {
@@ -209,10 +197,10 @@ export default class UIAudioInputElement extends HTMLElement {
         this.lastRecordedChunks = [];
         this.allChunks = [];
         this.silenceTimeoutId = undefined;
-        this.initialRMSList = [];
-        this.initialRMS = 1;
         this.detectedStartOfSpeech = false;
         this.silentCounter = 0;
+        this.highestRMS = 0;
+        this.lowestRMS = Infinity;
     }
 }
 
