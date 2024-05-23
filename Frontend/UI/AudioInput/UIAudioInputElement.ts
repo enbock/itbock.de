@@ -1,35 +1,29 @@
+// noinspection JSUnusedGlobalSymbols
 export default class UIAudioInputElement extends HTMLElement {
     public onaudioinput: (event: CustomEvent<string>) => void = () => <never>false;
     public onaudioabort: (event: Event) => void = () => <never>false;
     private isListening: boolean = false;
-    private mediaRecorder?: MediaRecorder;
-    private lastRecordedChunks: Array<Blob> = [];
-    private allChunks: Array<Blob> = [];
-    private silenceTimeoutId?: number;
-    private detectedStartOfSpeech: boolean = false;
     private stream?: MediaStream;
-    private silentCounter: number = 0;
-    private maxSilentCounter: number = 30;
-    private enabled: boolean = false;
+    private audioContext?: AudioContext;
+    private audioWorkletNode?: AudioWorkletNode;
+    private micEnabled: boolean = false;
     private doListening: boolean = false;
+    private detectedStartOfSpeech: boolean = false;
     private highestRMS: number = 0;
-    private lowestRMS: number = Infinity;
     private rmsThresholdFactor: number = 0.8;
+    private mediaRecorder?: MediaRecorder;
+    private recordedChunks: Array<Blob> = [];
+    private silenceStartTime?: number;
+    private rmsMinMultiplier: number = 20;
+    private rmsFirstSecond: number = 0;
+    private recordStartTime: number = 0;
+    private avgMeasureTime: number = 1500;
 
     public static get observedAttributes(): Array<string> {
         return ['dolistening', 'enabled'];
     }
 
-    public attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
-        const refreshCommand: Function | undefined = <Function | undefined>this[<keyof this>('refresh_' + name)];
-        if (refreshCommand) refreshCommand.call(this, newValue);
-    }
-
-    private refresh_silentcounter(newValue: string | null): void {
-        this.maxSilentCounter = newValue !== null ? parseInt(newValue) : this.maxSilentCounter;
-    }
-
-    private refresh_dolistening(newValue: string | null): void {
+    public set dolistening(newValue: string | null) {
         this.doListening = newValue != null;
 
         if (this.doListening) {
@@ -39,143 +33,103 @@ export default class UIAudioInputElement extends HTMLElement {
         }
     }
 
-    private refresh_enabled(newValue: string | null): void {
-        this.enabled = newValue != null;
+    public set enabled(newValue: string | null) {
+        this.micEnabled = newValue != null;
 
-        if (this.enabled) return;
-        this.disableMediaRecorder();
+        if (this.micEnabled) return;
+
+        this.mediaRecorder?.stop();
+        this.disableMicrophone();
     }
 
-    private start(): void {
+    public attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+        (<any>this)[<keyof this>(name)] = newValue;
+    }
+
+    private async handleStop(): Promise<void> {
+        if (this.micEnabled) await this.handleEndOfRecording();
+        this.disableMicrophone();
+    }
+
+    private async handleEndOfRecording(): Promise<void> {
+        if (this.detectedStartOfSpeech) {
+            const fullAudioBlob: Blob = new Blob(this.recordedChunks);
+            const base64Audio: string = await this.blobToBase64(fullAudioBlob);
+            const audioInputEvent: CustomEvent<string> = new CustomEvent('audioinput', {detail: base64Audio});
+            this.dispatchEvent(audioInputEvent);
+            this.onaudioinput(audioInputEvent);
+        } else {
+            const event: Event = new Event('audioabort');
+            this.dispatchEvent(event);
+            this.onaudioabort(event);
+        }
+    }
+
+    private async start(): Promise<void> {
         if (this.isListening) return;
         this.isListening = true;
-        this.silentCounter = 0;
-
-        void this.startRecording();
+        await this.startMicrophone();
     }
 
     private stop(): void {
-        if (!this.isListening) return;
-        this.isListening = false;
-        this.stopMediaRecording();
+        if (this.isListening) this.mediaRecorder?.stop();
+        this.disableMicrophone();
     }
 
-    private async startRecording(): Promise<void> {
+    private async startMicrophone(): Promise<void> {
         try {
-            if (!this.stream) {
-                this.stream = await navigator.mediaDevices.getUserMedia({audio: true});
-            }
-            if (!this.mediaRecorder || this.mediaRecorder.state === 'inactive') {
-                this.mediaRecorder = new MediaRecorder(this.stream);
-                this.mediaRecorder.ondataavailable = this.onDataAvailable.bind(this);
-                this.mediaRecorder.onstop = () => this.handleStop();
-            }
+            this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+            await this.audioContext.audioWorklet.addModule('ui-audio-input-processor.js');
+            this.stream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const source = this.audioContext.createMediaStreamSource(this.stream);
+            this.audioWorkletNode = new AudioWorkletNode(this.audioContext, 'rms-processor');
+            this.audioWorkletNode.port.onmessage = (event: MessageEvent) => this.handleRMS(event.data);
+            source.connect(this.audioWorkletNode);
 
-            this.startMediaRecording();
+            this.mediaRecorder = new MediaRecorder(this.stream);
+            this.mediaRecorder.ondataavailable = this.handleData.bind(this);
+            this.mediaRecorder.onstop = () => this.handleStop();
+            this.mediaRecorder.start();
         } catch (error) {
             console.error('Error accessing microphone', error);
         }
     }
 
-    private onDataAvailable(event: BlobEvent) {
-        this.lastRecordedChunks.push(event.data);
-        this.resetSilenceTimeout();
+    private handleData(event: BlobEvent) {
+        if (this.detectedStartOfSpeech) this.recordedChunks.push(event.data);
     }
 
-    private async handleStop(): Promise<void> {
-        if (!this.isListening) return;
-
-        const audioBlob: Blob = new Blob(this.lastRecordedChunks);
-        this.allChunks.push(...this.lastRecordedChunks);
-        this.lastRecordedChunks = [];
-        try {
-            const rms: number = await this.calculateRMS(audioBlob);
-            this.updateRMSRange(rms);
-
-            const rmsThresholdHigh: number = this.highestRMS * this.rmsThresholdFactor;
-            const rmsThresholdLow: number = (this.lowestRMS * (2 - this.rmsThresholdFactor)) * 2;
-            const diffThreshold: number = 1 - (1 / this.highestRMS * this.lowestRMS);
-            const minGainDetected: boolean = diffThreshold > 0 && diffThreshold > this.rmsThresholdFactor;
-
-            this.innerText = rmsThresholdLow + ' || ' + rms + ' || ' + rmsThresholdHigh + ' >> ' + diffThreshold;
-
-            if (this.detectedStartOfSpeech) {
-                if (rms < rmsThresholdLow && minGainDetected) {
-                    this.detectedStartOfSpeech = false;
-                    const fullAudioBlob: Blob = new Blob(this.allChunks);
-                    this.allChunks = [];
-                    const base64Audio: string = await this.blobToBase64(fullAudioBlob);
-                    const audioInputEvent: CustomEvent<string> = new CustomEvent('audioinput', {detail: base64Audio});
-                    this.dispatchEvent(audioInputEvent);
-                    this.onaudioinput(audioInputEvent);
-                    this.disableMediaRecorder();
-                } else {
-                    this.startMediaRecording();
-                }
-            } else {
-                if (rms > rmsThresholdHigh || (rms > rmsThresholdLow && rmsThresholdLow < 0.1)) {
-                    this.detectedStartOfSpeech = true;
-                    this.startMediaRecording();
-                } else {
-                    this.silentCounter++;
-                    if (this.silentCounter < this.maxSilentCounter) {
-                        this.startMediaRecording();
-                    } else {
-                        const event: Event = new Event('audioabort');
-                        this.dispatchEvent(event);
-                        this.onaudioabort(event);
-                        this.disableMediaRecorder();
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Audio decode error', error);
-        }
-    };
-
-    private startMediaRecording(): void {
-        if (!this.mediaRecorder) return;
-
-        if (this.mediaRecorder.state == 'recording') return;
-
-        this.mediaRecorder.start();
-        this.resetSilenceTimeout();
-    }
-
-    private resetSilenceTimeout(): void {
-        if (this.silenceTimeoutId) clearTimeout(this.silenceTimeoutId);
-
-        this.silenceTimeoutId = window.setTimeout((): void => {
-            this.stopMediaRecording();
-        }, 1000);
-    }
-
-    private stopMediaRecording(): void {
-        if (this.silenceTimeoutId) clearTimeout(this.silenceTimeoutId);
-        if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-            this.mediaRecorder.stop();
-        }
-    }
-
-    private async calculateRMS(audioBlob: Blob): Promise<number> {
-        const audioContext: AudioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        const arrayBuffer: ArrayBuffer = await audioBlob.arrayBuffer();
-        const audioBuffer: AudioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-
-        const rawData: Float32Array = audioBuffer.getChannelData(0);
-        let sumOfSquares: number = 0;
-        for (let i = 0; i < rawData.length; i++) {
-            sumOfSquares += rawData[i] * rawData[i];
-        }
-        return Math.sqrt(sumOfSquares / rawData.length);
-    }
-
-    private updateRMSRange(rms: number): void {
+    private async handleRMS(rms: number): Promise<void> {
         if (rms > this.highestRMS) {
             this.highestRMS = rms;
         }
-        if (rms < this.lowestRMS) {
-            this.lowestRMS = rms;
+
+        const rmsThresholdHigh: number = this.highestRMS * this.rmsThresholdFactor;
+        const rmsThresholdLow: number = (rms * (2 - this.rmsThresholdFactor)) * 2;
+        const diffThreshold: number = 1 / rmsThresholdLow * this.highestRMS;
+        const minGainDetected: boolean = diffThreshold > this.rmsMinMultiplier;
+        const now: number = Date.now();
+
+        if (this.recordStartTime == 0) this.recordStartTime = now;
+        if (now - this.recordStartTime <= this.avgMeasureTime) {
+            if (rms > this.rmsFirstSecond) this.rmsFirstSecond = rms;
+        } else {
+            if (this.rmsFirstSecond > rmsThresholdHigh && minGainDetected) this.detectedStartOfSpeech = true;
+        }
+
+        this.detectedStartOfSpeech = this.detectedStartOfSpeech || minGainDetected;
+        this.innerText = (this.detectedStartOfSpeech ? '*' : '_') + ' ' + this.rmsFirstSecond + ' || ' + rms + ' || ' + rmsThresholdHigh + ' >> ' + diffThreshold;
+
+        if (!this.detectedStartOfSpeech) return;
+
+        if (rms < rmsThresholdHigh) {
+            if (!this.silenceStartTime) {
+                this.silenceStartTime = now;
+            } else if (now - this.silenceStartTime >= this.avgMeasureTime) {
+                this.mediaRecorder?.stop();
+            }
+        } else {
+            this.silenceStartTime = undefined;
         }
     }
 
@@ -188,19 +142,21 @@ export default class UIAudioInputElement extends HTMLElement {
         });
     }
 
-    private disableMediaRecorder(): void {
-        this.stopMediaRecording();
+    private disableMicrophone(): void {
         this.stream?.getTracks().forEach(track => track.stop());
-        this.stream = undefined;
-        this.mediaRecorder = undefined;
+        this.audioWorkletNode?.disconnect();
+        if (this.audioContext?.state != 'closed') this.audioContext?.close();
         this.isListening = false;
-        this.lastRecordedChunks = [];
-        this.allChunks = [];
-        this.silenceTimeoutId = undefined;
         this.detectedStartOfSpeech = false;
-        this.silentCounter = 0;
         this.highestRMS = 0;
-        this.lowestRMS = Infinity;
+        this.silenceStartTime = undefined;
+        this.rmsFirstSecond = 0;
+        this.recordStartTime = 0;
+
+        if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+            this.mediaRecorder.stop();
+        }
+        this.recordedChunks = [];
     }
 }
 
