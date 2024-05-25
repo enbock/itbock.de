@@ -1,22 +1,43 @@
 import StartModel from 'Application/Start/View/StartModel';
-import DataCollection from 'Application/Start/Controller/DataCollection';
+import ResponseCollection from 'Application/Start/Controller/Response/ResponseCollection';
+import StartScreenPresenter from 'Application/Start/View/StartScreen/StartScreenPresenter';
+import OldPagePresenter from 'Application/Start/View/OldPage/OldPagePresenter';
+import ConversationPresenter from 'Application/Start/View/Conversation/ConversationPresenter';
+import Modules from 'Core/Start/Modules';
+import AudioPresenter from 'Application/Start/View/Audio/AudioPresenter';
 
 export default class StartPresenter {
-    public presentData(data: DataCollection): StartModel {
+    constructor(
+        private startScreenPresenter: StartScreenPresenter,
+        private oldPagePresenter: OldPagePresenter,
+        private conversationPresenter: ConversationPresenter,
+        private audioPresenter: AudioPresenter
+    ) {
+    }
+
+    public presentData(data: ResponseCollection): StartModel {
         const model: StartModel = new StartModel();
 
         model.showThinking = data.gptState.isLoading == true;
-        model.showAudioSpooling = data.audioState.isLoading == true;
         model.showAudioText = data.audioState.isPlaying == true && data.audioState.isLoading == false;
         model.audioText = data.audioState.audioOutput.text;
-        model.language = data.audioState.language
+        model.language = data.startState.language
             ? String(
-                new Intl.DisplayNames([data.audioState.language], {
+                new Intl.DisplayNames([data.startState.language], {
                     type: 'language'
-                }).of(data.audioState.language)
+                }).of(data.startState.language)
             )
             : '';
 
+        model.showStartScreen = data.startState.module == Modules.START_SCREEN;
+        model.showOldPage = data.startState.module == Modules.OLD_PAGE;
+        model.showConversation = data.startState.module == Modules.CONVERSATION;
+
+        model.startScreen = this.startScreenPresenter.present(data);
+        model.oldPage = this.oldPagePresenter.present(data);
+        model.conversation = this.conversationPresenter.present(data);
+        model.audio = this.audioPresenter.present(data);
+        
         return model;
     }
 }

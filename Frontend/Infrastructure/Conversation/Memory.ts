@@ -1,15 +1,15 @@
 import ConversationStorage from 'Core/Gpt/ConversationStorage';
-import ConversationRecordEntity from 'Core/Gpt/ConversationRecordEntity';
+import ConversationEntity from 'Core/Gpt/ConversationEntity';
 
 export default class Memory implements ConversationStorage {
-    private conversations: Array<ConversationRecordEntity> = [];
+    private conversations: Array<ConversationEntity> = [];
     private loading: boolean = false;
 
-    public getConversations(): Array<ConversationRecordEntity> {
+    public getConversations(): Array<ConversationEntity> {
         return this.conversations;
     }
 
-    public setConversations(conversations: Array<ConversationRecordEntity>): void {
+    public setConversations(conversations: Array<ConversationEntity>): void {
         this.conversations = conversations;
     }
 

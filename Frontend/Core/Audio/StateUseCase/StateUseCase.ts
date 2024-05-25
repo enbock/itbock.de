@@ -12,13 +12,10 @@ export default class StateUseCase {
     }
 
     public getState(response: Response): void {
-        if (this.startStorage.getApplicationStarted() == false) return;
-
         response.audioOutput = this.audioService.getAudioContent();
         response.audioInputEnabled = this.audioStorage.getListening() == true && this.audioStorage.getMicrophoneMuted() == false;
         response.microphoneEnable = this.audioStorage.getMicrophoneMuted() == false;
         response.isLoading = this.audioStorage.getLoading();
         response.isPlaying = this.audioStorage.getPlaying();
-        response.language = this.startStorage.getLanguage();
     }
 }

@@ -1,19 +1,22 @@
-import DataCollection from 'Application/Start/Controller/DataCollection';
-import GptStateUseCase from 'Core/Gpt/StateUseCase/StateUseCase';
+import ResponseCollection from 'Application/Start/Controller/Response/ResponseCollection';
 import AudioStateUseCase from 'Core/Audio/StateUseCase/StateUseCase';
+import ConversationUseCase from 'Core/Gpt/ConversationUseCase/ConversationUseCase';
+import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 
 export default class DataCollector {
     constructor(
-        private gptStateUseCase: GptStateUseCase,
-        private audioStateUseCase: AudioStateUseCase
+        private audioStateUseCase: AudioStateUseCase,
+        private conversationUseCase: ConversationUseCase,
+        private startUseCase: StartUseCase
     ) {
     }
 
-    public getData(): DataCollection {
-        const data: DataCollection = new DataCollection();
+    public getData(): ResponseCollection {
+        const data: ResponseCollection = new ResponseCollection();
 
-        this.gptStateUseCase.getState(data.gptState);
+        this.conversationUseCase.getState(data.gptState);
         this.audioStateUseCase.getState(data.audioState);
+        this.startUseCase.getState(data.startState);
 
         return data;
     }

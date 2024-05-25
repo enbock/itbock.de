@@ -1,7 +1,7 @@
-import ConversationRecordEntity from 'Core/Gpt/ConversationRecordEntity';
+import ConversationEntity from 'Core/Gpt/ConversationEntity';
 
 export default interface FakeCase {
-    support(conversations: Array<ConversationRecordEntity>): boolean;
+    support(conversations: Array<ConversationEntity>): boolean;
 
-    run(conversations: Array<ConversationRecordEntity>, result: ConversationRecordEntity): void;
+    run(conversations: Array<ConversationEntity>, result: ConversationEntity): void;
 }

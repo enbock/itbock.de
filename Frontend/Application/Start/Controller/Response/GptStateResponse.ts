@@ -1,7 +1,7 @@
-import Response from 'Core/Gpt/StateUseCase/Response';
-import ConversationRecordEntity from 'Core/Gpt/ConversationRecordEntity';
+import StateResponse from 'Core/Gpt/ConversationUseCase/Response/StateResponse';
+import ConversationEntity from 'Core/Gpt/ConversationEntity';
 
-export default class GptStateResponse implements Response {
+export default class GptStateResponse implements StateResponse {
     public isLoading: boolean = false;
-    public conversations: Array<ConversationRecordEntity> = [];
+    public conversations: Array<ConversationEntity> = [];
 }

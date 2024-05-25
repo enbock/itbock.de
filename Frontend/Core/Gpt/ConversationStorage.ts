@@ -1,9 +1,9 @@
-import ConversationRecordEntity from 'Core/Gpt/ConversationRecordEntity';
+import ConversationEntity from 'Core/Gpt/ConversationEntity';
 
 export default interface ConversationStorage {
-    getConversations(): Array<ConversationRecordEntity>;
+    getConversations(): Array<ConversationEntity>;
 
-    setConversations(conversations: Array<ConversationRecordEntity>): void;
+    setConversations(conversations: Array<ConversationEntity>): void;
 
     setLoading(isLoading: boolean): void;
 

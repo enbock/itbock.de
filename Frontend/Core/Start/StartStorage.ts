@@ -1,7 +1,9 @@
-export default interface StartStorage {
-    getApplicationStarted(): boolean;
+import Modules from 'Core/Start/Modules';
 
-    setApplicationStarted(started: boolean): void;
+export default interface StartStorage {
+    getModuleName(): Modules;
+
+    setModuleName(module: Modules): void;
 
     getLanguage(): string;
 

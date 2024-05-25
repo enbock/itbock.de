@@ -2,11 +2,15 @@ import AudioStorage from 'Core/Audio/AudioStorage';
 import EndOfInputRequest from 'Core/Audio/InputUseCase/EndOfInputRequest';
 import FinishedInputResponse from 'Core/Audio/InputUseCase/FinishedInputResponse';
 import Channel from 'Core/Audio/InputUseCase/Channel';
+import {UpdateRequest} from 'Core/Audio/InputUseCase/UpdateRequest';
+import Modules from 'Core/Start/Modules';
+import StartStorage from 'Core/Start/StartStorage';
 
 export default class InputUseCase {
     constructor(
         private audioStorage: AudioStorage,
-        private magicWords: Array<string>
+        private wakeUpWords: Array<string>,
+        private startStorage: StartStorage
     ) {
     }
 
@@ -22,6 +26,10 @@ export default class InputUseCase {
     }
 
     public initialize(): void {
+        this.audioStorage.setMicrophoneMuted(true);
+    }
+
+    public restart(): void {
         this.audioStorage.setMicrophoneMuted(false);
         this.audioStorage.setListening(false);
         this.audioStorage.setLoading(false);
@@ -34,10 +42,6 @@ export default class InputUseCase {
         this.audioStorage.setMicrophoneMuted(true);
     }
 
-    public suspend(): void {
-        this.audioStorage.setSuspended(true);
-    }
-
     public startInput(): void {
         this.audioStorage.setListening(true);
     }
@@ -46,7 +50,7 @@ export default class InputUseCase {
         const words: Array<string> = request.text.split(' ').map(s => s.trim().toLocaleLowerCase()).slice(0, 3);
 
         const foundMagicWord: boolean = words.find(
-            word => this.magicWords.find(
+            word => this.wakeUpWords.find(
                 magicWord => word.indexOf(magicWord) > -1
             ) !== undefined
         ) !== undefined;
@@ -54,5 +58,10 @@ export default class InputUseCase {
 
         this.audioStorage.setSuspended(false);
         response.channel = Channel.DEFAULT;
+        this.startStorage.setModuleName(Modules.CONVERSATION);
+    }
+
+    public updateByModule(request: UpdateRequest): void {
+        if (request.module == Modules.START_SCREEN) this.initialize();
     }
 }

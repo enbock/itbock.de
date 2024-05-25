@@ -1,4 +1,6 @@
+import Modules from 'Core/Start/Modules';
+
 export default interface Response {
-    showLinks: boolean;
-    applicationStarted: boolean;
+    module: Modules;
+    language: string;
 }

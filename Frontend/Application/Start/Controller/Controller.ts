@@ -4,24 +4,24 @@ import StartPresenter from 'Application/Start/View/StartPresenter';
 import ModuleController from 'Application/ModuleController';
 import ControllerHandler from 'Application/ControllerHandler';
 import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
-import StartControllerBus from 'Application/Start/Controller/StartControllerBus';
 import DataCollector from 'Application/Start/Controller/DataCollector';
-import DataCollection from 'Application/Start/Controller/DataCollection';
+import ResponseCollection from 'Application/Start/Controller/Response/ResponseCollection';
+import AudioInputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
 
 export default class Controller implements ShadowComponentReceiver {
     private startView?: Start;
 
     constructor(
         private document: Document,
-        private initializeApplicationView: typeof start,
+        private renderApplication: typeof start,
         view: typeof Start,
         private startUseCase: StartUseCase,
         private presenter: StartPresenter,
         private moduleControllers: Array<ModuleController>,
         private handlers: Array<ControllerHandler>,
-        private startControllerBus: StartControllerBus,
         private dataCollector: DataCollector,
-        private defaultLanguage: string
+        private defaultLanguage: string,
+        private audioInputUseCase: AudioInputUseCase
     ) {
         view.componentReceiver = this;
     }
@@ -31,10 +31,11 @@ export default class Controller implements ShadowComponentReceiver {
         void this.presentData();
     }
 
-    public start(): void {
-        void this.initializeController();
+    public async start(): Promise<void> {
+        this.audioInputUseCase.initialize();
+        await this.initializeController();
 
-        this.initializeApplicationView(this.document);
+        this.renderApplication(this.document);
     }
 
     private async initializeController(): Promise<void> {
@@ -42,7 +43,6 @@ export default class Controller implements ShadowComponentReceiver {
 
         const boundPresentData: Callback = async () => this.presentData();
 
-        this.startControllerBus.refresh = boundPresentData;
         this.handlers.forEach(h => h.initialize(boundPresentData));
 
         await this.presentData();
@@ -51,14 +51,14 @@ export default class Controller implements ShadowComponentReceiver {
 
     private async startModules(): Promise<void> {
         const callStack: Array<Promise<void>> = [];
-        for (const controller of this.moduleControllers) callStack.push(controller.init());
+        for (const controller of this.moduleControllers) callStack.push(controller.initialize());
         await Promise.all(callStack);
     }
 
     private async presentData(): Promise<void> {
         if (!this.startView) return;
 
-        const data: DataCollection = this.dataCollector.getData();
+        const data: ResponseCollection = this.dataCollector.getData();
         this.startView.model = this.presenter.presentData(data);
     }
 }

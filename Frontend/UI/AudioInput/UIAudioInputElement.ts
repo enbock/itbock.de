@@ -20,14 +20,14 @@ export default class UIAudioInputElement extends HTMLElement {
     private avgMeasureTime: number = 1500;
 
     public static get observedAttributes(): Array<string> {
-        return ['dolistening', 'enabled'];
+        return ['listening', 'enabled'];
     }
 
-    public set dolistening(newValue: string | null) {
+    public set listening(newValue: string | null) {
         this.doListening = newValue != null;
 
         if (this.doListening) {
-            this.start();
+            void this.start();
         } else {
             this.stop();
         }
@@ -55,11 +55,11 @@ export default class UIAudioInputElement extends HTMLElement {
         if (this.detectedStartOfSpeech) {
             const fullAudioBlob: Blob = new Blob(this.recordedChunks);
             const base64Audio: string = await this.blobToBase64(fullAudioBlob);
-            const audioInputEvent: CustomEvent<string> = new CustomEvent('audioinput', {detail: base64Audio});
+            const audioInputEvent: CustomEvent<string> = new CustomEvent('input', {detail: base64Audio});
             this.dispatchEvent(audioInputEvent);
             this.onaudioinput(audioInputEvent);
         } else {
-            const event: Event = new Event('audioabort');
+            const event: Event = new Event('abort');
             this.dispatchEvent(event);
             this.onaudioabort(event);
         }
@@ -81,7 +81,7 @@ export default class UIAudioInputElement extends HTMLElement {
             this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
             await this.audioContext.audioWorklet.addModule('ui-audio-input-processor.js');
             this.stream = await navigator.mediaDevices.getUserMedia({audio: true});
-            const source = this.audioContext.createMediaStreamSource(this.stream);
+            const source: MediaStreamAudioSourceNode = this.audioContext.createMediaStreamSource(this.stream);
             this.audioWorkletNode = new AudioWorkletNode(this.audioContext, 'rms-processor');
             this.audioWorkletNode.port.onmessage = (event: MessageEvent) => this.handleRMS(event.data);
             source.connect(this.audioWorkletNode);

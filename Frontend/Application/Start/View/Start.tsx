@@ -1,25 +1,26 @@
-import Component from '@enbock/ts-jsx/Component';
+import Component, {ComponentProperties} from '@enbock/ts-jsx/Component';
 import {ShadowDomElement} from '@enbock/ts-jsx/ShadowDom';
 import ShadowRenderer from '@enbock/ts-jsx/ShadowRenderer';
-import Audio from 'Application/Audio/View/Audio';
+import Audio from 'Application/Start/View/Audio/Audio';
 import StartModel from 'Application/Start/View/StartModel';
 import RootComponent from 'Application/RootComponent';
-import Welcome from 'Application/Welcome/View/Welcome';
 import Style from './Start.css';
-
-interface Properties {
-}
+import StartScreen from 'Application/Start/View/StartScreen/StartScreen';
+import Adapter from 'Application/Start/Adapter';
+import Conversation from 'Application/Start/View/Conversation/Conversation';
+import OldPage from 'Application/Start/View/OldPage/OldPage';
 
 export default function renderApplication(document: Document) {
     const rootNode: HTMLElement = ShadowRenderer.render(<Start/>);
     document.body.appendChild(rootNode);
 }
 
-export class Start extends Component<Properties> implements RootComponent {
+export class Start extends Component implements RootComponent {
     private modelInstance: StartModel = new StartModel();
 
     constructor(
-        props: Readonly<Properties>
+        props: Readonly<ComponentProperties>,
+        private adapter: Adapter
     ) {
         super(props);
     }
@@ -38,12 +39,10 @@ export class Start extends Component<Properties> implements RootComponent {
 
         return <>
             <style>{Style}</style>
-            <Audio/>
             <main-title>
                 <content>
                     <page--title>Bock Laboratories - Terminal</page--title>
                     {model.showThinking ? <h3>Ich denke, bitte warten...</h3> : <></>}
-                    {model.showAudioSpooling ? <h3>Audiospur wird geladen, bitte warten...</h3> : <></>}
                 </content>
                 <button--block>
                     {model.language}
@@ -75,12 +74,15 @@ export class Start extends Component<Properties> implements RootComponent {
                 <filler-3/>
                 <filler-4/>
             </menu-section>
+            <Audio model={model.audio} adapter={this.adapter}/>
         </>;
     }
 
     private getOutput(): ShadowDomElement {
         return <>
-            <Welcome/>
+            {this.model.showStartScreen ? <StartScreen model={this.model.startScreen} adapter={this.adapter}/> : ''}
+            {this.model.showConversation ? <Conversation model={this.model.conversation}/> : ''}
+            {this.model.showOldPage ? <OldPage model={this.model.oldPage}/> : ''}
         </>;
     }
 }

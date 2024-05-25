@@ -1,5 +1,6 @@
 import StartStorage from 'Core/Start/StartStorage';
 import Response from 'Core/Start/StartUseCase/Response';
+import Modules from 'Core/Start/Modules';
 
 export default class StartUseCase {
     constructor(
@@ -8,15 +9,16 @@ export default class StartUseCase {
     }
 
     public startApplication(): void {
-        this.startStorage.setApplicationStarted(true);
+        this.startStorage.setModuleName(Modules.CONVERSATION);
     }
 
     public getState(response: Response): void {
-        response.applicationStarted = this.startStorage.getApplicationStarted();
+        response.module = this.startStorage.getModuleName();
+        response.language = this.startStorage.getLanguage();
     }
 
     public initialize(defaultLanguage: string): void {
-        this.startStorage.setApplicationStarted(false);
+        this.startStorage.setModuleName(Modules.START_SCREEN);
         this.startStorage.setLanguage(defaultLanguage);
     }
 }

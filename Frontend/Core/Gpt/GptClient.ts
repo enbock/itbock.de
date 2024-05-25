@@ -1,5 +1,5 @@
-import ConversationRecordEntity from 'Core/Gpt/ConversationRecordEntity';
+import ConversationEntity from 'Core/Gpt/ConversationEntity';
 
 export default interface GptClient {
-    generalConversation(conversations: Array<ConversationRecordEntity>): Promise<ConversationRecordEntity>;
+    generalConversation(conversations: Array<ConversationEntity>): Promise<ConversationEntity>;
 }
