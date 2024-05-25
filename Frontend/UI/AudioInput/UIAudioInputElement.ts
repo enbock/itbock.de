@@ -118,7 +118,6 @@ export default class UIAudioInputElement extends HTMLElement {
         }
 
         this.detectedStartOfSpeech = this.detectedStartOfSpeech || minGainDetected;
-        this.innerText = (this.detectedStartOfSpeech ? '*' : '_') + ' ' + this.rmsFirstSecond + ' || ' + rms + ' || ' + rmsThresholdHigh + ' >> ' + diffThreshold;
 
         if (!this.detectedStartOfSpeech) return;
 
