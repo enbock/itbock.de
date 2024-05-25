@@ -36,13 +36,14 @@ export class Start extends Component implements RootComponent {
 
     render(): ShadowDomElement | ShadowDomElement[] {
         const model: StartModel = this.modelInstance;
-
+        
+        document.firstElementChild?.setAttribute('lang', model.languageCode);
         return <>
             <style>{Style}</style>
             <main-title>
                 <content>
-                    <page--title>Bock Laboratories - Terminal</page--title>
-                    {model.showThinking ? <h3>Ich denke, bitte warten...</h3> : <></>}
+                    <page--title>{model.i18n.pageTitle}</page--title>
+                    {model.showThinking ? <h3>{model.i18n.loadingText}</h3> : <></>}
                 </content>
                 <button--block>
                     {model.language}

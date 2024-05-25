@@ -24,6 +24,35 @@ export default class OpenAiSdk implements GptBackend {
         return this.parseResult(response);
     }
 
+    public async translate(language: string, data: Json): Promise<Json> {
+        const messages: Array<ChatCompletionMessageParam> = [
+            {
+                role: 'system',
+                content: `Translate the following content to ${language} language. 
+                    It is extrem important to keep the JSON structure and to translate only the values.
+                    The JSON structure must be identical to the user input.
+                `
+            },
+            {
+                role: 'user',
+                content: JSON.stringify(data)
+            }
+        ];
+
+        const response: ChatCompletion = await this.openai.chat.completions.create({
+            stream: false,
+            model: 'gpt-4o',
+            max_tokens: 2047,
+            presence_penalty: 0,
+            frequency_penalty: 0,
+            temperature: 0.3,
+            top_p: 1,
+            messages: messages
+        });
+
+        return this.parseTranslation(response, data);
+    }
+
     private parseResult(response: ChatCompletion): GptEntity {
         const gptMessage: ChatCompletionMessage = response.choices[0]?.message;
         console.log('GPT-Dump:', gptMessage);
@@ -36,6 +65,17 @@ export default class OpenAiSdk implements GptBackend {
         result.language = data.language || 'de-DE';
 
         return result;
+    }
+
+    private parseTranslation(response: ChatCompletion, data: Json): Json {
+        const gptMessage: ChatCompletionMessage = response.choices[0]?.message;
+        console.log('Translation GPT-Dump:', gptMessage);
+        try {
+            return JSON.parse(String(gptMessage.content));
+        } catch (error) {
+            console.warn('Translation JSON-GPT-Decode-Error:', error);
+            return data;
+        }
     }
 
     private parseGeneratedData(gptMessage: ChatCompletionMessage): Json {

@@ -18,9 +18,13 @@ export default class StartPresenter {
     public presentData(data: ResponseCollection): StartModel {
         const model: StartModel = new StartModel();
 
+        model.i18n.loadingText = data.i18n.start.loadingText;
+        model.i18n.pageTitle = data.i18n.start.pageTitle;
+
         model.showThinking = data.gptState.isLoading == true;
         model.showAudioText = data.audioState.isPlaying == true && data.audioState.isLoading == false;
         model.audioText = data.audioState.audioOutput.text;
+        model.languageCode = data.startState.language.slice(0, 2);
         model.language = data.startState.language
             ? String(
                 new Intl.DisplayNames([data.startState.language], {
@@ -37,7 +41,7 @@ export default class StartPresenter {
         model.oldPage = this.oldPagePresenter.present(data);
         model.conversation = this.conversationPresenter.present(data);
         model.audio = this.audioPresenter.present(data);
-        
+
         return model;
     }
 }

@@ -208,3 +208,51 @@ paths:
                   message:
                     type: string
                     example: "Unexpected error: <error_message>"
+
+  /i18n:
+    post:
+      summary: Übersetzt die bereitgestellten Daten in eine andere Sprache.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  example: {"key": "value"}
+                language:
+                  type: string
+                  example: "es-ES"
+      responses:
+        '200':
+          description: Übersetzung erfolgreich
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    example: {"key": "valor"}
+        '400':
+          description: Ungültige Anfrage
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Data and language are required"
+        '500':
+          description: Serverfehler
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unexpected error: <error_message>"

@@ -58,7 +58,7 @@ export default class Controller implements ShadowComponentReceiver {
     private async presentData(): Promise<void> {
         if (!this.startView) return;
 
-        const data: ResponseCollection = this.dataCollector.getData();
+        const data: ResponseCollection = await this.dataCollector.getData();
         this.startView.model = this.presenter.presentData(data);
     }
 }

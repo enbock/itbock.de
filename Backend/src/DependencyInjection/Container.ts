@@ -1,4 +1,3 @@
-import Handler from '../Application/Handler';
 import MfaService from '../Core/Mfa/MfaService';
 import S3TokenStore from '../Infrastructure/TokenStorage/S3TokenStore';
 import TokenPresenter from '../Application/Mfa/TokenPresenter';
@@ -6,7 +5,6 @@ import {S3} from '@aws-sdk/client-s3';
 import {authenticator} from 'otplib';
 import ParseHelper from '../ParseHelper';
 import GptBackend from '../Core/Gpt/GptBackend';
-import GptUseCase from '../Core/Gpt/GptUseCase';
 import BodyParser from '../Application/Gpt/BodyParser';
 import GptController from '../Application/Gpt/GptController';
 import OpenAI from 'openai';
@@ -18,6 +16,9 @@ import ValidateTokenController from '../Application/Mfa/ValidateTokenController'
 import AudioTransformController from '../Application/Audio/AudioTransformController';
 import AudioTransformUseCase from '../Core/Audio/AudioTransformUseCase';
 import OpenAiAudioTransform from '../Infrastructure/AudioTransformClient/OpenAiAudioTransform';
+import I18nUseCase from '../Core/Gpt/I18nUseCase/I18nUseCase';
+import I18nController from '../Application/I18n/I18nController';
+import GptUseCase from '../Core/Gpt/UseCase/GptUseCase';
 
 
 export class Container {
@@ -27,11 +28,9 @@ export class Container {
         this.s3, process.env.S3_BUCKET_NAME!, process.env.S3_TOKEN_PATH!
     );
     private mfaService: MfaService = new MfaService(this.appName, this.tokenStore, authenticator);
+    public validateTokenController: ValidateTokenController = new ValidateTokenController(this.mfaService);
     private tokenPresenter: TokenPresenter = new TokenPresenter();
-
-    private generateTokenController: GenerateTokenController = new GenerateTokenController(this.mfaService, this.tokenPresenter);
-    private validateTokenController: ValidateTokenController = new ValidateTokenController(this.mfaService);
-
+    public generateTokenController: GenerateTokenController = new GenerateTokenController(this.mfaService, this.tokenPresenter);
     private openAi: OpenAI = new OpenAI({
         organization: process.env.OPENAI_API_ORG || '',
         apiKey: process.env.OPENAI_API_KEY || ''
@@ -48,7 +47,7 @@ export class Container {
         this.audioSyntheseClient
     );
     private gptPresenter: GptPresenter = new GptPresenter();
-    private gptController: GptController = new GptController(
+    public gptController: GptController = new GptController(
         this.gptUseCase,
         this.bodyParser,
         this.gptPresenter
@@ -58,14 +57,12 @@ export class Container {
         this.openAi
     );
     private audioTransformUseCase: AudioTransformUseCase = new AudioTransformUseCase(this.audioTransformClient);
-    private audioTransformController: AudioTransformController = new AudioTransformController(this.audioTransformUseCase);
+    public audioTransformController: AudioTransformController = new AudioTransformController(this.audioTransformUseCase);
 
-    public handler: Handler = new Handler(
-        this.generateTokenController,
-        this.validateTokenController,
-        this.gptController,
-        this.audioTransformController
+    private i18nUseCase: I18nUseCase = new I18nUseCase(
+        this.gptBackend
     );
+    public i18nController: I18nController = new I18nController(this.i18nUseCase);
 }
 
 const DependencyInjectionContainer: Container = new Container();

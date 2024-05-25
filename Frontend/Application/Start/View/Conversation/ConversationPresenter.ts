@@ -10,17 +10,18 @@ export default class ConversationPresenter {
             .map(e => e)
             .reverse()
             .filter(c => c.text.trim().length > 0)
-            .map(c => this.presentConversation(c))
+            .map(c => this.presentConversation(c, data))
         ;
 
         return model;
     }
 
-    private presentConversation(conversation: ConversationEntity): string {
+    private presentConversation(conversation: ConversationEntity, data: ResponseCollection): string {
+        const i18n: Json = data.i18n.conversation;
         const map: Record<Role, string> = {
-            assistant: 'Assistent',
-            user: 'Benutzer',
-            system: 'System'
+            assistant: i18n.assistant,
+            user: i18n.user,
+            system: i18n.system
         };
         return map[conversation.role] + ': ' + conversation.text;
     }

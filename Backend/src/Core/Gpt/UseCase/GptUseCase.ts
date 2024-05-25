@@ -1,8 +1,8 @@
 import {ChatCompletionMessageParam} from 'openai/src/resources/chat/completions';
 import GeneralGptSceneSetup from './GeneralGptSceneSetup';
-import GptEntity from './GptEntity';
-import GptBackend from './GptBackend';
-import AudioSyntheseClient from '../AudioSyntheseClient';
+import GptEntity from '../GptEntity';
+import GptBackend from '../GptBackend';
+import AudioSyntheseClient from '../../AudioSyntheseClient';
 
 
 export default class GptUseCase {

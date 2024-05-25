@@ -40,6 +40,9 @@ import StartCase from 'Infrastructure/GptClient/Fake/Cases/StartCase';
 import EndOfTopicCase from 'Infrastructure/GptClient/Fake/Cases/EndOfTopicCase';
 import MuteMicrophone from 'Infrastructure/GptClient/Fake/Cases/MuteMicrophone';
 import OldHomepage from 'Infrastructure/GptClient/Fake/Cases/OldHomepage';
+import LanguageCacheMemory from 'Infrastructure/I18n/Cache/Memory';
+import LanguageTranslationClientRest from 'Infrastructure/I18n/Rest/LanguageTranslationClient';
+import LanguageUseCase from 'Core/I18n/UseCase/LanguageUseCase';
 
 class Container {
     private config: Config = new Config();
@@ -103,10 +106,19 @@ class Container {
         new ConversationPresenter(),
         new AudioPresenter()
     );
+    private languageCache: LanguageCacheMemory = new LanguageCacheMemory();
+    private languageTranslationClient: LanguageTranslationClientRest = new LanguageTranslationClientRest(
+        this.config.translationServiceUrl,
+        this.fetchHelper
+    );
     private startDataCollector: StartDataCollector = new StartDataCollector(
         this.audioStateUseCase,
         this.conversationUseCase,
-        this.startUseCase
+        this.startUseCase,
+        new LanguageUseCase(
+            this.languageTranslationClient,
+            this.languageCache
+        )
     );
     private startAdapter: StartAdapter = new StartAdapter();
     private audioAbortHandler: AudioAbortHandler = new AudioAbortHandler(this.startAdapter, this.inputUseCase, this.conversationUseCase, this.startUseCase);

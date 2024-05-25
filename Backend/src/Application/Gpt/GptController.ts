@@ -1,4 +1,4 @@
-import GptUseCase from '../../Core/Gpt/GptUseCase';
+import GptUseCase from '../../Core/Gpt/UseCase/GptUseCase';
 import GptEntity from '../../Core/Gpt/GptEntity';
 import BodyParser from './BodyParser';
 import {ChatCompletionMessageParam} from 'openai/src/resources/chat/completions';
