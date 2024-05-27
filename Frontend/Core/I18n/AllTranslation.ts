@@ -9,7 +9,8 @@ export default <Json>{
         linkLabel: 'Homepage von 2020'
     },
     startScreen: {
-        startLabel: 'Start'
+        startLabel: 'Start',
+        imageText: 'Star Trek Terminal Logo mit den EB-Initialen des Labors'
     },
     start: {
         pageTitle: 'Bock Laboratories - Terminal',

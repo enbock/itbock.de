@@ -36,7 +36,7 @@ export class Start extends Component implements RootComponent {
 
     render(): ShadowDomElement | ShadowDomElement[] {
         const model: StartModel = this.modelInstance;
-        
+
         document.firstElementChild?.setAttribute('lang', model.languageCode);
         return <>
             <style>{Style}</style>

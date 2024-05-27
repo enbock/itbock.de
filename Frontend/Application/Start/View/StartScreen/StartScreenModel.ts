@@ -1,5 +1,6 @@
 class I18n {
     public startLabel: string = 'Start';
+    public imageText: string = 'Star Trek Terminal Logo mit den EB-Initialen des Labors';
 }
 
 export default class StartScreenModel {

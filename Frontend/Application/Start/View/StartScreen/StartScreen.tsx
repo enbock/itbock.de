@@ -17,6 +17,7 @@ export default class StartScreen extends Component<Properties> {
     public render(): ShadowDomElement | ShadowDomElement[] {
         return <>
             <style>{Style}</style>
+            <img src="itbock_terminal.svg" alt={this.model.i18n.imageText}/>
             <button
                 right
                 onClick={() => this.onStartClick()}

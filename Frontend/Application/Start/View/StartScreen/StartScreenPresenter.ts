@@ -5,6 +5,7 @@ export default class StartScreenPresenter {
     public present(data: ResponseCollection): StartScreenModel {
         const model: StartScreenModel = new StartScreenModel();
         model.i18n.startLabel = data.i18n.startScreen.startLabel;
+        model.i18n.imageText = data.i18n.startScreen.imageText;
         return model;
     }
 }

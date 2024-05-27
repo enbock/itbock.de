@@ -12,6 +12,8 @@ export default class LanguageUseCase {
     }
 
     public async getI18n(request: TranslationRequest): Promise<Json> {
+        if (request.language == '') return AllTranslation;
+        
         const language: string = request.language.slice(0, 2);
         const translation: Json = this.cache.getTranslation(language);
         if (translation) return translation;

@@ -43,6 +43,9 @@ import OldHomepage from 'Infrastructure/GptClient/Fake/Cases/OldHomepage';
 import LanguageCacheMemory from 'Infrastructure/I18n/Cache/Memory';
 import LanguageTranslationClientRest from 'Infrastructure/I18n/Rest/LanguageTranslationClient';
 import LanguageUseCase from 'Core/I18n/UseCase/LanguageUseCase';
+import AudioFeedbackUseCase from 'Core/Audio/FeedbackUseCase/FeedbackUseCase';
+import AudioFeedbackClientBrowser from 'Infrastructure/Audio/Feedback/Client/Browser/Browser';
+import {FEEDBACK} from 'Core/Audio/AudioFeedbackClient';
 
 class Container {
     private config: Config = new Config();
@@ -91,14 +94,31 @@ class Container {
     private playbackUseCase: PlaybackUseCase = new PlaybackUseCase(
         this.audioStorage
     );
+    private audioFeedbackClientBrowser: AudioFeedbackClientBrowser = new AudioFeedbackClientBrowser(
+        {
+            [FEEDBACK.COMPUTER_BEEP]: [
+                'sounds/voiceinput1.wav',
+                'sounds/voiceinput2.wav'
+            ],
+            [FEEDBACK.SCREEN_ON]: [
+                'sounds/scrshow.wav'
+            ],
+            [FEEDBACK.SCREEN_OFF]: [
+                'sounds/scrhide.wav'
+            ]
+        },
+        document.body
+    );
     private conversationUseCase: ConversationUseCase = new ConversationUseCase(
         this.conversationStorage,
         this.gptClient,
         this.audioService,
-        this.startStorage
+        this.startStorage,
+        this.audioFeedbackClientBrowser
     );
     private startUseCase: StartUseCase = new StartUseCase(
-        this.startStorage
+        this.startStorage,
+        this.audioFeedbackClientBrowser
     );
     private startPresenter: StartPresenter = new StartPresenter(
         new StartScreenPresenter(),
@@ -122,6 +142,10 @@ class Container {
     );
     private startAdapter: StartAdapter = new StartAdapter();
     private audioAbortHandler: AudioAbortHandler = new AudioAbortHandler(this.startAdapter, this.inputUseCase, this.conversationUseCase, this.startUseCase);
+
+    private audioFeedbackUseCase: AudioFeedbackUseCase = new AudioFeedbackUseCase(
+        this.audioFeedbackClientBrowser
+    );
     private audioInputHandler: AudioInputHandler = new AudioInputHandler(
         this.startAdapter,
         this.inputUseCase,
@@ -133,7 +157,8 @@ class Container {
                 this.startUseCase,
                 this.inputUseCase
             )
-        ]
+        ],
+        this.audioFeedbackUseCase
     );
     private audioOutputHandler: AudioOutputHandler = new AudioOutputHandler(
         this.startAdapter,

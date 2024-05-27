@@ -22,7 +22,7 @@ export default class StartHandler implements ControllerHandler {
     }
 
     private async handleStart(): Promise<void> {
-        this.startUseCase.startApplication();
+        await this.startUseCase.startApplication();
         this.inputUseCase.restart();
         void this.presentData();
         await this.conversationUseCase.startConversation({

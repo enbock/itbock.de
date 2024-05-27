@@ -7,13 +7,15 @@ import AudioService from 'Core/Audio/AudioService';
 import StartStorage from 'Core/Start/StartStorage';
 import StateResponse from 'Core/Gpt/ConversationUseCase/Response/StateResponse';
 import Modules from 'Core/Start/Modules';
+import AudioFeedbackClient, {FEEDBACK} from 'Core/Audio/AudioFeedbackClient';
 
 export default class ConversationUseCase {
     constructor(
         private conversationStorage: ConversationStorage,
         private gptClient: GptClient,
         private audioService: AudioService,
-        private startStorage: StartStorage
+        private startStorage: StartStorage,
+        private audioFeedbackClient: AudioFeedbackClient
     ) {
     }
 
@@ -69,7 +71,7 @@ export default class ConversationUseCase {
     private async executeConversation(conversations: Array<ConversationEntity>): Promise<void> {
         const record: ConversationEntity = await this.gptClient.generalConversation(conversations);
 
-        this.handleCommands(record.commands);
+        await this.handleCommands(record.commands);
 
         const gptText: string = record.text.trim();
         if (gptText == '') {
@@ -92,9 +94,14 @@ export default class ConversationUseCase {
         this.conversationStorage.setLoading(false);
     }
 
-    private handleCommands(commands: Array<Command>): void {
+    private async handleCommands(commands: Array<Command>): Promise<void> {
         if (commands.includes('openOldPage')) this.startStorage.setModuleName(Modules.OLD_PAGE);
-        if (commands.includes('mute')) this.startStorage.setModuleName(Modules.START_SCREEN);
+        if (commands.includes('mute')) await this.switchToStartScreen();
         if (commands.includes('topicEnd')) this.audioService.suspend();
+    }
+
+    private async switchToStartScreen(): Promise<void> {
+        this.startStorage.setModuleName(Modules.START_SCREEN);
+        void this.audioFeedbackClient.play(FEEDBACK.SCREEN_OFF);
     }
 }

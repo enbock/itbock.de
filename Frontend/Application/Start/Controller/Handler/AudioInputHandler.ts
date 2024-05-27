@@ -4,6 +4,7 @@ import InputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
 import AudioInputReceiverHandler from 'Application/Start/Controller/Handler/AudioInputReceiverHandler';
 import InputResponse from 'Application/Start/Controller/Handler/InputResponse';
 import AudioTransformUseCase from 'Core/Audio/InputUseCase/AudioTransformUseCase';
+import FeedbackUseCase from 'Core/Audio/FeedbackUseCase/FeedbackUseCase';
 
 export default class AudioInputHandler implements ControllerHandler {
     private presentData: PresentDataCallback = () => <never>false;
@@ -12,7 +13,8 @@ export default class AudioInputHandler implements ControllerHandler {
         private adapter: Adapter,
         private inputUseCase: InputUseCase,
         private audioTransformUseCase: AudioTransformUseCase,
-        private receivers: Array<AudioInputReceiverHandler>
+        private receivers: Array<AudioInputReceiverHandler>,
+        private feedbackUseCase: FeedbackUseCase
     ) {
     }
 
@@ -22,6 +24,7 @@ export default class AudioInputHandler implements ControllerHandler {
     }
 
     public async handleAudioBlob(audioBase64: string): Promise<void> {
+        void this.feedbackUseCase.beep();
         const text: string = await this.audioTransformUseCase.transcribeAudio(audioBase64);
 
         const response: InputResponse = new InputResponse();

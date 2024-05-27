@@ -1,14 +1,17 @@
 import StartStorage from 'Core/Start/StartStorage';
 import Response from 'Core/Start/StartUseCase/Response';
 import Modules from 'Core/Start/Modules';
+import AudioFeedbackClient, {FEEDBACK} from 'Core/Audio/AudioFeedbackClient';
 
 export default class StartUseCase {
     constructor(
-        private startStorage: StartStorage
+        private startStorage: StartStorage,
+        private audioFeedbackClient: AudioFeedbackClient
     ) {
     }
 
-    public startApplication(): void {
+    public async startApplication(): Promise<void> {
+        void this.audioFeedbackClient.play(FEEDBACK.SCREEN_ON);
         this.startStorage.setModuleName(Modules.CONVERSATION);
     }
 
