@@ -5,7 +5,7 @@ const Dotenv = require('dotenv-webpack');
 
 // noinspection JSUnusedLocalSymbols
 module.exports = (env, argv) => {
-    const development = argv.mode === 'development';
+    // noinspection JSValidateTypes,SpellCheckingInspection
     return {
         entry: './Application/index.ts',
         target: 'web',
@@ -70,7 +70,7 @@ module.exports = (env, argv) => {
                 template: 'Application/public/index.html'
             }),
 
-            new Dotenv({})
+            new Dotenv({systemvars: true})
         ],
         output: {
             filename: 'bundle.[fullhash].js',

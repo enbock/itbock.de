@@ -27,8 +27,8 @@ import Encoder from 'Infrastructure/GptClient/Network/Encoder';
 import AudioAbortHandler from 'Application/Start/Controller/Handler/AudioAbortHandler';
 import AudioInputHandler from 'Application/Start/Controller/Handler/AudioInputHandler';
 import AudioOutputHandler from 'Application/Start/Controller/Handler/AudioOutputHandler';
-import ConversationInputHandler from 'Application/Start/Controller/Handler/ConversationInputHandler';
-import StandbyReceiver from 'Application/Start/Controller/Handler/StandbyReceiver';
+import AudioInputHandlerConversationInputHandler from 'Application/Start/Controller/Handler/ConversationInputHandler';
+import AudioInputHandlerStandbyReceiver from 'Application/Start/Controller/Handler/StandbyReceiver';
 import StartHandler from 'Application/Start/Controller/Handler/StartHandler';
 import StartAdapter from 'Application/Start/Adapter';
 import StartScreenPresenter from 'Application/Start/View/StartScreen/StartScreenPresenter';
@@ -146,17 +146,19 @@ class Container {
     private audioFeedbackUseCase: AudioFeedbackUseCase = new AudioFeedbackUseCase(
         this.audioFeedbackClientBrowser
     );
+    private audioInputHandlerStandbyReceiver: AudioInputHandlerStandbyReceiver = new AudioInputHandlerStandbyReceiver(this.inputUseCase);
+    private audioInputHandlerConversationInputHandler: AudioInputHandlerConversationInputHandler = new AudioInputHandlerConversationInputHandler(
+        this.conversationUseCase,
+        this.startUseCase,
+        this.inputUseCase
+    );
     private audioInputHandler: AudioInputHandler = new AudioInputHandler(
         this.startAdapter,
         this.inputUseCase,
         this.audioTransformUseCase,
         [
-            new StandbyReceiver(this.inputUseCase),
-            new ConversationInputHandler(
-                this.conversationUseCase,
-                this.startUseCase,
-                this.inputUseCase
-            )
+            this.audioInputHandlerStandbyReceiver,
+            this.audioInputHandlerConversationInputHandler
         ],
         this.audioFeedbackUseCase
     );
@@ -181,7 +183,8 @@ class Container {
             this.audioAbortHandler,
             this.audioInputHandler,
             this.audioOutputHandler,
-            this.startHandler
+            this.startHandler,
+            this.audioInputHandlerConversationInputHandler
         ],
         this.startDataCollector,
         navigator.language,
