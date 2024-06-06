@@ -14,7 +14,7 @@ export default class UIAudioInputElement extends HTMLElement {
     private mediaRecorder?: MediaRecorder;
     private recordedChunks: Array<Blob> = [];
     private silenceStartTime?: number;
-    private rmsMinMultiplier: number = 20;
+    private rmsMinMultiplier: number = 40;
     private rmsFirstSecond: number = 0;
     private recordStartTime: number = 0;
     private avgMeasureTime: number = 1500;
