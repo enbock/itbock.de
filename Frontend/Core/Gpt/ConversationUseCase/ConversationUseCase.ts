@@ -96,8 +96,8 @@ export default class ConversationUseCase {
 
     private async handleCommands(commands: Array<Command>): Promise<void> {
         if (commands.includes('openOldPage')) this.startStorage.setModuleName(Modules.OLD_PAGE);
-        if (commands.includes('mute')) await this.switchToStartScreen();
-        if (commands.includes('topicEnd')) this.audioService.suspend();
+        if (commands.includes('shutdown')) await this.switchToStartScreen();
+        if (commands.includes('suspend')) this.audioService.suspend();
     }
 
     private async switchToStartScreen(): Promise<void> {

@@ -3,12 +3,13 @@ import GeneralGptSceneSetup from './GeneralGptSceneSetup';
 import GptEntity from '../GptEntity';
 import GptBackend from '../GptBackend';
 import AudioSyntheseClient from '../../AudioSyntheseClient';
-
+import Command from '../Command/Command';
 
 export default class GptUseCase {
     constructor(
         private backend: GptBackend,
-        private audioSyntheseClient: AudioSyntheseClient
+        private audioSyntheseClient: AudioSyntheseClient,
+        private commands: Array<Command>
     ) {
     }
 
@@ -19,6 +20,12 @@ export default class GptUseCase {
             ...scene,
             ...pastConversation
         ]);
+
+        for (const command of this.commands) {
+            if (command.supports(result) == false) continue;
+            await command.execute(result);
+        }
+
         result.audio = await this.audioSyntheseClient.speech(result.say);
 
         return result;

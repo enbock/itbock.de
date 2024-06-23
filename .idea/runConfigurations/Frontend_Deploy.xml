@@ -6,9 +6,7 @@
       <script value="deploy" />
     </scripts>
     <node-interpreter value="project" />
-    <envs>
-      <env name="FAKE" value="false" />
-    </envs>
+    <envs />
     <method v="2" />
   </configuration>
 </component>

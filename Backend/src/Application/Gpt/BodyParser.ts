@@ -11,12 +11,11 @@ export default class BodyParser {
     public parseBody(body: string): Array<ChatCompletionMessageParam> {
         try {
             const data: Json = JSON.parse(body);
-            const conversation: Array<Json> = this.parseHelper.get<Array<Json> | undefined>(data, 'messages', []) || [];
+            const conversation: Array<Json> = this.parseHelper.get<Array<Json>>(data, 'messages', []) || [];
             return conversation.map(x => this.parse(x));
         } catch (error) {
-
+            return [];
         }
-        return [];
     }
 
     private parse(data: Json): ChatCompletionMessageParam {

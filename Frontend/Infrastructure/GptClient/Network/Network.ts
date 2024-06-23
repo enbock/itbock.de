@@ -33,6 +33,7 @@ export default class Network implements GptClient {
         entity.commands = (this.parseHelper.get<Array<Command>>(data, 'commands', []) || []).map(s => <Command>String(s));
         entity.audio = String(this.parseHelper.get<string>(data, 'audio', '') || '');
         entity.language = String(this.parseHelper.get<string>(data, 'language', '') || 'de-DE');
+        entity.data = this.parseHelper.get<Record<string, string>>(data, 'data', {}) || {};
 
         return entity;
     }

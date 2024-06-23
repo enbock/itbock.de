@@ -1,10 +1,10 @@
 import {ChatCompletion, ChatCompletionMessageParam} from 'openai/src/resources/chat/completions';
 import {ChatCompletionMessage} from 'openai/resources/chat';
 import OpenAI from 'openai';
-import GptEntity from '../../Core/Gpt/GptEntity';
-import GptBackend from '../../Core/Gpt/GptBackend';
+import GptEntity from '../../../Core/Gpt/GptEntity';
+import GptBackend from '../../../Core/Gpt/GptBackend';
 
-export default class OpenAiSdk implements GptBackend {
+export default class OpenAi implements GptBackend {
     constructor(
         private openai: OpenAI
     ) {
@@ -61,8 +61,10 @@ export default class OpenAiSdk implements GptBackend {
 
         result.say = String(data.content || '');
         result.commands = (data.commands || []).map((x: any) => String(x));
+        result.internalCommands = (data['internal-commands'] || []).map((x: any) => String(x));
         result.role = gptMessage.role;
         result.language = data.language || 'de-DE';
+        result.data = data.data || {};
 
         return result;
     }
@@ -91,7 +93,7 @@ export default class OpenAiSdk implements GptBackend {
 
     private checkForSingleText(gptMessage: ChatCompletionMessage): Json {
         const messageContent: string = gptMessage?.content || '';
-        if (messageContent.indexOf('{') > -1) {
+        if (messageContent.indexOf('{') != 0) {
             console.error('GPT-Message not parsable.');
             return {};
         }
@@ -99,9 +101,7 @@ export default class OpenAiSdk implements GptBackend {
         console.log('Use message as plain text');
 
         return {
-            say: messageContent,
-            command: '',
-            language: ''
+            content: messageContent
         };
     }
 }

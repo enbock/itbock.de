@@ -6,9 +6,7 @@
       <script value="start" />
     </scripts>
     <node-interpreter value="project" />
-    <envs>
-      <env name="FAKE" value="true" />
-    </envs>
+    <envs />
     <method v="2" />
   </configuration>
 </component>

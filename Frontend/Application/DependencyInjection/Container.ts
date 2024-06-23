@@ -37,8 +37,8 @@ import ConversationPresenter from 'Application/Start/View/Conversation/Conversat
 import AudioPresenter from 'Application/Start/View/Audio/AudioPresenter';
 import Fake from 'Infrastructure/GptClient/Fake/Fake';
 import StartCase from 'Infrastructure/GptClient/Fake/Cases/StartCase';
-import EndOfTopicCase from 'Infrastructure/GptClient/Fake/Cases/EndOfTopicCase';
-import MuteMicrophone from 'Infrastructure/GptClient/Fake/Cases/MuteMicrophone';
+import Suspend from 'Infrastructure/GptClient/Fake/Cases/Suspend';
+import ShutdownTerminal from 'Infrastructure/GptClient/Fake/Cases/ShutdownTerminal';
 import OldHomepage from 'Infrastructure/GptClient/Fake/Cases/OldHomepage';
 import LanguageCacheMemory from 'Infrastructure/I18n/Cache/Memory';
 import LanguageTranslationClientRest from 'Infrastructure/I18n/Rest/LanguageTranslationClient';
@@ -60,8 +60,8 @@ class Container {
         ? new Fake(
             [
                 new StartCase(),
-                new EndOfTopicCase(),
-                new MuteMicrophone(),
+                new Suspend(),
+                new ShutdownTerminal(),
                 new OldHomepage()
             ]
         )

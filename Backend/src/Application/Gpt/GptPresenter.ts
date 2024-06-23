@@ -7,7 +7,8 @@ export default class GptPresenter {
             say: gpt.say,
             role: gpt.role,
             language: gpt.language,
-            audio: gpt.audio
+            audio: gpt.audio,
+            data: gpt.data
         });
     }
 }

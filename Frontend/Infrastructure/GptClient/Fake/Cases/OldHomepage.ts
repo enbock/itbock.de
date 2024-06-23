@@ -11,7 +11,7 @@ export default class OldHomepage implements FakeCase {
     public run(conversations: Array<ConversationEntity>, result: ConversationEntity): void {
         result.text = 'Link zur alten Homepage wird angezeigt.';
         result.role = 'assistant';
-        result.commands = ['openOldPage', 'topicEnd'];
+        result.commands = ['openOldPage', 'suspend'];
         result.audio = FakeAudio;
     }
 }

@@ -1,4 +1,4 @@
-import TokenStorage from '../../Core/TokenStorage';
+import TokenStorage from '../../../Core/TokenStorage';
 import {GetObjectCommandInput, PutObjectCommandInput, S3} from '@aws-sdk/client-s3';
 import {GetObjectCommandOutput} from '@aws-sdk/client-s3/dist-types/commands/GetObjectCommand';
 
