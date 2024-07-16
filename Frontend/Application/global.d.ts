@@ -4,11 +4,7 @@ type throwsErrorOrReturn<E extends Error, T> = T;
 type throwsError<E extends Error> = void;
 type Callback<Function = () => Promise<void>> = Function;
 type MockedObject<T = any> = SpyObj<T>;
-type Json = any;
-
-type Factorizable<T> = {
-    factory(...args: any[]): T
-}
+type JsonData = any;
 
 declare namespace JSX {
     type Element = any;

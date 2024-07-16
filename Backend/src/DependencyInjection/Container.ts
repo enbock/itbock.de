@@ -25,19 +25,31 @@ import UserParser from '../Infrastructure/UserStorage/S3/UserParser';
 import UserEncoder from '../Infrastructure/UserStorage/S3/UserEncoder';
 import Command from '../Core/Gpt/Command/Command';
 import AuthorizeCommand from '../Core/Gpt/Command/AuthorizeCommand';
+import StartReplicationController from '../Application/Replication/Start/StartReplicationController';
+import StartReplicationUseCase from '../Core/Start/UseCase/StartReplicationUseCase';
+import StartReplicationStorageS3 from '../Infrastructure/Start/ReplicationStorage/S3/S3Storage';
+import StartReplicationParser from '../Infrastructure/Start/ReplicationStorage/S3/ReplicationParser';
+import StartReplicationEncoder from '../Infrastructure/Start/ReplicationStorage/S3/ReplicationEncoder';
+import StartReplicationPresenter from '../Application/Replication/Start/StartReplicationPresenter';
 
 export class Container {
     private appName: string = 'Bock-Laboratories';
     private s3: S3 = new S3();
 
     private tokenStore: S3TokenStore = new S3TokenStore(
-        this.s3, process.env.S3_BUCKET_NAME!, process.env.S3_TOKEN_PATH!
+        this.s3,
+        process.env.S3_BUCKET_NAME!,
+        process.env.S3_TOKEN_PATH!
     );
     private parseHelper: ParseHelper = new ParseHelper();
     private userParser: UserParser = new UserParser(this.parseHelper);
     private userEncoder: UserEncoder = new UserEncoder();
     private userStorage: UserStorage = new S3UserStore(
-        this.s3, process.env.S3_BUCKET_NAME!, `${process.env.S3_USER_DATA_PATH!}`, this.userParser, this.userEncoder
+        this.s3,
+        process.env.S3_BUCKET_NAME!,
+        process.env.S3_USER_DATA_PATH!,
+        this.userParser,
+        this.userEncoder
     );
     private mfaService: MfaService = new MfaService(this.appName, this.tokenStore, authenticator);
 
@@ -79,7 +91,22 @@ export class Container {
     private i18nUseCase: I18nUseCase = new I18nUseCase(
         this.gptBackend
     );
+    private startReplicationUseCase: StartReplicationUseCase = new StartReplicationUseCase(
+        new StartReplicationStorageS3(
+            this.s3,
+            process.env.S3_BUCKET_NAME!,
+            process.env.S3_SESSION_PATH!,
+            new StartReplicationParser(
+                this.parseHelper
+            ),
+            new StartReplicationEncoder()
+        )
+    );
     public i18nController: I18nController = new I18nController(this.i18nUseCase);
+    public startReplicationController: StartReplicationController = new StartReplicationController(
+        this.startReplicationUseCase,
+        new StartReplicationPresenter()
+    );
 }
 
 const DependencyInjectionContainer: Container = new Container();

@@ -1,21 +1,6 @@
 {
-  "name": "ai-webpage-itbock.de-2024",
-  "version": "1.0.0",
-  "dependencies": {
-    "@aws-sdk/client-polly": "*",
-    "@enbock/ts-jsx": "*",
-    "@types/jsdom": "*",
-    "@types/node": "*",
-    "copy-webpack-plugin": "*",
-    "css-loader": "*",
-    "html-webpack-plugin": "*",
-    "jsdom": "*",
-    "ts-loader": "*",
-    "typescript": "*",
-    "webpack": "*",
-    "webpack-cli": "*",
-    "webpack-dev-server": "*"
-  },
+  "name": "ai-webpage-itbock.de",
+  "version": "2.0.0",
   "scripts": {
     "dev:ai": "npx ai-code-writer",
     "start": "webpack serve --open --mode development --no-open --no-live-reload --no-hot --stats-error-details",
@@ -26,9 +11,24 @@
     "build:service-worker-manager:compile": "tsc Application/ServiceWorkerManager.ts --module esnext --target esnext --moduleResolution node --outdir build",
     "build:service-worker-manager:update": "node scripts/buildServiceWorker.js"
   },
-  "devDependencies": {
+  "dependencies": {
+    "@aws-sdk/client-polly": "*",
+    "@enbock/ts-jsx": "*",
+    "@types/jsdom": "*",
+    "@types/node": "*",
+    "@types/uuid": "*",
+    "copy-webpack-plugin": "*",
+    "css-loader": "*",
+    "html-webpack-plugin": "*",
+    "jsdom": "*",
+    "ts-loader": "*",
+    "typescript": "*",
+    "uuid": "*",
+    "webpack": "*",
+    "webpack-cli": "*",
+    "webpack-dev-server": "*",
     "dotenv": "*",
     "dotenv-webpack": "*",
-    "npm-run-all": "^4.1.5"
+    "npm-run-all": "*"
   }
 }

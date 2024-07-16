@@ -7,7 +7,7 @@ export default class AudioPresenter {
         const model: AudioModel = new AudioModel();
 
         this.presentTextToAudio(model, data.audioState);
-        model.isLoading = data.audioState.isLoading == true;
+        model.isLoading = data.audioState.isAudioLoading == true;
         model.doListening = data.audioState.audioInputEnabled == true;
         model.microphoneEnabled = data.audioState.microphoneEnable == true;
 

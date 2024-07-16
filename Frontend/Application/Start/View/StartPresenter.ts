@@ -3,7 +3,6 @@ import ResponseCollection from 'Application/Start/Controller/Response/ResponseCo
 import StartScreenPresenter from 'Application/Start/View/StartScreen/StartScreenPresenter';
 import OldPagePresenter from 'Application/Start/View/OldPage/OldPagePresenter';
 import ConversationPresenter from 'Application/Start/View/Conversation/ConversationPresenter';
-import Modules from 'Core/Start/Modules';
 import AudioPresenter from 'Application/Start/View/Audio/AudioPresenter';
 
 export default class StartPresenter {
@@ -16,13 +15,10 @@ export default class StartPresenter {
     }
 
     public presentData(data: ResponseCollection): StartModel {
-        const model: StartModel = new StartModel();
-
-        model.i18n.loadingText = data.i18n.start.loadingText;
-        model.i18n.pageTitle = data.i18n.start.pageTitle;
+        const model: StartModel = new StartModel(data.i18n.start);
 
         model.showThinking = data.gptState.isLoading == true;
-        model.showAudioText = data.audioState.isPlaying == true && data.audioState.isLoading == false;
+        model.showAudioText = data.audioState.isAudioPlaying == true && data.audioState.isAudioLoading == false;
         model.audioText = data.audioState.audioOutput.text;
         model.languageCode = data.startState.language.slice(0, 2);
         model.language = data.startState.language
@@ -33,9 +29,9 @@ export default class StartPresenter {
             )
             : '';
 
-        model.showStartScreen = data.startState.module == Modules.START_SCREEN;
-        model.showOldPage = data.startState.module == Modules.OLD_PAGE;
-        model.showConversation = data.startState.module == Modules.CONVERSATION;
+        model.showStartScreen = data.replication.module == 'START_SCREEN';
+        model.showOldPage = data.replication.module == 'OLD_PAGE';
+        model.showConversation = data.replication.module == 'CONVERSATION';
 
         model.startScreen = this.startScreenPresenter.present(data);
         model.oldPage = this.oldPagePresenter.present(data);

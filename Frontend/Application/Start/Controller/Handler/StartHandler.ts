@@ -30,7 +30,6 @@ export default class StartHandler implements ControllerHandler {
         });
         const state: StartStateResponse = new StartStateResponse();
         this.startUseCase.getState(state);
-        this.inputUseCase.updateByModule({module: state.module});
         void this.presentData();
     }
 }

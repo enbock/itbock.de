@@ -21,5 +21,9 @@ export default class StartModel {
     public conversation: ConversationModel = new ConversationModel();
     public oldPage: OldPageModel = new OldPageModel();
     public startScreen: StartScreenModel = new StartScreenModel();
-    public i18n: I18n = new I18n();
+
+    constructor(
+        public i18n: I18n
+    ) {
+    }
 }

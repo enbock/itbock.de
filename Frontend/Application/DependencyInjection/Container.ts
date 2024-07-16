@@ -1,6 +1,6 @@
 import FetchHelper from 'Infrastructure/ApiHelper/FetchHelper';
 import ParseHelper from 'Infrastructure/ParseHelper';
-import StartControllerController from 'Application/Start/Controller/Controller';
+import StartController from 'Application/Start/Controller/Controller';
 import renderApplication, {Start} from 'Application/Start/View/Start';
 import ViewInjection from '@enbock/ts-jsx/ViewInjection';
 import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
@@ -23,7 +23,7 @@ import AudioStateUseCase from 'Core/Audio/StateUseCase/StateUseCase';
 import PlaybackUseCase from 'Core/Audio/PlaybackUseCase/PlaybackUseCase';
 import GptClient from 'Core/Gpt/GptClient';
 import NetworkGptClient from 'Infrastructure/GptClient/Network/Network';
-import Encoder from 'Infrastructure/GptClient/Network/Encoder';
+import GptClientNetworkEncoder from 'Infrastructure/GptClient/Network/Encoder';
 import AudioAbortHandler from 'Application/Start/Controller/Handler/AudioAbortHandler';
 import AudioInputHandler from 'Application/Start/Controller/Handler/AudioInputHandler';
 import AudioOutputHandler from 'Application/Start/Controller/Handler/AudioOutputHandler';
@@ -46,16 +46,29 @@ import LanguageUseCase from 'Core/I18n/UseCase/LanguageUseCase';
 import AudioFeedbackUseCase from 'Core/Audio/FeedbackUseCase/FeedbackUseCase';
 import AudioFeedbackClientBrowser from 'Infrastructure/Audio/Feedback/Client/Browser/Browser';
 import {FEEDBACK} from 'Core/Audio/AudioFeedbackClient';
+import StartReplicationUseCase from 'Core/Start/ReplicationUseCase/ReplicationUseCase';
+import StartReplicationCacheMemory from 'Infrastructure/Start/Replication/Cache/Memory/Memory';
+import StartReplicationClientNetwork from 'Infrastructure/Start/Replication/Client/Network/Network';
+import StartReplicationClientNetworkParser from 'Infrastructure/Start/Replication/Client/Network/Parser';
+import StartReplicationClientNetworkEncoder from 'Infrastructure/Start/Replication/Client/Network/Encoder';
+import ReplicationSessionService from 'Core/Replication/SessionService';
+import {v4} from 'uuid';
+import ReplicationSessionStorageMemory from 'Infrastructure/Replication/SessionStorage/Memory/Memory';
+import StartControllerReplicationPollHandler from 'Application/Start/Controller/Handler/ReplicationPollHandler';
+import ReplicationPollHandler from 'Application/Start/Controller/Handler/ReplicationPollHandler';
+import TimeHelper from 'Application/Start/TimeHelper/TimeHelper';
 
 class Container {
     private config: Config = new Config();
     private fetchHelper: FetchHelper = new FetchHelper();
     private parseHelper: ParseHelper = new ParseHelper();
+    private timeHelper: TimeHelper = new TimeHelper();
+
     private audioTransformClient: AudioTransformClient = new NetworkAudioTransformClient(
         this.fetchHelper,
         this.config.transformUrl
     );
-    private encoder: Encoder = new Encoder();
+    private encoder: GptClientNetworkEncoder = new GptClientNetworkEncoder();
     private gptClient: GptClient = this.config.useFakeApi
         ? new Fake(
             [
@@ -83,11 +96,9 @@ class Container {
     );
     private inputUseCase: InputUseCase = new InputUseCase(
         this.audioStorage,
-        this.config.wakeupWords,
-        this.startStorage
+        this.config.wakeupWords
     );
     private audioStateUseCase: AudioStateUseCase = new AudioStateUseCase(
-        this.startStorage,
         this.audioService,
         this.audioStorage
     );
@@ -131,6 +142,23 @@ class Container {
         this.config.translationServiceUrl,
         this.fetchHelper
     );
+    private replicationSessionService: ReplicationSessionService = new ReplicationSessionService(
+        v4,
+        new ReplicationSessionStorageMemory()
+    );
+    private startReplicationUseCase: StartReplicationUseCase = new StartReplicationUseCase(
+        new StartReplicationCacheMemory(),
+        new StartReplicationClientNetwork(
+            this.fetchHelper,
+            new StartReplicationClientNetworkEncoder(
+                this.config.replicationUrlStart
+            ),
+            new StartReplicationClientNetworkParser(
+                this.parseHelper
+            )
+        ),
+        this.replicationSessionService
+    );
     private startDataCollector: StartDataCollector = new StartDataCollector(
         this.audioStateUseCase,
         this.conversationUseCase,
@@ -138,7 +166,8 @@ class Container {
         new LanguageUseCase(
             this.languageTranslationClient,
             this.languageCache
-        )
+        ),
+        this.startReplicationUseCase
     );
     private startAdapter: StartAdapter = new StartAdapter();
     private audioAbortHandler: AudioAbortHandler = new AudioAbortHandler(this.startAdapter, this.inputUseCase, this.conversationUseCase, this.startUseCase);
@@ -149,8 +178,7 @@ class Container {
     private audioInputHandlerStandbyReceiver: AudioInputHandlerStandbyReceiver = new AudioInputHandlerStandbyReceiver(this.inputUseCase);
     private audioInputHandlerConversationInputHandler: AudioInputHandlerConversationInputHandler = new AudioInputHandlerConversationInputHandler(
         this.conversationUseCase,
-        this.startUseCase,
-        this.inputUseCase
+        this.startUseCase
     );
     private audioInputHandler: AudioInputHandler = new AudioInputHandler(
         this.startAdapter,
@@ -172,7 +200,12 @@ class Container {
         this.conversationUseCase,
         this.startAdapter
     );
-    public startControllerController: StartControllerController = new StartControllerController(
+    private startControllerReplicationPollHandler: ReplicationPollHandler = new StartControllerReplicationPollHandler(
+        this.timeHelper,
+        this.startReplicationUseCase,
+        this.config.replicationPollTime
+    );
+    public startController: StartController = new StartController(
         document,
         renderApplication,
         Start,
@@ -184,14 +217,14 @@ class Container {
             this.audioInputHandler,
             this.audioOutputHandler,
             this.startHandler,
-            this.audioInputHandlerConversationInputHandler
+            this.audioInputHandlerConversationInputHandler,
+            this.startControllerReplicationPollHandler
         ],
         this.startDataCollector,
         navigator.language,
         new InputUseCase(
             this.audioStorage,
-            this.config.wakeupWords,
-            this.startStorage
+            this.config.wakeupWords
         )
     );
 

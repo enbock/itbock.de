@@ -8,7 +8,7 @@ export default class Encoder {
             });
     }
 
-    private encodeConversation(conversation: ConversationEntity): Json {
+    private encodeConversation(conversation: ConversationEntity): JsonData {
         return {
             content: conversation.text,
             role: conversation.role,

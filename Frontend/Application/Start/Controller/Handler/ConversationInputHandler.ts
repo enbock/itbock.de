@@ -5,13 +5,11 @@ import AudioInputReceiverHandler from 'Application/Start/Controller/Handler/Audi
 import ConversationUseCase from 'Core/Gpt/ConversationUseCase/ConversationUseCase';
 import StartStateResponse from 'Application/Start/Controller/Response/StartStateResponse';
 import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
-import InputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
 
 export default class ConversationInputHandler implements ControllerHandler, AudioInputReceiverHandler {
     constructor(
         private conversationUseCase: ConversationUseCase,
-        private startUseCase: StartUseCase,
-        private inputUseCase: InputUseCase
+        private startUseCase: StartUseCase
     ) {
     }
 
@@ -38,7 +36,6 @@ export default class ConversationInputHandler implements ControllerHandler, Audi
 
         const state: StartStateResponse = new StartStateResponse();
         this.startUseCase.getState(state);
-        this.inputUseCase.updateByModule({module: state.module});
 
         void this.presentData();
     }

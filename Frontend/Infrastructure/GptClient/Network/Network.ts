@@ -26,7 +26,7 @@ export default class Network implements GptClient {
 
         this.fetchHelper.isResponseSuccessful(response);
 
-        const data: Json = await response.json();
+        const data: JsonData = await response.json();
 
         entity.text = String(this.parseHelper.get<string>(data, 'say', 'Netzwerkfehler') || 'Datenfehler');
         entity.role = String(this.parseHelper.get<string>(data, 'role', 'user') || 'user') as Role;

@@ -2,15 +2,11 @@ import AudioStorage from 'Core/Audio/AudioStorage';
 import EndOfInputRequest from 'Core/Audio/InputUseCase/EndOfInputRequest';
 import FinishedInputResponse from 'Core/Audio/InputUseCase/FinishedInputResponse';
 import Channel from 'Core/Audio/InputUseCase/Channel';
-import {UpdateRequest} from 'Core/Audio/InputUseCase/UpdateRequest';
-import Modules from 'Core/Start/Modules';
-import StartStorage from 'Core/Start/StartStorage';
 
 export default class InputUseCase {
     constructor(
         private audioStorage: AudioStorage,
-        private wakeUpWords: Array<string>,
-        private startStorage: StartStorage
+        private wakeUpWords: Array<string>
     ) {
     }
 
@@ -58,10 +54,5 @@ export default class InputUseCase {
 
         this.audioStorage.setSuspended(false);
         response.channel = Channel.DEFAULT;
-        this.startStorage.setModuleName(Modules.CONVERSATION);
-    }
-
-    public updateByModule(request: UpdateRequest): void {
-        if (request.module == Modules.START_SCREEN) this.initialize();
     }
 }

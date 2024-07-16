@@ -5,8 +5,7 @@ export default class OldPagePresenter {
     public present(data: ResponseCollection): OldPageModel {
         const model: OldPageModel = new OldPageModel();
 
-        model.i18n.linkLabel = data.i18n.oldPage.linkLabel;
-        model.i18n.title = data.i18n.oldPage.title;
+        model.i18n = data.i18n;
 
         return model;
     }

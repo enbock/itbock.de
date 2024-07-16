@@ -15,6 +15,6 @@ console.log(`
 `);
 
 
-const RootDependency: StartController = DependencyInjectionContainer.startControllerController;
+const RootDependency: StartController = DependencyInjectionContainer.startController;
 
 RootDependency.start();

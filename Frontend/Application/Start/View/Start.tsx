@@ -16,7 +16,7 @@ export default function renderApplication(document: Document) {
 }
 
 export class Start extends Component implements RootComponent {
-    private modelInstance: StartModel = new StartModel();
+    private modelInstance: StartModel = new StartModel({} as any);
 
     constructor(
         props: Readonly<ComponentProperties>,

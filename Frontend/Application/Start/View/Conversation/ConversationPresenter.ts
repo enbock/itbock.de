@@ -17,7 +17,7 @@ export default class ConversationPresenter {
     }
 
     private presentConversation(conversation: ConversationEntity, data: ResponseCollection): string {
-        const i18n: Json = data.i18n.conversation;
+        const i18n: JsonData = data.i18n.conversation;
         const map: Record<Role, string> = {
             assistant: i18n.assistant,
             user: i18n.user,

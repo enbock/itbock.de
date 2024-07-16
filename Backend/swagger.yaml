@@ -221,7 +221,7 @@ paths:
               properties:
                 data:
                   type: object
-                  example: {"key": "value"}
+                  example: { "key": "value" }
                 language:
                   type: string
                   example: "es-ES"
@@ -235,7 +235,7 @@ paths:
                 properties:
                   data:
                     type: object
-                    example: {"key": "valor"}
+                    example: { "key": "valor" }
         '400':
           description: Ungültige Anfrage
           content:
@@ -256,3 +256,26 @@ paths:
                   message:
                     type: string
                     example: "Unexpected error: <error_message>"
+
+  /replication/start:
+    get:
+      parameters:
+        - name: sessionId
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Start Domain Replication Data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  module:
+                    type: string
+                    enum:
+                      - 'START_SCREEN'
+                      - 'OLD_PAGE'
+                      - 'CONVERSATION'
+                    example: 'START_SCREEN'
+

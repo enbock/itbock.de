@@ -1,14 +1,17 @@
 import Method from './Method';
 
+export class RequestError extends Error {
+}
+
 export default class FetchHelper {
-    public createHeader(method: Method, body?: BodyInit): RequestInit {
+    public createHeader(method: Method, body?: BodyInit, headers: any = {}): RequestInit {
         const isFileUpload: boolean = body instanceof FormData;
-        const headers: any = {};
+        const headerOptions: any = headers || {};
         if (!isFileUpload && body) {
-            headers['content-type'] = 'application/json';
+            headerOptions['content-type'] = 'application/json';
         }
         const headerData: RequestInit = {
-            headers: new Headers(headers),
+            headers: new Headers(headerOptions),
             method: method,
             mode: 'cors'
         } as RequestInit;
@@ -20,5 +23,11 @@ export default class FetchHelper {
 
     public isResponseSuccessful(response: Response): boolean {
         return response.status >= 200 && response.status < 300;
+    }
+
+    public assertSuccess(response: Response): void {
+        if (this.isResponseSuccessful(response)) return;
+
+        throw new RequestError();
     }
 }

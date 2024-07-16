@@ -6,7 +6,6 @@ import GptClient from 'Core/Gpt/GptClient';
 import AudioService from 'Core/Audio/AudioService';
 import StartStorage from 'Core/Start/StartStorage';
 import StateResponse from 'Core/Gpt/ConversationUseCase/Response/StateResponse';
-import Modules from 'Core/Start/Modules';
 import AudioFeedbackClient, {FEEDBACK} from 'Core/Audio/AudioFeedbackClient';
 
 export default class ConversationUseCase {
@@ -95,13 +94,11 @@ export default class ConversationUseCase {
     }
 
     private async handleCommands(commands: Array<Command>): Promise<void> {
-        if (commands.includes('openOldPage')) this.startStorage.setModuleName(Modules.OLD_PAGE);
         if (commands.includes('shutdown')) await this.switchToStartScreen();
         if (commands.includes('suspend')) this.audioService.suspend();
     }
 
     private async switchToStartScreen(): Promise<void> {
-        this.startStorage.setModuleName(Modules.START_SCREEN);
         void this.audioFeedbackClient.play(FEEDBACK.SCREEN_OFF);
     }
 }

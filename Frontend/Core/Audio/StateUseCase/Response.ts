@@ -2,8 +2,8 @@ import {AudioBuffer} from 'Core/Audio/AudioStorage';
 
 export default interface Response {
     microphoneEnable: boolean;
-    isLoading: boolean;
+    isAudioLoading: boolean;
     audioInputEnabled: boolean;
     audioOutput: AudioBuffer;
-    isPlaying: boolean;
+    isAudioPlaying: boolean;
 }

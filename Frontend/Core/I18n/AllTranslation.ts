@@ -1,4 +1,4 @@
-export default <Json>{
+export default <JsonData>{
     conversation: {
         assistant: 'Assistent',
         user: 'Benutzer',
