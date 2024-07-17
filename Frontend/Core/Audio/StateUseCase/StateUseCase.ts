@@ -13,7 +13,6 @@ export default class StateUseCase {
         response.audioOutput = this.audioService.getAudioContent();
         response.audioInputEnabled = this.audioStorage.getListening() == true && this.audioStorage.getMicrophoneMuted() == false;
         response.microphoneEnable = this.audioStorage.getMicrophoneMuted() == false;
-        response.isAudioLoading = this.audioStorage.getLoading();
         response.isAudioPlaying = this.audioStorage.getPlaying();
     }
 }

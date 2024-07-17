@@ -20,7 +20,6 @@ import StartStorage from 'Core/Start/StartStorage';
 import MemoryStartStorage from 'Infrastructure/Storage/Start/Memory';
 import AudioTransformUseCase from 'Core/Audio/InputUseCase/AudioTransformUseCase';
 import AudioStateUseCase from 'Core/Audio/StateUseCase/StateUseCase';
-import PlaybackUseCase from 'Core/Audio/PlaybackUseCase/PlaybackUseCase';
 import GptClient from 'Core/Gpt/GptClient';
 import NetworkGptClient from 'Infrastructure/GptClient/Network/Network';
 import GptClientNetworkEncoder from 'Infrastructure/GptClient/Network/Encoder';
@@ -57,12 +56,16 @@ import ReplicationSessionStorageMemory from 'Infrastructure/Replication/SessionS
 import StartControllerReplicationPollHandler from 'Application/Start/Controller/Handler/ReplicationPollHandler';
 import ReplicationPollHandler from 'Application/Start/Controller/Handler/ReplicationPollHandler';
 import TimeHelper from 'Application/Start/TimeHelper/TimeHelper';
+import AudioOutputDevice from 'Application/Start/View/Audio/AudioOutputDevice';
+import PlaybackUseCase from 'Core/Audio/PlaybackUseCase/PlaybackUseCase';
 
 class Container {
     private config: Config = new Config();
     private fetchHelper: FetchHelper = new FetchHelper();
     private parseHelper: ParseHelper = new ParseHelper();
     private timeHelper: TimeHelper = new TimeHelper();
+    
+    private startAdapter: StartAdapter = new StartAdapter();
 
     private audioTransformClient: AudioTransformClient = new NetworkAudioTransformClient(
         this.fetchHelper,
@@ -102,9 +105,6 @@ class Container {
         this.audioService,
         this.audioStorage
     );
-    private playbackUseCase: PlaybackUseCase = new PlaybackUseCase(
-        this.audioStorage
-    );
     private audioFeedbackClientBrowser: AudioFeedbackClientBrowser = new AudioFeedbackClientBrowser(
         {
             [FEEDBACK.COMPUTER_BEEP]: [
@@ -131,11 +131,16 @@ class Container {
         this.startStorage,
         this.audioFeedbackClientBrowser
     );
+    private audioOutputDevice: AudioOutputDevice = new AudioOutputDevice(
+        this.startAdapter
+    );
     private startPresenter: StartPresenter = new StartPresenter(
         new StartScreenPresenter(),
         new OldPagePresenter(),
         new ConversationPresenter(),
-        new AudioPresenter()
+        new AudioPresenter(
+            this.audioOutputDevice
+        )
     );
     private languageCache: LanguageCacheMemory = new LanguageCacheMemory();
     private languageTranslationClient: LanguageTranslationClientRest = new LanguageTranslationClientRest(
@@ -169,7 +174,6 @@ class Container {
         ),
         this.startReplicationUseCase
     );
-    private startAdapter: StartAdapter = new StartAdapter();
     private audioAbortHandler: AudioAbortHandler = new AudioAbortHandler(this.startAdapter, this.inputUseCase, this.conversationUseCase, this.startUseCase);
 
     private audioFeedbackUseCase: AudioFeedbackUseCase = new AudioFeedbackUseCase(
@@ -189,6 +193,9 @@ class Container {
             this.audioInputHandlerConversationInputHandler
         ],
         this.audioFeedbackUseCase
+    );
+    private playbackUseCase: PlaybackUseCase = new PlaybackUseCase(
+        this.audioStorage
     );
     private audioOutputHandler: AudioOutputHandler = new AudioOutputHandler(
         this.startAdapter,

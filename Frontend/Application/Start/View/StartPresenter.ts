@@ -18,7 +18,7 @@ export default class StartPresenter {
         const model: StartModel = new StartModel(data.i18n.start);
 
         model.showThinking = data.gptState.isLoading == true;
-        model.showAudioText = data.audioState.isAudioPlaying == true && data.audioState.isAudioLoading == false;
+        model.showAudioText = data.audioState.isAudioPlaying == true;
         model.audioText = data.audioState.audioOutput.text;
         model.languageCode = data.startState.language.slice(0, 2);
         model.language = data.startState.language

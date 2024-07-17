@@ -28,7 +28,6 @@ export default class InputUseCase {
     public restart(): void {
         this.audioStorage.setMicrophoneMuted(false);
         this.audioStorage.setListening(false);
-        this.audioStorage.setLoading(false);
         this.audioStorage.setPlaying(false);
         this.audioStorage.setBuffer([]);
         this.audioStorage.setPlayingText({text: '', audio: ''});

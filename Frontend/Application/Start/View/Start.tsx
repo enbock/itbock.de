@@ -1,7 +1,7 @@
 import Component, {ComponentProperties} from '@enbock/ts-jsx/Component';
 import {ShadowDomElement} from '@enbock/ts-jsx/ShadowDom';
 import ShadowRenderer from '@enbock/ts-jsx/ShadowRenderer';
-import Audio from 'Application/Start/View/Audio/Audio';
+import AudioInput from 'Application/Start/View/Audio/AudioInput';
 import StartModel from 'Application/Start/View/StartModel';
 import RootComponent from 'Application/RootComponent';
 import Style from './Start.css';
@@ -75,7 +75,7 @@ export class Start extends Component implements RootComponent {
                 <filler-3/>
                 <filler-4/>
             </menu-section>
-            <Audio model={model.audio} adapter={this.adapter}/>
+            <AudioInput model={model.audio} adapter={this.adapter}/>
         </>;
     }
 

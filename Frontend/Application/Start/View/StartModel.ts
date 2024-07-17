@@ -1,4 +1,4 @@
-import AudioModel from 'Application/Start/View/Audio/AudioModel';
+import AudioInputModel from 'Application/Start/View/Audio/AudioInputModel';
 import ConversationModel from 'Application/Start/View/Conversation/ConversationModel';
 import OldPageModel from 'Application/Start/View/OldPage/OldPageModel';
 import StartScreenModel from 'Application/Start/View/StartScreen/StartScreenModel';
@@ -17,7 +17,7 @@ export default class StartModel {
     public showStartScreen: boolean = false;
     public showConversation: boolean = false;
     public showOldPage: boolean = false;
-    public audio: AudioModel = new AudioModel();
+    public audio: AudioInputModel = new AudioInputModel();
     public conversation: ConversationModel = new ConversationModel();
     public oldPage: OldPageModel = new OldPageModel();
     public startScreen: StartScreenModel = new StartScreenModel();

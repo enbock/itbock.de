@@ -3,7 +3,6 @@ import Response from 'Core/Audio/StateUseCase/Response';
 
 export default class AudioStateResponse implements Response {
     public microphoneEnable: boolean = false;
-    public isAudioLoading: boolean = false;
     public audioInputEnabled: boolean = false;
     public audioOutput: AudioBuffer = {audio: '', text: ''};
     public isAudioPlaying: boolean = false;
