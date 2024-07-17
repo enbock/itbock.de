@@ -6,7 +6,7 @@ import GptClient from 'Core/Gpt/GptClient';
 import AudioService from 'Core/Audio/AudioService';
 import StartStorage from 'Core/Start/StartStorage';
 import StateResponse from 'Core/Gpt/ConversationUseCase/Response/StateResponse';
-import AudioFeedbackClient, {FEEDBACK} from 'Core/Audio/AudioFeedbackClient';
+import AudioFeedbackClient, {AudioFeedback} from 'Core/Audio/AudioFeedbackClient';
 
 export default class ConversationUseCase {
     constructor(
@@ -99,6 +99,6 @@ export default class ConversationUseCase {
     }
 
     private async switchToStartScreen(): Promise<void> {
-        void this.audioFeedbackClient.play(FEEDBACK.SCREEN_OFF);
+        void this.audioFeedbackClient.play(AudioFeedback.SCREEN_OFF);
     }
 }

@@ -44,7 +44,7 @@ import LanguageTranslationClientRest from 'Infrastructure/I18n/Rest/LanguageTran
 import LanguageUseCase from 'Core/I18n/UseCase/LanguageUseCase';
 import AudioFeedbackUseCase from 'Core/Audio/FeedbackUseCase/FeedbackUseCase';
 import AudioFeedbackClientBrowser from 'Infrastructure/Audio/Feedback/Client/Browser/Browser';
-import {FEEDBACK} from 'Core/Audio/AudioFeedbackClient';
+import {AudioFeedback} from 'Core/Audio/AudioFeedbackClient';
 import StartReplicationUseCase from 'Core/Start/ReplicationUseCase/ReplicationUseCase';
 import StartReplicationCacheMemory from 'Infrastructure/Start/Replication/Cache/Memory/Memory';
 import StartReplicationClientNetwork from 'Infrastructure/Start/Replication/Client/Network/Network';
@@ -64,7 +64,7 @@ class Container {
     private fetchHelper: FetchHelper = new FetchHelper();
     private parseHelper: ParseHelper = new ParseHelper();
     private timeHelper: TimeHelper = new TimeHelper();
-    
+
     private startAdapter: StartAdapter = new StartAdapter();
 
     private audioTransformClient: AudioTransformClient = new NetworkAudioTransformClient(
@@ -107,14 +107,14 @@ class Container {
     );
     private audioFeedbackClientBrowser: AudioFeedbackClientBrowser = new AudioFeedbackClientBrowser(
         {
-            [FEEDBACK.COMPUTER_BEEP]: [
+            [AudioFeedback.COMPUTER_BEEP]: [
                 'sounds/voiceinput1.wav',
                 'sounds/voiceinput2.wav'
             ],
-            [FEEDBACK.SCREEN_ON]: [
+            [AudioFeedback.SCREEN_ON]: [
                 'sounds/scrshow.wav'
             ],
-            [FEEDBACK.SCREEN_OFF]: [
+            [AudioFeedback.SCREEN_OFF]: [
                 'sounds/scrhide.wav'
             ]
         },

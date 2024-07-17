@@ -1,4 +1,4 @@
-import AudioFeedbackClient, {FEEDBACK} from 'Core/Audio/AudioFeedbackClient';
+import AudioFeedbackClient, {AudioFeedback} from 'Core/Audio/AudioFeedbackClient';
 
 export default class FeedbackUseCase {
     constructor(
@@ -7,6 +7,6 @@ export default class FeedbackUseCase {
     }
 
     public async beep(): Promise<void> {
-        void this.audioFeedbackClient.play(FEEDBACK.COMPUTER_BEEP);
+        void this.audioFeedbackClient.play(AudioFeedback.COMPUTER_BEEP);
     }
 }

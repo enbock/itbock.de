@@ -1,6 +1,6 @@
 import StartStorage from 'Core/Start/StartStorage';
 import Response from 'Core/Start/StartUseCase/Response';
-import AudioFeedbackClient, {FEEDBACK} from 'Core/Audio/AudioFeedbackClient';
+import AudioFeedbackClient, {AudioFeedback} from 'Core/Audio/AudioFeedbackClient';
 
 export default class StartUseCase {
     constructor(
@@ -10,7 +10,7 @@ export default class StartUseCase {
     }
 
     public async startApplication(): Promise<void> {
-        void this.audioFeedbackClient.play(FEEDBACK.SCREEN_ON);
+        void this.audioFeedbackClient.play(AudioFeedback.SCREEN_ON);
     }
 
     public getState(response: Response): void {

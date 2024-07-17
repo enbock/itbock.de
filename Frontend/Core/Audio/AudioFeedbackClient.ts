@@ -1,9 +1,9 @@
-export enum FEEDBACK {
+export enum AudioFeedback {
     COMPUTER_BEEP,
     SCREEN_ON,
     SCREEN_OFF
 }
 
 export default interface AudioFeedbackClient {
-    play(feedback: FEEDBACK): Promise<void>;
+    play(feedback: AudioFeedback): Promise<void>;
 }
