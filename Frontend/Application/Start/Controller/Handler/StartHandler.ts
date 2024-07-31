@@ -23,7 +23,7 @@ export default class StartHandler implements ControllerHandler {
 
     private async handleStart(): Promise<void> {
         await this.startUseCase.startApplication();
-        this.inputUseCase.restart();
+        this.inputUseCase.reset();
         void this.presentData();
         await this.conversationUseCase.startConversation({
             onStateChange: () => this.presentData()

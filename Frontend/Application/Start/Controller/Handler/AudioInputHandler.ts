@@ -1,10 +1,9 @@
 import ControllerHandler, {PresentDataCallback} from 'Application/ControllerHandler';
 import Adapter from 'Application/Start/Adapter';
 import InputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
-import AudioInputReceiverHandler from 'Application/Start/Controller/Handler/AudioInputReceiverHandler';
-import InputResponse from 'Application/Start/Controller/Handler/InputResponse';
-import AudioTransformUseCase from 'Core/Audio/InputUseCase/AudioTransformUseCase';
+import AudioTransformUseCase from 'Core/Audio/AudioTransformCase/AudioTransformUseCase';
 import FeedbackUseCase from 'Core/Audio/FeedbackUseCase/FeedbackUseCase';
+import StartBus from 'Application/Start/StartBus';
 
 export default class AudioInputHandler implements ControllerHandler {
     private presentData: PresentDataCallback = () => <never>false;
@@ -13,8 +12,8 @@ export default class AudioInputHandler implements ControllerHandler {
         private adapter: Adapter,
         private inputUseCase: InputUseCase,
         private audioTransformUseCase: AudioTransformUseCase,
-        private receivers: Array<AudioInputReceiverHandler>,
-        private feedbackUseCase: FeedbackUseCase
+        private feedbackUseCase: FeedbackUseCase,
+        private startBus: StartBus
     ) {
     }
 
@@ -27,16 +26,9 @@ export default class AudioInputHandler implements ControllerHandler {
         void this.feedbackUseCase.beep();
         const text: string = await this.audioTransformUseCase.transcribeAudio(audioBase64);
 
-        const response: InputResponse = new InputResponse();
-        this.inputUseCase.inputFinished({text: text}, response);
+        this.inputUseCase.inputFinished();
+        void this.presentData();
 
-        for (const receiver of this.receivers) {
-            if (receiver.support(response.channel) == false) continue;
-
-            await receiver.receiveText(text);
-            break;
-        }
-
-        await this.presentData();
+        void this.startBus.receiveText(text);
     }
 }

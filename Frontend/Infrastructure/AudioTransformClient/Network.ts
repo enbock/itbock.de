@@ -1,4 +1,4 @@
-import AudioTransformClient from 'Core/Audio/InputUseCase/AudioTransformClient';
+import AudioTransformClient from 'Core/Audio/AudioTransformClient';
 import FetchHelper from 'Infrastructure/ApiHelper/FetchHelper';
 import Method from 'Infrastructure/ApiHelper/Method';
 

@@ -8,6 +8,5 @@ export default class StartStateResponse implements StartResponse, AudioResponse 
     public language: string = '';
     public audioInputEnabled: boolean = false;
     public audioOutput: AudioBuffer = {audio: '', text: ''};
-    public isAudioLoading: boolean = false;
     public isAudioPlaying: boolean = false;
 }

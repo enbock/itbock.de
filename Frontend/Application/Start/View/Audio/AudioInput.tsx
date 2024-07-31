@@ -16,7 +16,7 @@ export default class AudioInput extends Component<Properties> {
                 {...(model.doListening ? {listening: ''} : {})}
                 {...(model.microphoneEnabled ? {enabled: ''} : {})}
                 onInput={this.onAudioInput.bind(this)}
-                onAbort={this.onAudioInputAborted.bind(this)}
+                onAbort={() => false}
                 aria-hidden="true"
             />
         </>;
@@ -24,9 +24,5 @@ export default class AudioInput extends Component<Properties> {
 
     private onAudioInput(event: CustomEvent): void {
         void this.props.adapter.audioBlobInput(event.detail as string);
-    }
-
-    private onAudioInputAborted(): void {
-        void this.props.adapter.audioAbort();
     }
 }

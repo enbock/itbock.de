@@ -1,20 +1,18 @@
 import ConversationStorage from 'Core/Gpt/ConversationStorage';
-import ConversationEntity, {Command} from 'Core/Gpt/ConversationEntity';
+import ConversationEntity from 'Core/Gpt/ConversationEntity';
 import StartConversationRequest from 'Core/Gpt/ConversationUseCase/Request/StartConversationRequest';
 import ConversationRequest from 'Core/Gpt/ConversationUseCase/Request/ConversationRequest';
 import GptClient from 'Core/Gpt/GptClient';
 import AudioService from 'Core/Audio/AudioService';
 import StartStorage from 'Core/Start/StartStorage';
 import StateResponse from 'Core/Gpt/ConversationUseCase/Response/StateResponse';
-import AudioFeedbackClient, {AudioFeedback} from 'Core/Audio/AudioFeedbackClient';
 
 export default class ConversationUseCase {
     constructor(
         private conversationStorage: ConversationStorage,
         private gptClient: GptClient,
         private audioService: AudioService,
-        private startStorage: StartStorage,
-        private audioFeedbackClient: AudioFeedbackClient
+        private startStorage: StartStorage
     ) {
     }
 
@@ -36,9 +34,7 @@ export default class ConversationUseCase {
         const setupConversation: ConversationEntity = new ConversationEntity();
         setupConversation.language = this.startStorage.getLanguage();
         setupConversation.role = 'assistant';
-        await this.executeConversation([
-            setupConversation
-        ]);
+        await this.executeConversation([setupConversation]);
         this.changeToFinishedState();
     }
 
@@ -70,8 +66,6 @@ export default class ConversationUseCase {
     private async executeConversation(conversations: Array<ConversationEntity>): Promise<void> {
         const record: ConversationEntity = await this.gptClient.generalConversation(conversations);
 
-        await this.handleCommands(record.commands);
-
         const gptText: string = record.text.trim();
         if (gptText == '') {
             this.audioService.continueWithoutText();
@@ -91,14 +85,5 @@ export default class ConversationUseCase {
 
     private changeToFinishedState(): void {
         this.conversationStorage.setLoading(false);
-    }
-
-    private async handleCommands(commands: Array<Command>): Promise<void> {
-        if (commands.includes('shutdown')) await this.switchToStartScreen();
-        if (commands.includes('suspend')) this.audioService.suspend();
-    }
-
-    private async switchToStartScreen(): Promise<void> {
-        void this.audioFeedbackClient.play(AudioFeedback.SCREEN_OFF);
     }
 }

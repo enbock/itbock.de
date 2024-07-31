@@ -29,8 +29,4 @@ export default class AudioService {
     public continueWithoutText(): void {
         this.audioStorage.setListening(true);
     }
-
-    public suspend(): void {
-        this.audioStorage.setSuspended(true);
-    }
 }

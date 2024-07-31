@@ -6,7 +6,7 @@ import ViewInjection from '@enbock/ts-jsx/ViewInjection';
 import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 import StartPresenter from 'Application/Start/View/StartPresenter';
 import StartDataCollector from 'Application/Start/Controller/DataCollector';
-import AudioTransformClient from 'Core/Audio/InputUseCase/AudioTransformClient';
+import AudioTransformClient from 'Core/Audio/AudioTransformClient';
 import NetworkAudioTransformClient from 'Infrastructure/AudioTransformClient/Network';
 import Config from 'Application/DependencyInjection/Config';
 import InputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
@@ -18,16 +18,14 @@ import ConversationStorage from 'Core/Gpt/ConversationStorage';
 import MemoryConversationStorage from 'Infrastructure/Conversation/Memory';
 import StartStorage from 'Core/Start/StartStorage';
 import MemoryStartStorage from 'Infrastructure/Storage/Start/Memory';
-import AudioTransformUseCase from 'Core/Audio/InputUseCase/AudioTransformUseCase';
+import AudioTransformUseCase from 'Core/Audio/AudioTransformCase/AudioTransformUseCase';
 import AudioStateUseCase from 'Core/Audio/StateUseCase/StateUseCase';
 import GptClient from 'Core/Gpt/GptClient';
 import NetworkGptClient from 'Infrastructure/GptClient/Network/Network';
 import GptClientNetworkEncoder from 'Infrastructure/GptClient/Network/Encoder';
-import AudioAbortHandler from 'Application/Start/Controller/Handler/AudioAbortHandler';
 import AudioInputHandler from 'Application/Start/Controller/Handler/AudioInputHandler';
 import AudioOutputHandler from 'Application/Start/Controller/Handler/AudioOutputHandler';
 import AudioInputHandlerConversationInputHandler from 'Application/Start/Controller/Handler/ConversationInputHandler';
-import AudioInputHandlerStandbyReceiver from 'Application/Start/Controller/Handler/StandbyReceiver';
 import StartHandler from 'Application/Start/Controller/Handler/StartHandler';
 import StartAdapter from 'Application/Start/Adapter';
 import StartScreenPresenter from 'Application/Start/View/StartScreen/StartScreenPresenter';
@@ -58,6 +56,7 @@ import ReplicationPollHandler from 'Application/Start/Controller/Handler/Replica
 import TimeHelper from 'Application/Start/TimeHelper/TimeHelper';
 import AudioOutputDevice from 'Application/Start/View/Audio/AudioOutputDevice';
 import PlaybackUseCase from 'Core/Audio/PlaybackUseCase/PlaybackUseCase';
+import StartBus from 'Application/Start/StartBus';
 
 class Container {
     private config: Config = new Config();
@@ -66,6 +65,7 @@ class Container {
     private timeHelper: TimeHelper = new TimeHelper();
 
     private startAdapter: StartAdapter = new StartAdapter();
+    private startBus: StartBus = new StartBus();
 
     private audioTransformClient: AudioTransformClient = new NetworkAudioTransformClient(
         this.fetchHelper,
@@ -98,8 +98,7 @@ class Container {
         this.audioTransformClient
     );
     private inputUseCase: InputUseCase = new InputUseCase(
-        this.audioStorage,
-        this.config.wakeupWords
+        this.audioStorage
     );
     private audioStateUseCase: AudioStateUseCase = new AudioStateUseCase(
         this.audioService,
@@ -124,8 +123,7 @@ class Container {
         this.conversationStorage,
         this.gptClient,
         this.audioService,
-        this.startStorage,
-        this.audioFeedbackClientBrowser
+        this.startStorage
     );
     private startUseCase: StartUseCase = new StartUseCase(
         this.startStorage,
@@ -174,32 +172,27 @@ class Container {
         ),
         this.startReplicationUseCase
     );
-    private audioAbortHandler: AudioAbortHandler = new AudioAbortHandler(this.startAdapter, this.inputUseCase, this.conversationUseCase, this.startUseCase);
-
     private audioFeedbackUseCase: AudioFeedbackUseCase = new AudioFeedbackUseCase(
         this.audioFeedbackClientBrowser
     );
-    private audioInputHandlerStandbyReceiver: AudioInputHandlerStandbyReceiver = new AudioInputHandlerStandbyReceiver(this.inputUseCase);
     private audioInputHandlerConversationInputHandler: AudioInputHandlerConversationInputHandler = new AudioInputHandlerConversationInputHandler(
         this.conversationUseCase,
-        this.startUseCase
+        this.startBus
     );
     private audioInputHandler: AudioInputHandler = new AudioInputHandler(
         this.startAdapter,
         this.inputUseCase,
         this.audioTransformUseCase,
-        [
-            this.audioInputHandlerStandbyReceiver,
-            this.audioInputHandlerConversationInputHandler
-        ],
-        this.audioFeedbackUseCase
+        this.audioFeedbackUseCase,
+        this.startBus
     );
     private playbackUseCase: PlaybackUseCase = new PlaybackUseCase(
         this.audioStorage
     );
     private audioOutputHandler: AudioOutputHandler = new AudioOutputHandler(
         this.startAdapter,
-        this.playbackUseCase
+        this.playbackUseCase,
+        this.inputUseCase
     );
     private startHandler: StartHandler = new StartHandler(
         this.startUseCase,
@@ -220,7 +213,6 @@ class Container {
         this.startPresenter,
         [],
         [
-            this.audioAbortHandler,
             this.audioInputHandler,
             this.audioOutputHandler,
             this.startHandler,
@@ -229,10 +221,7 @@ class Container {
         ],
         this.startDataCollector,
         navigator.language,
-        new InputUseCase(
-            this.audioStorage,
-            this.config.wakeupWords
-        )
+        this.inputUseCase
     );
 
     constructor() {

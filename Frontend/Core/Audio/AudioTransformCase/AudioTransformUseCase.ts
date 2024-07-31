@@ -1,4 +1,4 @@
-import AudioTransformClient from 'Core/Audio/InputUseCase/AudioTransformClient';
+import AudioTransformClient from 'Core/Audio/AudioTransformClient';
 
 export default class AudioTransformUseCase {
     constructor(
