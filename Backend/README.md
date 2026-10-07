@@ -1,13 +1,14 @@
 # MFA-Backend
 
-Ein einfaches MFA-Backend, das TOTP-Tokens generiert und validiert. Dieses Projekt verwendet TypeScript und läuft auf
-AWS Lambda. Das Deployment erfolgt direkt über AWS CloudFormation (ohne Serverless Framework).
+Backend für itbock.de: MFA-Tokens (TOTP), GPT-Chat, Audio-Transkription, Übersetzung (i18n) und Replikation. Es ist
+in TypeScript geschrieben und läuft auf AWS Lambda hinter API Gateway. Das Deployment erfolgt direkt über AWS
+CloudFormation (ohne Serverless Framework).
 
 ## Voraussetzungen
 
 - Node.js (empfohlen: v24.x, entspricht der Lambda-Runtime `nodejs24.x`)
 - npm (Node Package Manager)
-- AWS CLI v2 mit konfigurierten Zugangsdaten (`aws configure`)
+- AWS CLI v2 mit konfigurierten Zugangsdaten (`aws configure`, Region `eu-west-1`)
 
 ## Installation
 
@@ -30,23 +31,37 @@ CloudFormation) beschrieben.
 
 ### Umgebungsvariablen
 
-Die benötigten Variablen stehen in `.env` (Vorlage: `.env.dist`):
+Alle Variablen stehen in `.env` (Vorlage: `.env.dist`, wird nicht committet). Werte aus `.env` haben Vorrang vor
+bereits gesetzten Shell-/Windows-Variablen gleichen Namens.
+
+Laufzeit (werden an die Lambda-Funktionen weitergegeben):
 
 - `OPENAI_API_KEY`: OpenAI API-Key. Projekt- und Service-Account-Keys (`sk-proj-…`, `sk-svcacct-…`) werden
   unterstützt. Ein `OpenAI-Organization`-Header wird bewusst nicht gesendet, da dieser bei den neuen projektbasierten
   Keys zu `401`-Fehlern führt.
-- `S3_BUCKET_NAME`, `S3_TOKEN_PATH`, `S3_USER_DATA_PATH`, `S3_SESSION_PATH`: Ablageorte im S3-Bucket.
+- `S3_BUCKET_NAME`: Bucket für Tokens, Nutzerdaten und Sessions.
+- `S3_TOKEN_PATH`, `S3_USER_DATA_PATH`, `S3_SESSION_PATH`: Ablageorte (Prefixe) im Bucket.
+
+Deployment (nur für `npm run deploy`):
+
+- `DEPLOY_ARTIFACT_BUCKET`: S3-Bucket für den hochgeladenen Code (Pflicht).
+- `STACK_NAME` (Standard `itbock-backend`), `STAGE_NAME` (Standard `dev`).
+- `DOMAIN_NAME` (Standard `api.itbock.de`): Custom Domain, die auf die API zeigt. Leer lassen = nicht umstellen.
 
 ## Projektstruktur
 
-- `Application`: Enthält die Delivery-Schicht, z.B. Handlers, Presenter und den Dependency Injection Container.
-- `Core`: Enthält die Geschäftslogik, z.B. den `MFAService` und Interfaces für Abhängigkeiten.
-- `Infrastructure`: Enthält Low-Level Implementierungen wie den `CryptoService` und den `InMemoryTokenStore`.
+- `Application`: Delivery-Schicht, die Lambda-Controller (Mfa, Gpt, Audio, I18n, Replication).
+- `Core`: Geschäftslogik und Interfaces, z.B. der `MfaService` und die GPT-Use-Cases.
+- `Infrastructure`: Implementierungen der Schnittstellen, z.B. OpenAI (Chat, Audio), S3-Speicher und Krypto.
+- `DependencyInjection`: `Container.ts` verdrahtet alles. `lambda.ts` exportiert die Handler.
+- `scripts`: Build (`build.js`), Deployment (`deploy.js`) und lokaler Server (`local-server.js`).
+- `template.yaml`: CloudFormation-Template der gesamten AWS-Infrastruktur.
 
 ## Lokales Testen
 
-Ein kleiner lokaler Server (`scripts/local-server.js`) ruft die gebauten Lambda-Handler auf und ist unter denselben
-URLs wie bisher erreichbar (`http://localhost:3000/dev/...`):
+Ein kleiner lokaler Server (`scripts/local-server.js`) baut nichts selbst, sondern ruft die kompilierten Lambda-Handler
+auf. `npm run start` kompiliert daher zuerst und startet dann den Server unter `http://localhost:3000/dev/...`.
+Er nutzt die Werte aus `.env` und die lokalen AWS-Zugangsdaten (also echte S3-Daten und den echten OpenAI-Key):
 
 ```bash
 npm run start
@@ -54,8 +69,8 @@ npm run start
 
 ## Deployment
 
-Einmalig in `.env` einen S3-Bucket für die Code-Artefakte angeben (`DEPLOY_ARTIFACT_BUCKET`, bewusst nicht der
-Daten-Bucket). Danach:
+Voraussetzung: `DEPLOY_ARTIFACT_BUCKET` ist in `.env` gesetzt. Die Custom Domain `api.itbock.de` und das
+ACM-Zertifikat `*.itbock.de` müssen in der Region bereits existieren (sie liegen außerhalb des Stacks). Dann:
 
 ```bash
 npm run deploy
@@ -69,13 +84,19 @@ Das Skript `scripts/deploy.js` erledigt alles in einem Lauf:
 4. **Scharf schalten:** die Custom Domain (`DOMAIN_NAME`, Standard `api.itbock.de`) wird auf diese API und Stage
    umgestellt. Mit `DOMAIN_NAME=` (leer) wird dieser Schritt übersprungen.
 
-Ist die Domain bereits auf die API gemappt, passiert nichts. Die Domain und das ACM-Zertifikat selbst liegen außerhalb
-des Stacks. Beim ersten Lauf gibt das Skript die vorherige REST-API-ID aus. Ein Rollback ist der Befehl:
+Ist die Domain bereits auf die API gemappt, wird sie nicht angefasst. Spätere Deployments sind damit ebenfalls nur
+`npm run deploy`.
 
-```bash
-aws apigateway update-base-path-mapping --domain-name api.itbock.de --base-path "(none)" \
-  --patch-operations op=replace,path=/restapiId,value=<alteRestApiId>
-```
+### API-Key rotieren
+
+Neuen Key in `.env` bei `OPENAI_API_KEY` eintragen und `npm run deploy` ausführen. Der Key wird als
+CloudFormation-Parameter (`NoEcho`) an alle Lambda-Funktionen übergeben. Den alten Key erst nach einem Test von
+`POST /gpt` bei OpenAI widerrufen.
+
+### Rollback
+
+Es gibt keinen zweiten Stack im Hintergrund. Für einen Rollback den vorherigen Code-Stand auschecken und erneut
+`npm run deploy` ausführen.
 
 ## Lizenz
 
