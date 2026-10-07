@@ -11,10 +11,10 @@ export default class AudioPresenter {
     public present(data: ResponseCollection): AudioInputModel {
         const model: AudioInputModel = new AudioInputModel();
 
-        model.doListening = data.audioState.audioInputEnabled == true;
-        model.microphoneEnabled = data.audioState.microphoneEnable == true;
+        model.doListening = data.isLeader && data.audioState.audioInputEnabled == true;
+        model.microphoneEnabled = data.isLeader && data.audioState.microphoneEnable == true;
 
-        void this.audioOutputDevice.playAudio(data.audioState.audioOutput);
+        if (data.isLeader) void this.audioOutputDevice.playAudio(data.audioState.audioOutput);
 
         return model;
     }

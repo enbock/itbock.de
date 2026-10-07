@@ -21,7 +21,11 @@ export default class AudioOutputDevice {
         this.audioElement.pause();
         this.audioElement.currentTime = 0;
         this.audioElement.src = `data:audio/wav;base64,${buffer.audio}`;
-        void this.audioElement.play();
+        try {
+            await this.audioElement.play();
+        } catch {
+            this.playbackFinished();
+        }
     }
 
     private playbackFinished(): void {

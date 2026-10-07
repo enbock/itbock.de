@@ -7,12 +7,19 @@ A AI driven webpage with code assistance for my daily developer work.
 Can we do an LCARS again?
 
 # Overview
-This webpage, itbock.de, is an AI-driven platform designed to assist developers in their daily work. It offers a variety of functionalities such as:
+This webpage, itbock.de, is an AI-driven platform designed to assist developers in their daily work.
+It offers a variety of functionalities such as:
 
 - **Automatic Speech Recognition (ASR)**: Converts spoken language into text.
 - **Natural Language Processing (NLP)**: Powered by OpenAI's GPT-4, enabling conversational AI capabilities.
 - **Audio Transformation**: Transforms audio files into text.
 - **Translation Services**: Provides language translation for various texts.
+- **Replicated Sessions**: The frontend keeps a browser-local session id and mirrors backend-controlled
+  module, language, conversation, and document state across tabs by polling the replication API. Browser tabs elect a
+  single leader for microphone/audio via Web Locks; follower tabs stay display-only and take over automatically when
+  the leader closes.
+- **Knowledge-driven Info Pages**: The frontend can render replicated document collections in a dedicated info
+  view. The backend resolves the shown documents from a Markdown knowledge base indexed into S3.
 
 # Technologies Used
 The following technologies and frameworks are used in this project:
@@ -27,9 +34,9 @@ The following technologies and frameworks are used in this project:
 - **Backend**:
   - **Node.js**: The runtime environment used.
   - **AWS Lambda**: Serverless computing service for running backend functions.
-  - **OpenAI API**: For NLP and AI-driven features.
-  - **AWS S3**: For storing audio files and other assets.
-  - **Serverless Framework**: Facilitates deployment and management of AWS Lambda functions.
+  - **OpenAI API**: For NLP, AI-driven features and knowledge embeddings.
+  - **AWS S3**: For storing sessions, the RAG knowledge index and other assets.
+  - **AWS CloudFormation**: Deploys and manages the Lambda functions and API Gateway (no Serverless Framework).
 
 # License
 This project is licensed under the MIT License.

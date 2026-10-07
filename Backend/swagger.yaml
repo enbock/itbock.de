@@ -100,6 +100,13 @@ paths:
   /gpt:
     post:
       summary: Führt eine GPT-Abfrage durch und liefert eine Antwort.
+      parameters:
+        - name: session-id
+          in: header
+          required: false
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -115,6 +122,9 @@ paths:
                       role:
                         type: string
                         example: "user"
+                      language:
+                        type: string
+                        example: "de-DE"
                       content:
                         type: string
                         example: "Hello, how are you?"
@@ -139,6 +149,17 @@ paths:
                   language:
                     type: string
                     example: "en-US"
+                  module:
+                    type: string
+                    enum:
+                      - 'START_SCREEN'
+                      - 'OLD_PAGE'
+                      - 'CONVERSATION'
+                      - 'INFO'
+                    example: 'CONVERSATION'
+                  version:
+                    type: integer
+                    example: 4
                   audio:
                     type: string
                     example: "/+MYxAAGe2oYEABNogG//mMbyAMY5AgUZ5Oz0wcBhBBDCaZ4DHn2An..."
@@ -152,6 +173,16 @@ paths:
                   message:
                     type: string
                     example: "Invalid input"
+        '409':
+          description: Session wird bereits verarbeitet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Session is busy"
         '500':
           description: Serverfehler
           content:
@@ -260,9 +291,17 @@ paths:
   /replication/start:
     get:
       parameters:
-        - name: sessionId
+        - name: session-id
           in: header
           required: true
+          schema:
+            type: string
+            format: uuid
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: Start Domain Replication Data
@@ -271,11 +310,74 @@ paths:
               schema:
                 type: object
                 properties:
+                  version:
+                    type: integer
+                    example: 3
                   module:
                     type: string
                     enum:
                       - 'START_SCREEN'
                       - 'OLD_PAGE'
                       - 'CONVERSATION'
+                      - 'INFO'
                     example: 'START_SCREEN'
-
+                  language:
+                    type: string
+                    example: 'de-DE'
+                  busy:
+                    type: boolean
+                    example: false
+                  conversations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        role:
+                          type: string
+                          example: 'assistant'
+                        text:
+                          type: string
+                          example: 'Willkommen im Terminal.'
+                        language:
+                          type: string
+                          example: 'de-DE'
+                  documents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 'about-endre#0'
+                        title:
+                          type: string
+                          example: 'Über Endre Bock'
+                        text:
+                          type: string
+                          example: 'Endre Bock ist Fullstackentwickler.'
+                        url:
+                          type: string
+                          nullable: true
+                          example: null
+        '204':
+          description: Session unverändert
+        '400':
+          description: Ungültige Session-ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Session ID is invalid
+        '401':
+          description: Session-ID fehlt
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized: Session ID is missing"

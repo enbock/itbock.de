@@ -5,9 +5,9 @@ import SessionService from 'Core/Replication/SessionService';
 
 export default class ReplicationUseCase {
     constructor(
-        public replicationCache: ReplicationCache,
-        public replicationClient: ReplicationClient,
-        public sessionService: SessionService
+        private replicationCache: ReplicationCache,
+        private replicationClient: ReplicationClient,
+        private sessionService: SessionService
     ) {
     }
 
@@ -15,11 +15,20 @@ export default class ReplicationUseCase {
         return this.replicationCache.getState();
     }
 
-    public async pollState(): Promise<void> {
-        this.replicationCache.setState(
-            await this.replicationClient.loadState(
-                this.sessionService.getSessionId()
-            )
+    public async pollState(): Promise<boolean> {
+        const currentState: StartReplicationEntity = this.replicationCache.getState();
+        const state: StartReplicationEntity | null = await this.replicationClient.loadState(
+            this.sessionService.getSessionId(),
+            currentState.version
         );
+
+        if (state === null || state.version == currentState.version) return false;
+
+        this.replicationCache.setState(state);
+        return true;
+    }
+
+    public async refresh(): Promise<boolean> {
+        return this.pollState();
     }
 }

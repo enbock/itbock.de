@@ -31,6 +31,9 @@ import StartReplicationStorageS3 from '../Infrastructure/Start/ReplicationStorag
 import StartReplicationParser from '../Infrastructure/Start/ReplicationStorage/S3/ReplicationParser';
 import StartReplicationEncoder from '../Infrastructure/Start/ReplicationStorage/S3/ReplicationEncoder';
 import StartReplicationPresenter from '../Application/Replication/Start/StartReplicationPresenter';
+import RetrievalUseCase from '../Core/Rag/RetrievalUseCase';
+import OpenAiEmbeddingClient from '../Infrastructure/Rag/OpenAiEmbeddingClient';
+import S3KnowledgeStorage from '../Infrastructure/Rag/S3KnowledgeStorage';
 
 export class Container {
     private appName: string = 'Bock-Laboratories';
@@ -53,14 +56,41 @@ export class Container {
     );
     private mfaService: MfaService = new MfaService(this.appName, this.tokenStore, authenticator);
 
-    public validateTokenController: ValidateTokenController = new ValidateTokenController(this.mfaService);
+    public validateTokenController: ValidateTokenController = new ValidateTokenController(
+        this.mfaService
+    );
     private tokenPresenter: TokenPresenter = new TokenPresenter();
-    public generateTokenController: GenerateTokenController = new GenerateTokenController(this.mfaService, this.tokenPresenter);
+    public generateTokenController: GenerateTokenController = new GenerateTokenController(
+        this.mfaService,
+        this.tokenPresenter
+    );
 
     private openAi: OpenAI = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY || ''
     });
+    private startReplicationStorage: StartReplicationStorageS3 = new StartReplicationStorageS3(
+        this.s3,
+        process.env.S3_BUCKET_NAME!,
+        process.env.S3_SESSION_PATH!,
+        new StartReplicationParser(
+            this.parseHelper
+        ),
+        new StartReplicationEncoder()
+    );
+    private startReplicationUseCase: StartReplicationUseCase = new StartReplicationUseCase(
+        this.startReplicationStorage
+    );
     private gptBackend: GptBackend = new OpenAi(this.openAi);
+    private embeddingClient: OpenAiEmbeddingClient = new OpenAiEmbeddingClient(this.openAi);
+    private knowledgeStorage: S3KnowledgeStorage = new S3KnowledgeStorage(
+        this.s3,
+        process.env.S3_BUCKET_NAME!,
+        process.env.S3_KNOWLEDGE_PATH!
+    );
+    private retrievalUseCase: RetrievalUseCase = new RetrievalUseCase(
+        this.embeddingClient,
+        this.knowledgeStorage
+    );
     private bodyParser: BodyParser = new BodyParser(this.parseHelper);
     private audioSyntheseClient: OpenAiAudioSyntheseClient = new OpenAiAudioSyntheseClient(
         'https://api.openai.com/v1/audio/speech',
@@ -72,7 +102,9 @@ export class Container {
     private gptUseCase: GptUseCase = new GptUseCase(
         this.gptBackend,
         this.audioSyntheseClient,
-        this.commands
+        this.commands,
+        this.retrievalUseCase,
+        this.startReplicationUseCase
     );
     private gptPresenter: GptPresenter = new GptPresenter();
     public gptController: GptController = new GptController(
@@ -84,22 +116,15 @@ export class Container {
     private audioTransformClient: OpenAiAudioTransform = new OpenAiAudioTransform(
         this.openAi
     );
-    private audioTransformUseCase: AudioTransformUseCase = new AudioTransformUseCase(this.audioTransformClient);
-    public audioTransformController: AudioTransformController = new AudioTransformController(this.audioTransformUseCase);
+    private audioTransformUseCase: AudioTransformUseCase = new AudioTransformUseCase(
+        this.audioTransformClient
+    );
+    public audioTransformController: AudioTransformController = new AudioTransformController(
+        this.audioTransformUseCase
+    );
 
     private i18nUseCase: I18nUseCase = new I18nUseCase(
         this.gptBackend
-    );
-    private startReplicationUseCase: StartReplicationUseCase = new StartReplicationUseCase(
-        new StartReplicationStorageS3(
-            this.s3,
-            process.env.S3_BUCKET_NAME!,
-            process.env.S3_SESSION_PATH!,
-            new StartReplicationParser(
-                this.parseHelper
-            ),
-            new StartReplicationEncoder()
-        )
     );
     public i18nController: I18nController = new I18nController(this.i18nUseCase);
     public startReplicationController: StartReplicationController = new StartReplicationController(

@@ -1,3 +1,5 @@
+import Modules from 'Core/Start/Modules';
+
 export type Role = 'assistant' | 'user' | 'system';
 export type Command = 'shutdown' | 'suspend' | 'openOldPage';
 
@@ -8,4 +10,6 @@ export default class ConversationEntity {
     public audio: string = '';
     public language: string = '';
     public data: Record<string, string> = {};
+    public module: Modules | null = null;
+    public version: number | null = null;
 }

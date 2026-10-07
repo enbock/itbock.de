@@ -1,5 +1,6 @@
-import { GetObjectCommandInput, PutObjectCommandInput, S3 } from '@aws-sdk/client-s3';
-import { GetObjectCommandOutput } from '@aws-sdk/client-s3/dist-types/commands/GetObjectCommand';
+import {DeleteObjectCommandInput, GetObjectCommandInput, GetObjectCommandOutput, PutObjectCommandInput, S3} from '@aws-sdk/client-s3';
+import ReplicationConflictError from '../../../../Core/Start/ReplicationConflictError';
+import ReplicationLoadResult from '../../../../Core/Start/ReplicationLoadResult';
 import ReplicationStorage from '../../../../Core/Start/ReplicationStorage';
 import StartReplicationEntity from '../../../../Core/Start/StartReplicationEntity';
 import ReplicationParser from './ReplicationParser';
@@ -15,34 +16,102 @@ export default class S3Storage implements ReplicationStorage {
     ) {
     }
 
-    public async loadSessionData(sessionId: string): Promise<StartReplicationEntity> {
+    public async loadSessionData(sessionId: string): Promise<ReplicationLoadResult> {
         try {
             const params: GetObjectCommandInput = {
                 Bucket: this.bucketName,
-                Key: `${this.path}${sessionId}`
+                Key: this.createKey(sessionId)
             };
             const result: GetObjectCommandOutput = await this.s3.getObject(params);
-            return this.replicationParser.parseReplication(result.Body?.toString() || '{}');
+            const body: string = result.Body ? await result.Body.transformToString() : '';
+            const sessionData: StartReplicationEntity = this.replicationParser.parseReplication(body);
+
+            sessionData.persisted = true;
+
+            return new ReplicationLoadResult(sessionData, result.ETag || null);
         } catch (error) {
-            return new StartReplicationEntity();
+            if (this.isNotFoundError(error)) {
+                return new ReplicationLoadResult(new StartReplicationEntity(), null);
+            }
+
+            throw error;
         }
     }
 
-    public async saveSessionData(sessionId: string, data: StartReplicationEntity): Promise<void> {
+    public async saveSessionData(
+        sessionId: string,
+        data: StartReplicationEntity,
+        revisionToken: string | null
+    ): Promise<void> {
         const params: PutObjectCommandInput = {
             Bucket: this.bucketName,
-            Key: `${this.path}${sessionId}`,
+            Key: this.createKey(sessionId),
             Body: this.replicationEncoder.encodeReplication(data),
-            ContentType: 'application/json'
+            ContentType: 'application/json',
+            IfMatch: revisionToken || undefined,
+            IfNoneMatch: revisionToken === null ? '*' : undefined
         };
-        await this.s3.putObject(params);
+
+        try {
+            await this.s3.putObject(params);
+        } catch (error) {
+            if (this.isConflictError(error)) {
+                throw new ReplicationConflictError();
+            }
+
+            throw error;
+        }
     }
 
     public async deleteSessionData(sessionId: string): Promise<void> {
-        const params = {
+        const params: DeleteObjectCommandInput = {
             Bucket: this.bucketName,
-            Key: `${this.path}${sessionId}`
+            Key: this.createKey(sessionId)
         };
         await this.s3.deleteObject(params);
+    }
+
+    private createKey(sessionId: string): string {
+        return `${this.path}${sessionId}.json`;
+    }
+
+    private isNotFoundError(error: unknown): boolean {
+        const errorName: string | undefined = this.getErrorName(error);
+
+        return errorName === 'NoSuchKey' || errorName === 'NotFound';
+    }
+
+    private isConflictError(error: unknown): boolean {
+        const errorName: string | undefined = this.getErrorName(error);
+        const statusCode: number | undefined = this.getStatusCode(error);
+
+        return errorName === 'PreconditionFailed'
+            || errorName === 'ConditionalRequestConflict'
+            || statusCode === 412
+            || statusCode === 409
+            ;
+    }
+
+    private getErrorName(error: unknown): string | undefined {
+        return typeof error === 'object' && error !== null && 'name' in error && typeof error.name === 'string'
+            ? error.name
+            : undefined
+            ;
+    }
+
+    private getStatusCode(error: unknown): number | undefined {
+        if (
+            typeof error !== 'object'
+            || error === null
+            || !('$metadata' in error)
+            || typeof error.$metadata !== 'object'
+            || error.$metadata === null
+            || !('httpStatusCode' in error.$metadata)
+            || typeof error.$metadata.httpStatusCode !== 'number'
+        ) {
+            return undefined;
+        }
+
+        return error.$metadata.httpStatusCode;
     }
 }

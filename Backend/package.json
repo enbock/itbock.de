@@ -9,8 +9,10 @@
     "deploy": "npm-run-all --serial build deploy:aws",
     "build:tsc": "tsc",
     "build": "node scripts/build.js",
+    "knowledge:index": "node scripts/knowledge-index.js",
     "start:local": "node scripts/local-server.js",
-    "deploy:aws": "node scripts/deploy.js"
+    "deploy:aws": "node scripts/deploy.js",
+    "test": "node --import tsx --test test/**/*.test.ts"
   },
   "author": "Endre Bock",
   "license": "MIT",
@@ -27,6 +29,7 @@
     "@types/node": "^24.19.1",
     "@types/otplib": "*",
     "npm-run-all": "*",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
 }

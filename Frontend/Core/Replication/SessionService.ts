@@ -1,9 +1,8 @@
-import {v4} from 'uuid';
 import SessionStorage from 'Core/Replication/SessionStorage';
 
 export default class SessionService {
     constructor(
-        private uuid: typeof v4,
+        private uuid: () => string,
         private sessionStorage: SessionStorage
     ) {
     }

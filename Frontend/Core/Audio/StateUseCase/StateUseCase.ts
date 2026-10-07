@@ -9,10 +9,12 @@ export default class StateUseCase {
     ) {
     }
 
-    public getState(response: Response): void {
-        response.audioOutput = this.audioService.getAudioContent();
-        response.audioInputEnabled = this.audioStorage.getListening() == true && this.audioStorage.getMicrophoneMuted() == false;
-        response.microphoneEnable = this.audioStorage.getMicrophoneMuted() == false;
-        response.isAudioPlaying = this.audioStorage.getPlaying();
+    public getState(response: Response, isLeader: boolean = true): void {
+        const microphoneMuted: boolean = this.audioStorage.getMicrophoneMuted();
+
+        response.audioOutput = isLeader ? this.audioService.getAudioContent() : {text: '', audio: ''};
+        response.audioInputEnabled = isLeader && this.audioStorage.getListening() == true && microphoneMuted == false;
+        response.microphoneEnable = isLeader && microphoneMuted == false;
+        response.isAudioPlaying = isLeader && this.audioStorage.getPlaying();
     }
 }

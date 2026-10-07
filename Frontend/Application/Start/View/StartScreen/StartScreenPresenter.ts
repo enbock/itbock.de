@@ -3,6 +3,10 @@ import ResponseCollection from 'Application/Start/Controller/Response/ResponseCo
 
 export default class StartScreenPresenter {
     public present(data: ResponseCollection): StartScreenModel {
-        return new StartScreenModel(data.i18n.startScreen);
+        const model: StartScreenModel = new StartScreenModel(data.i18n.startScreen);
+
+        model.showStartButton = data.isLeader;
+
+        return model;
     }
 }

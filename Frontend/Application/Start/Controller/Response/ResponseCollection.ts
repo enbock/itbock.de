@@ -4,6 +4,7 @@ import StartStateResponse from 'Application/Start/Controller/Response/StartState
 import StartReplicationEntity from 'Core/Start/ReplicationUseCase/StartReplicationEntity';
 
 export default class ResponseCollection {
+    public isLeader: boolean = false;
     public i18n: JsonData = {};
     public gptState: GptStateResponse = new GptStateResponse();
     public audioState: AudioStateResponse = new AudioStateResponse();

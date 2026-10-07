@@ -13,17 +13,19 @@ export default class Network implements ReplicationClient {
     ) {
     }
 
-    public async loadState(sessionId: string): Promise<StartReplicationEntity> {
+    public async loadState(sessionId: string, knownVersion: number): Promise<StartReplicationEntity | null> {
         try {
             const response: Response = await fetch(
-                this.encoder.encodeLoadStateEndpoint(),
+                this.encoder.encodeLoadStateEndpoint(knownVersion),
                 this.fetchHelper.createHeader(Method.GET, undefined, {'session-id': sessionId})
             );
+            if (response.status == 204) return null;
+
             this.fetchHelper.assertSuccess(response);
 
             return this.parser.parseState(await response.json());
-        } catch (error) {
-            return new StartReplicationEntity();
+        } catch {
+            return null;
         }
     }
 }

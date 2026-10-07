@@ -14,8 +14,6 @@ import AudioService from 'Core/Audio/AudioService';
 import AudioStorage from 'Core/Audio/AudioStorage';
 import MemoryAudioStorage from 'Infrastructure/Storage/Audio/Memory';
 import ConversationUseCase from 'Core/Gpt/ConversationUseCase/ConversationUseCase';
-import ConversationStorage from 'Core/Gpt/ConversationStorage';
-import MemoryConversationStorage from 'Infrastructure/Conversation/Memory';
 import StartStorage from 'Core/Start/StartStorage';
 import MemoryStartStorage from 'Infrastructure/Storage/Start/Memory';
 import AudioTransformUseCase from 'Core/Audio/AudioTransformCase/AudioTransformUseCase';
@@ -32,6 +30,7 @@ import StartScreenPresenter from 'Application/Start/View/StartScreen/StartScreen
 import OldPagePresenter from 'Application/Start/View/OldPage/OldPagePresenter';
 import ConversationPresenter from 'Application/Start/View/Conversation/ConversationPresenter';
 import AudioPresenter from 'Application/Start/View/Audio/AudioPresenter';
+import InfoPresenter from 'Application/Start/View/Info/InfoPresenter';
 import Fake from 'Infrastructure/GptClient/Fake/Fake';
 import StartCase from 'Infrastructure/GptClient/Fake/Cases/StartCase';
 import Suspend from 'Infrastructure/GptClient/Fake/Cases/Suspend';
@@ -49,14 +48,16 @@ import StartReplicationClientNetwork from 'Infrastructure/Start/Replication/Clie
 import StartReplicationClientNetworkParser from 'Infrastructure/Start/Replication/Client/Network/Parser';
 import StartReplicationClientNetworkEncoder from 'Infrastructure/Start/Replication/Client/Network/Encoder';
 import ReplicationSessionService from 'Core/Replication/SessionService';
-import {v4} from 'uuid';
-import ReplicationSessionStorageMemory from 'Infrastructure/Replication/SessionStorage/Memory/Memory';
+import ReplicationSessionStorageLocalStorage from 'Infrastructure/Replication/SessionStorage/LocalStorage/LocalStorage';
 import StartControllerReplicationPollHandler from 'Application/Start/Controller/Handler/ReplicationPollHandler';
 import ReplicationPollHandler from 'Application/Start/Controller/Handler/ReplicationPollHandler';
 import TimeHelper from 'Application/Start/TimeHelper/TimeHelper';
 import AudioOutputDevice from 'Application/Start/View/Audio/AudioOutputDevice';
 import PlaybackUseCase from 'Core/Audio/PlaybackUseCase/PlaybackUseCase';
 import StartBus from 'Application/Start/StartBus';
+import LeaderUseCase from 'Core/Replication/LeaderUseCase/LeaderUseCase';
+import WebLocks from 'Infrastructure/Replication/LeaderElection/WebLocks';
+import LeaderHandler from 'Application/Start/Controller/Handler/LeaderHandler';
 
 class Container {
     private config: Config = new Config();
@@ -66,6 +67,15 @@ class Container {
 
     private startAdapter: StartAdapter = new StartAdapter();
     private startBus: StartBus = new StartBus();
+    private lockManager: LockManager | undefined = this.createLockManager();
+    private sessionBrowserStorage: Storage = this.createSessionBrowserStorage();
+    private replicationSessionService: ReplicationSessionService = new ReplicationSessionService(
+        () => crypto.randomUUID(),
+        new ReplicationSessionStorageLocalStorage(this.sessionBrowserStorage)
+    );
+    private leaderUseCase: LeaderUseCase = new LeaderUseCase(
+        new WebLocks(this.lockManager)
+    );
 
     private audioTransformClient: AudioTransformClient = new NetworkAudioTransformClient(
         this.fetchHelper,
@@ -85,11 +95,11 @@ class Container {
             this.fetchHelper,
             this.parseHelper,
             this.config.gptClientUrl,
-            this.encoder
+            this.encoder,
+            this.replicationSessionService
         )
     ;
     private audioStorage: AudioStorage = new MemoryAudioStorage();
-    private conversationStorage: ConversationStorage = new MemoryConversationStorage();
     private startStorage: StartStorage = new MemoryStartStorage();
     private audioService: AudioService = new AudioService(
         this.audioStorage
@@ -119,36 +129,6 @@ class Container {
         },
         document.body
     );
-    private conversationUseCase: ConversationUseCase = new ConversationUseCase(
-        this.conversationStorage,
-        this.gptClient,
-        this.audioService,
-        this.startStorage
-    );
-    private startUseCase: StartUseCase = new StartUseCase(
-        this.startStorage,
-        this.audioFeedbackClientBrowser
-    );
-    private audioOutputDevice: AudioOutputDevice = new AudioOutputDevice(
-        this.startAdapter
-    );
-    private startPresenter: StartPresenter = new StartPresenter(
-        new StartScreenPresenter(),
-        new OldPagePresenter(),
-        new ConversationPresenter(),
-        new AudioPresenter(
-            this.audioOutputDevice
-        )
-    );
-    private languageCache: LanguageCacheMemory = new LanguageCacheMemory();
-    private languageTranslationClient: LanguageTranslationClientRest = new LanguageTranslationClientRest(
-        this.config.translationServiceUrl,
-        this.fetchHelper
-    );
-    private replicationSessionService: ReplicationSessionService = new ReplicationSessionService(
-        v4,
-        new ReplicationSessionStorageMemory()
-    );
     private startReplicationUseCase: StartReplicationUseCase = new StartReplicationUseCase(
         new StartReplicationCacheMemory(),
         new StartReplicationClientNetwork(
@@ -162,6 +142,33 @@ class Container {
         ),
         this.replicationSessionService
     );
+    private conversationUseCase: ConversationUseCase = new ConversationUseCase(
+        this.gptClient,
+        this.audioService,
+        this.startStorage,
+        this.startReplicationUseCase
+    );
+    private startUseCase: StartUseCase = new StartUseCase(
+        this.startStorage,
+        this.audioFeedbackClientBrowser
+    );
+    private audioOutputDevice: AudioOutputDevice = new AudioOutputDevice(
+        this.startAdapter
+    );
+    private startPresenter: StartPresenter = new StartPresenter(
+        new StartScreenPresenter(),
+        new OldPagePresenter(),
+        new ConversationPresenter(),
+        new InfoPresenter(),
+        new AudioPresenter(
+            this.audioOutputDevice
+        )
+    );
+    private languageCache: LanguageCacheMemory = new LanguageCacheMemory();
+    private languageTranslationClient: LanguageTranslationClientRest = new LanguageTranslationClientRest(
+        this.config.translationServiceUrl,
+        this.fetchHelper
+    );
     private startDataCollector: StartDataCollector = new StartDataCollector(
         this.audioStateUseCase,
         this.conversationUseCase,
@@ -170,12 +177,14 @@ class Container {
             this.languageTranslationClient,
             this.languageCache
         ),
-        this.startReplicationUseCase
+        this.startReplicationUseCase,
+        this.leaderUseCase
     );
     private audioFeedbackUseCase: AudioFeedbackUseCase = new AudioFeedbackUseCase(
         this.audioFeedbackClientBrowser
     );
-    private audioInputHandlerConversationInputHandler: AudioInputHandlerConversationInputHandler = new AudioInputHandlerConversationInputHandler(
+    private audioInputHandlerConversationInputHandler:
+        AudioInputHandlerConversationInputHandler = new AudioInputHandlerConversationInputHandler(
         this.conversationUseCase,
         this.startBus
     );
@@ -192,7 +201,13 @@ class Container {
     private audioOutputHandler: AudioOutputHandler = new AudioOutputHandler(
         this.startAdapter,
         this.playbackUseCase,
-        this.inputUseCase
+        this.inputUseCase,
+        this.leaderUseCase
+    );
+    private leaderHandler: LeaderHandler = new LeaderHandler(
+        this.leaderUseCase,
+        this.inputUseCase,
+        this.startReplicationUseCase
     );
     private startHandler: StartHandler = new StartHandler(
         this.startUseCase,
@@ -213,6 +228,7 @@ class Container {
         this.startPresenter,
         [],
         [
+            this.leaderHandler,
             this.audioInputHandler,
             this.audioOutputHandler,
             this.startHandler,
@@ -226,6 +242,48 @@ class Container {
 
     constructor() {
         ViewInjection(Start, this.startAdapter);
+    }
+
+    private createLockManager(): LockManager | undefined {
+        try {
+            return navigator.locks;
+        } catch {
+            return undefined;
+        }
+    }
+
+    private createSessionBrowserStorage(): Storage {
+        try {
+            return window.localStorage;
+        } catch {
+            return this.createMemoryStorage();
+        }
+    }
+
+    private createMemoryStorage(): Storage {
+        const data: Map<string, string> = new Map<string, string>();
+
+        return {
+            get length(): number {
+                return data.size;
+            },
+            clear(): void {
+                data.clear();
+            },
+            getItem(key: string): string | null {
+                return data.get(key) || null;
+            },
+            key(index: number): string | null {
+                const keys: Array<string> = Array.from(data.keys());
+                return keys[index] || null;
+            },
+            removeItem(key: string): void {
+                data.delete(key);
+            },
+            setItem(key: string, value: string): void {
+                data.set(key, value);
+            }
+        };
     }
 }
 

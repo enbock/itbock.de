@@ -20,8 +20,8 @@ export default class ReplicationPollHandler implements ControllerHandler {
     }
 
     private async pollData(): Promise<void> {
-        await this.replicationUseCase.pollState();
-        void this.presentData();
+        const hasChanged: boolean = await this.replicationUseCase.pollState();
+        if (hasChanged) void this.presentData();
         this.handler.start();
     }
 }

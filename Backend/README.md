@@ -41,12 +41,29 @@ Laufzeit (werden an die Lambda-Funktionen weitergegeben):
   Keys zu `401`-Fehlern führt.
 - `S3_BUCKET_NAME`: Bucket für Tokens, Nutzerdaten und Sessions.
 - `S3_TOKEN_PATH`, `S3_USER_DATA_PATH`, `S3_SESSION_PATH`: Ablageorte (Prefixe) im Bucket.
+- `S3_KNOWLEDGE_PATH`: Prefix des RAG-Indexes im Bucket, z.B. `Backend/Knowledge/`.
 
 Deployment (nur für `npm run deploy`):
 
 - `DEPLOY_ARTIFACT_BUCKET`: S3-Bucket für den hochgeladenen Code (Pflicht).
 - `STACK_NAME` (Standard `itbock-backend`), `STAGE_NAME` (Standard `dev`).
 - `DOMAIN_NAME` (Standard `api.itbock.de`): Custom Domain, die auf die API zeigt. Leer lassen = nicht umstellen.
+
+## Replikation, Sessions und RAG
+
+- `POST /gpt` akzeptiert optional den Header `session-id` (UUID v4). Mit Session-ID wird der Gesprächsverlauf in S3
+  gespeichert und via `GET /replication/start?version=<n>` repliziert.
+- Sessions enthalten Modul, Sprache, Busy-Status, Verlauf und Dokumente. Die KI liefert nur Dokument-IDs; das Backend
+  löst sie aus dem Wissensindex auf und verwirft unbekannte IDs.
+- Wissensdokumente liegen unter `Backend/knowledge/`. Vor jedem Deployment mit geändertem Wissen muss der Index neu
+  gebaut und hochgeladen werden:
+
+  ```bash
+  npm run knowledge:index
+  ```
+
+- Datenschutz: Sitzungen werden für bis zu 30 Tage in Amazon S3 gespeichert und sind an eine zufällige Browser-
+  Session-ID gebunden. IP-Adressen werden weder gespeichert noch an OpenAI weitergegeben.
 
 ## Projektstruktur
 
@@ -73,6 +90,7 @@ Voraussetzung: `DEPLOY_ARTIFACT_BUCKET` ist in `.env` gesetzt. Die Custom Domain
 ACM-Zertifikat `*.itbock.de` müssen in der Region bereits existieren (sie liegen außerhalb des Stacks). Dann:
 
 ```bash
+npm run knowledge:index
 npm run deploy
 ```
 
@@ -86,6 +104,38 @@ Das Skript `scripts/deploy.js` erledigt alles in einem Lauf:
 
 Ist die Domain bereits auf die API gemappt, wird sie nicht angefasst. Spätere Deployments sind damit ebenfalls nur
 `npm run deploy`.
+
+### Einmalige Lifecycle-Regel für Sessions
+
+Der Stack verwendet einen bereits existierenden S3-Bucket. Deshalb wird die Lifecycle-Regel für Session-Dateien nicht
+im Template angelegt. Die AWS-API ersetzt mit `put-bucket-lifecycle-configuration` immer die komplette Konfiguration.
+Vorhandene Regeln müssen daher mit der folgenden Session-Regel zusammengeführt werden:
+
+```bash
+aws s3api put-bucket-lifecycle-configuration \
+  --bucket <S3_BUCKET_NAME> \
+  --lifecycle-configuration file://session-lifecycle.json
+```
+
+```json
+{
+  "Rules": [
+    {
+      "ID": "itbock-session-retention",
+      "Status": "Enabled",
+      "Filter": {
+        "Prefix": "Backend/Session/"
+      },
+      "Expiration": {
+        "Days": 30
+      }
+    }
+  ]
+}
+```
+
+Wird ein anderer Session-Prefix oder eine andere Aufbewahrungszeit verwendet, müssen `Prefix` bzw. `Days`
+entsprechend angepasst werden.
 
 ### API-Key rotieren
 

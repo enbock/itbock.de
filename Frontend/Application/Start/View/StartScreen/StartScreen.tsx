@@ -18,12 +18,14 @@ export default class StartScreen extends Component<Properties> {
         return <>
             <style>{Style}</style>
             <img src="itbock_terminal.svg" alt={this.model.i18n.imageText}/>
-            <button
-                right
-                onClick={() => this.onStartClick()}
-            >
-                {this.model.i18n.startLabel}
-            </button>
+            {this.model.showStartButton
+                ? <button
+                    right
+                    onClick={() => this.onStartClick()}
+                >
+                    {this.model.i18n.startLabel}
+                </button>
+                : <p>{this.model.i18n.followerHint}</p>}
         </>;
     }
 

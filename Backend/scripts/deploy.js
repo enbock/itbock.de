@@ -42,7 +42,8 @@ aws([
     `BucketName=${env.S3_BUCKET_NAME}`,
     `TokenPath=${env.S3_TOKEN_PATH || 'Backend/Token'}`,
     `UserDataPath=${env.S3_USER_DATA_PATH || 'Backend/Users'}`,
-    `SessionPath=${env.S3_SESSION_PATH || 'Backend/Session'}`,
+    `SessionPath=${env.S3_SESSION_PATH || 'Backend/Session/'}`,
+    `KnowledgePath=${env.S3_KNOWLEDGE_PATH || 'Backend/Knowledge/'}`,
     `OpenAiApiKey=${env.OPENAI_API_KEY}`
 ]);
 

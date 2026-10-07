@@ -4,7 +4,7 @@ import FakeAudio from 'Infrastructure/GptClient/Fake/Cases/FakeAudio';
 
 export default class StartCase implements FakeCase {
     public support(conversations: Array<ConversationEntity>): boolean {
-        return conversations.length < 2;
+        return conversations.length > 0 && conversations[conversations.length - 1].role == 'assistant';
     }
 
     public run(conversations: Array<ConversationEntity>, result: ConversationEntity): void {

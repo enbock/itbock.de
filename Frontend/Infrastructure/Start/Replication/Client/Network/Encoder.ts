@@ -4,7 +4,8 @@ export default class Encoder {
     ) {
     }
 
-    public encodeLoadStateEndpoint(): string {
-        return this.loadStateEndpoint;
+    public encodeLoadStateEndpoint(version: number): string {
+        const separator: string = this.loadStateEndpoint.includes('?') ? '&' : '?';
+        return `${this.loadStateEndpoint}${separator}version=${encodeURIComponent(String(version))}`;
     }
 }

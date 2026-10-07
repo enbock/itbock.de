@@ -3,6 +3,7 @@ import {ChatCompletionMessage} from 'openai/resources/chat';
 import OpenAI from 'openai';
 import GptEntity from '../../../Core/Gpt/GptEntity';
 import GptBackend from '../../../Core/Gpt/GptBackend';
+import GptPage from '../../../Core/Gpt/GptPage';
 
 export default class OpenAi implements GptBackend {
     constructor(
@@ -65,6 +66,7 @@ export default class OpenAi implements GptBackend {
         result.role = gptMessage.role;
         result.language = data.language || 'de-DE';
         result.data = data.data || {};
+        result.page = this.parsePage(data.page);
 
         return result;
     }
@@ -102,6 +104,23 @@ export default class OpenAi implements GptBackend {
 
         return {
             content: messageContent
+        };
+    }
+
+    private parsePage(value: unknown): GptPage | null {
+        if (
+            typeof value !== 'object'
+            || value === null
+            || typeof (value as {module?: unknown}).module !== 'string'
+            || !Array.isArray((value as {documentIds?: unknown}).documentIds)
+        ) {
+            return null;
+        }
+
+        return {
+            module: (value as {module: string}).module,
+            documentIds: (value as {documentIds: Array<unknown>}).documentIds
+                .filter((entry: unknown): entry is string => typeof entry === 'string')
         };
     }
 }

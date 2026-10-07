@@ -42,8 +42,13 @@ export default class Controller implements ShadowComponentReceiver {
         this.startUseCase.initialize(this.defaultLanguage);
 
         const boundPresentData: Callback = async () => this.presentData();
+        const handlerInitialization: Array<Promise<void>> = [];
 
-        this.handlers.forEach(h => h.initialize(boundPresentData));
+        this.handlers.forEach((handler: ControllerHandler) => {
+            handlerInitialization.push(handler.initialize(boundPresentData));
+        });
+
+        await Promise.all(handlerInitialization);
 
         await this.presentData();
         await this.startModules();

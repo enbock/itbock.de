@@ -2,6 +2,7 @@ import ControllerHandler from 'Application/ControllerHandler';
 import PlaybackUseCase from 'Core/Audio/PlaybackUseCase/PlaybackUseCase';
 import Adapter from 'Application/Start/Adapter';
 import InputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
+import LeaderUseCase from 'Core/Replication/LeaderUseCase/LeaderUseCase';
 
 export default class AudioOutputHandler implements ControllerHandler {
     private presentData: Callback = () => <never>false;
@@ -9,7 +10,8 @@ export default class AudioOutputHandler implements ControllerHandler {
     constructor(
         private adapter: Adapter,
         private playbackUseCase: PlaybackUseCase,
-        private inputUseCase: InputUseCase
+        private inputUseCase: InputUseCase,
+        private leaderUseCase: LeaderUseCase
     ) {
     }
 
@@ -20,7 +22,7 @@ export default class AudioOutputHandler implements ControllerHandler {
 
     private async handleFinishing(): Promise<void> {
         this.playbackUseCase.endPlayback();
-        this.inputUseCase.startInput();
+        if (this.leaderUseCase.isLeader()) this.inputUseCase.startInput();
         await this.presentData();
     }
 }

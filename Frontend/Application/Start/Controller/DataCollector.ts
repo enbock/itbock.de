@@ -4,6 +4,9 @@ import ConversationUseCase from 'Core/Gpt/ConversationUseCase/ConversationUseCas
 import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 import LanguageUseCase from 'Core/I18n/UseCase/LanguageUseCase';
 import ReplicationUseCase from 'Core/Start/ReplicationUseCase/ReplicationUseCase';
+import {StartReplicationConversationEntity} from 'Core/Start/ReplicationUseCase/StartReplicationEntity';
+import ConversationEntity from 'Core/Gpt/ConversationEntity';
+import LeaderUseCase from 'Core/Replication/LeaderUseCase/LeaderUseCase';
 
 export default class DataCollector {
     constructor(
@@ -11,7 +14,8 @@ export default class DataCollector {
         private conversationUseCase: ConversationUseCase,
         private startUseCase: StartUseCase,
         private languageService: LanguageUseCase,
-        private replicationUseCase: ReplicationUseCase
+        private replicationUseCase: ReplicationUseCase,
+        private leaderUseCase: LeaderUseCase
     ) {
     }
 
@@ -19,11 +23,23 @@ export default class DataCollector {
         const data: ResponseCollection = new ResponseCollection();
 
         this.conversationUseCase.getState(data.gptState);
-        this.audioStateUseCase.getState(data.audioState);
+        data.isLeader = this.leaderUseCase.isLeader();
+        this.audioStateUseCase.getState(data.audioState, data.isLeader);
         this.startUseCase.getState(data.startState);
-        data.i18n = await this.languageService.getI18n(data.startState);
         data.replication = this.replicationUseCase.getState();
+        data.startState.language = data.replication.language || data.startState.language;
+        data.gptState.conversations = data.replication.conversations.map(this.mapConversation);
+        data.i18n = await this.languageService.getI18n(data.startState);
 
         return data;
+    }
+
+    private mapConversation(conversation: StartReplicationConversationEntity): ConversationEntity {
+        const entity: ConversationEntity = new ConversationEntity();
+        entity.role = conversation.role;
+        entity.text = conversation.text;
+        entity.language = conversation.language;
+
+        return entity;
     }
 }

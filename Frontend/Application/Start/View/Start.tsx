@@ -9,6 +9,7 @@ import StartScreen from 'Application/Start/View/StartScreen/StartScreen';
 import Adapter from 'Application/Start/Adapter';
 import Conversation from 'Application/Start/View/Conversation/Conversation';
 import OldPage from 'Application/Start/View/OldPage/OldPage';
+import Info from 'Application/Start/View/Info/Info';
 
 export default function renderApplication(document: Document) {
     const rootNode: HTMLElement = ShadowRenderer.render(<Start/>);
@@ -84,6 +85,7 @@ export class Start extends Component implements RootComponent {
             {this.model.showStartScreen ? <StartScreen model={this.model.startScreen} adapter={this.adapter}/> : ''}
             {this.model.showConversation ? <Conversation model={this.model.conversation}/> : ''}
             {this.model.showOldPage ? <OldPage model={this.model.oldPage}/> : ''}
+            {this.model.showInfo ? <Info model={this.model.info}/> : ''}
         </>;
     }
 }

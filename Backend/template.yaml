@@ -16,7 +16,13 @@ Parameters:
     Default: Backend/Users
   SessionPath:
     Type: String
-    Default: Backend/Session
+    Default: Backend/Session/
+  KnowledgePath:
+    Type: String
+    Default: Backend/Knowledge/
+  SessionRetentionDays:
+    Type: Number
+    Default: 30
   OpenAiApiKey:
     Type: String
     NoEcho: true
@@ -44,7 +50,14 @@ Resources:
                   - s3:GetObject
                   - s3:PutObject
                   - s3:DeleteObject
-                Resource: !Sub arn:${AWS::Partition}:s3:::${BucketName}/*
+                Resource:
+                  - !Sub arn:${AWS::Partition}:s3:::${BucketName}/${TokenPath}*
+                  - !Sub arn:${AWS::Partition}:s3:::${BucketName}/${UserDataPath}*
+                  - !Sub arn:${AWS::Partition}:s3:::${BucketName}/${SessionPath}*
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: !Sub arn:${AWS::Partition}:s3:::${BucketName}/${KnowledgePath}*
               - Effect: Allow
                 Action: s3:ListBucket
                 Resource: !Sub arn:${AWS::Partition}:s3:::${BucketName}
@@ -66,7 +79,7 @@ Resources:
       Handler: lambda.generateTokenHandler
       Code: ./build
       MemorySize: 1024
-      Timeout: 30
+      Timeout: 29
       Role: !GetAtt LambdaRole.Arn
       Environment:
         Variables:
@@ -74,6 +87,7 @@ Resources:
           S3_TOKEN_PATH: !Ref TokenPath
           S3_USER_DATA_PATH: !Ref UserDataPath
           S3_SESSION_PATH: !Ref SessionPath
+          S3_KNOWLEDGE_PATH: !Ref KnowledgePath
           OPENAI_API_KEY: !Ref OpenAiApiKey
 
   GenerateTokenPermission:
@@ -144,6 +158,7 @@ Resources:
           S3_TOKEN_PATH: !Ref TokenPath
           S3_USER_DATA_PATH: !Ref UserDataPath
           S3_SESSION_PATH: !Ref SessionPath
+          S3_KNOWLEDGE_PATH: !Ref KnowledgePath
           OPENAI_API_KEY: !Ref OpenAiApiKey
 
   GptPermission:
@@ -280,7 +295,8 @@ Resources:
               x-amazon-apigateway-integration:
                 type: aws_proxy
                 httpMethod: POST
-                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GenerateTokenFunction.Arn}/invocations
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GenerateTokenFunction.Arn}/invocations
             options:
               responses:
                 "200":
@@ -304,11 +320,20 @@ Resources:
                   default:
                     statusCode: "200"
                     responseParameters:
-                      method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'"
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'
                       method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
                       method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
                     responseTemplates:
-                      application/json: "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\"http://localhost:3001\") || $origin.matches(\"https://www[.]itbock[.]de\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
           /validate-token:
             post:
               responses:
@@ -317,7 +342,8 @@ Resources:
               x-amazon-apigateway-integration:
                 type: aws_proxy
                 httpMethod: POST
-                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ValidateTokenFunction.Arn}/invocations
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ValidateTokenFunction.Arn}/invocations
             options:
               responses:
                 "200":
@@ -341,20 +367,40 @@ Resources:
                   default:
                     statusCode: "200"
                     responseParameters:
-                      method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'"
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'
                       method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
                       method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
                     responseTemplates:
-                      application/json: "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\"http://localhost:3001\") || $origin.matches(\"https://www[.]itbock[.]de\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
           /gpt:
             post:
+              parameters:
+                - name: session-id
+                  in: header
+                  required: false
+                  schema:
+                    type: string
               responses:
                 "200":
                   description: Lambda proxy response
+                "400":
+                  description: Invalid session id
+                "409":
+                  description: Session is busy
               x-amazon-apigateway-integration:
                 type: aws_proxy
                 httpMethod: POST
-                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GptFunction.Arn}/invocations
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GptFunction.Arn}/invocations
             options:
               responses:
                 "200":
@@ -378,11 +424,20 @@ Resources:
                   default:
                     statusCode: "200"
                     responseParameters:
-                      method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'"
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id,session-id'
                       method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
                       method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
                     responseTemplates:
-                      application/json: "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\"http://localhost:3001\") || $origin.matches(\"https://www[.]itbock[.]de\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
           /audio-transform:
             post:
               responses:
@@ -391,7 +446,8 @@ Resources:
               x-amazon-apigateway-integration:
                 type: aws_proxy
                 httpMethod: POST
-                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AudioTransformFunction.Arn}/invocations
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AudioTransformFunction.Arn}/invocations
             options:
               responses:
                 "200":
@@ -415,11 +471,20 @@ Resources:
                   default:
                     statusCode: "200"
                     responseParameters:
-                      method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'"
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'
                       method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
                       method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
                     responseTemplates:
-                      application/json: "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\"http://localhost:3001\") || $origin.matches(\"https://www[.]itbock[.]de\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
           /i18n:
             post:
               responses:
@@ -428,7 +493,8 @@ Resources:
               x-amazon-apigateway-integration:
                 type: aws_proxy
                 httpMethod: POST
-                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${I18nFunction.Arn}/invocations
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${I18nFunction.Arn}/invocations
             options:
               responses:
                 "200":
@@ -452,20 +518,47 @@ Resources:
                   default:
                     statusCode: "200"
                     responseParameters:
-                      method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'"
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'
                       method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
                       method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
                     responseTemplates:
-                      application/json: "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\"http://localhost:3001\") || $origin.matches(\"https://www[.]itbock[.]de\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
           /replication/start:
             get:
+              parameters:
+                - name: session-id
+                  in: header
+                  required: true
+                  schema:
+                    type: string
+                - name: version
+                  in: query
+                  required: false
+                  schema:
+                    type: integer
               responses:
                 "200":
                   description: Lambda proxy response
+                "204":
+                  description: Session unchanged
+                "400":
+                  description: Invalid session id
+                "401":
+                  description: Session id missing
               x-amazon-apigateway-integration:
                 type: aws_proxy
                 httpMethod: POST
-                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${StartReplicationFunction.Arn}/invocations
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${StartReplicationFunction.Arn}/invocations
             options:
               responses:
                 "200":
@@ -489,11 +582,20 @@ Resources:
                   default:
                     statusCode: "200"
                     responseParameters:
-                      method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id,session-id'"
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id,session-id'
                       method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
                       method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
                     responseTemplates:
-                      application/json: "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\"http://localhost:3001\") || $origin.matches(\"https://www[.]itbock[.]de\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
 
   Deployment:
     Type: AWS::ApiGateway::Deployment

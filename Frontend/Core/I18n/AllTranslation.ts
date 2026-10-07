@@ -10,7 +10,8 @@ export default <JsonData>{
     },
     startScreen: {
         startLabel: 'Start',
-        imageText: 'Star Trek Terminal Logo mit den EB-Initialen des Labors'
+        imageText: 'Star Trek Terminal Logo mit den EB-Initialen des Labors',
+        followerHint: 'Das Mikrofon ist bereits in einem anderen Tab aktiv. Dieser Tab zeigt nur den Status an.'
     },
     start: {
         pageTitle: 'Bock Laboratories - Terminal',
