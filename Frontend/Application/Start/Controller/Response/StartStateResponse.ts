@@ -6,6 +6,7 @@ import AudioResponse from 'Core/Audio/StateUseCase/Response';
 export default class StartStateResponse implements StartResponse, AudioResponse {
     public microphoneEnable: boolean = false;
     public language: string = '';
+    public sessionStarted: boolean = false;
     public audioInputEnabled: boolean = false;
     public audioOutput: AudioBuffer = {audio: '', text: ''};
     public isAudioPlaying: boolean = false;

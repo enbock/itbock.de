@@ -15,9 +15,10 @@ It offers a variety of functionalities such as:
 - **Audio Transformation**: Transforms audio files into text.
 - **Translation Services**: Provides language translation for various texts.
 - **Replicated Sessions**: The frontend keeps a browser-local session id and mirrors backend-controlled
-  module, language, conversation, and document state across tabs by polling the replication API. Browser tabs elect a
-  single leader for microphone/audio via Web Locks; follower tabs stay display-only and take over automatically when
-  the leader closes.
+  module, language, conversation, and document state across tabs by polling the replication API. The session replication
+  (leader election and replication polling) starts only after the start button on the start page is pressed; the start
+  page itself is shown immediately on load. Browser tabs elect a single leader for microphone/audio via Web Locks;
+  follower tabs stay display-only and take over automatically when the leader closes.
 - **Knowledge-driven Info Pages**: The frontend can render replicated document collections in a dedicated info
   view. The backend resolves the shown documents from a Markdown knowledge base indexed into S3.
 

@@ -208,16 +208,18 @@ class Container {
         this.inputUseCase,
         this.startReplicationUseCase
     );
-    private startHandler: StartHandler = new StartHandler(
-        this.startUseCase,
-        this.inputUseCase,
-        this.conversationUseCase,
-        this.startAdapter
-    );
     private startControllerReplicationPollHandler: ReplicationPollHandler = new StartControllerReplicationPollHandler(
         this.timeHelper,
         this.startReplicationUseCase,
         this.config.replicationPollTime
+    );
+    private startHandler: StartHandler = new StartHandler(
+        this.startUseCase,
+        this.inputUseCase,
+        this.conversationUseCase,
+        this.startAdapter,
+        this.leaderUseCase,
+        this.startControllerReplicationPollHandler
     );
     public startController: StartController = new StartController(
         document,

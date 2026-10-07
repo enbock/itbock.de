@@ -3,10 +3,16 @@ import Response from 'Core/Start/StartUseCase/Response';
 import AudioFeedbackClient, {AudioFeedback} from 'Core/Audio/AudioFeedbackClient';
 
 export default class StartUseCase {
+    private sessionStarted: boolean = false;
+
     constructor(
         private startStorage: StartStorage,
         private audioFeedbackClient: AudioFeedbackClient
     ) {
+    }
+
+    public startSession(): void {
+        this.sessionStarted = true;
     }
 
     public async startApplication(): Promise<void> {
@@ -15,6 +21,7 @@ export default class StartUseCase {
 
     public getState(response: Response): void {
         response.language = this.startStorage.getLanguage();
+        response.sessionStarted = this.sessionStarted;
     }
 
     public initialize(defaultLanguage: string): void {

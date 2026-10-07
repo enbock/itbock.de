@@ -5,7 +5,7 @@ export default class StartScreenPresenter {
     public present(data: ResponseCollection): StartScreenModel {
         const model: StartScreenModel = new StartScreenModel(data.i18n.startScreen);
 
-        model.showStartButton = data.isLeader;
+        model.showStartButton = !data.startState.sessionStarted || data.isLeader;
 
         return model;
     }

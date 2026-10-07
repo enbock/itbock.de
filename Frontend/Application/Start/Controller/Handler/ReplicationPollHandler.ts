@@ -15,8 +15,11 @@ export default class ReplicationPollHandler implements ControllerHandler {
     }
 
     public async initialize(presentData: Callback): Promise<void> {
-        this.handler.start();
         this.presentData = presentData;
+    }
+
+    public start(): void {
+        this.handler.start();
     }
 
     private async pollData(): Promise<void> {

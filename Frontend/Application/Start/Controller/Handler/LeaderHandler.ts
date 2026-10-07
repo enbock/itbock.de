@@ -16,7 +16,6 @@ export default class LeaderHandler implements ControllerHandler {
     public async initialize(presentData: Callback): Promise<void> {
         this.presentData = presentData;
         this.leaderUseCase.onChange((isLeader: boolean) => void this.handleLeaderChange(isLeader));
-        await this.leaderUseCase.start();
     }
 
     private async handleLeaderChange(isLeader: boolean): Promise<void> {
