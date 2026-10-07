@@ -1,5 +1,3 @@
-import {ShadowComponentReceiver} from '@enbock/ts-jsx/Component';
-
-export default interface ModuleController extends ShadowComponentReceiver {
+export default interface ModuleController {
     initialize(): Promise<void>;
 }

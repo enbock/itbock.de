@@ -1,6 +1,6 @@
 @import "theme/Element/Button.css";
 
-:host {
+.start-screen {
     display: flex;
     flex-grow: 1;
     align-items: center;

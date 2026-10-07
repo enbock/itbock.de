@@ -2,7 +2,7 @@
 @import "theme/Start/SubHeader.css";
 @import "theme/Start/Menu.css";
 
-:host {
+.start {
     display: grid;
     grid-template-areas:
     "main-title main-title"

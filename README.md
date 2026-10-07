@@ -26,9 +26,10 @@ The following technologies and frameworks are used in this project:
 
 - **Frontend**:
   - **TypeScript**: Ensures type safety and modern JavaScript features.
-  - **Webpack**: Module bundler for compiling TypeScript and other assets.
-  - **HTML/CSS**: For structuring and styling the webpage.
-  - **Web Components**: Custom elements like `<audio-input>` for handling audio input.
+  - **Webpack**: Module bundler for compiling TypeScript, CSS and other assets.
+  - **HTML/CSS**: Views build the DOM natively (no TSX/JSX, no Shadow DOM). CSS is bundled classically
+    via webpack (`style-loader` + `css-loader`).
+  - **Custom Elements**: A Web Component `<audio-input>` (without Shadow DOM) handles microphone/audio input.
   - **Service Workers**: For offline capabilities and caching.
 
 - **Backend**:

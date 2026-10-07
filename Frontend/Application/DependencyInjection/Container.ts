@@ -1,8 +1,7 @@
 import FetchHelper from 'Infrastructure/ApiHelper/FetchHelper';
 import ParseHelper from 'Infrastructure/ParseHelper';
 import StartController from 'Application/Start/Controller/Controller';
-import renderApplication, {Start} from 'Application/Start/View/Start';
-import ViewInjection from '@enbock/ts-jsx/ViewInjection';
+import renderApplication from 'Application/Start/View/Start';
 import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 import StartPresenter from 'Application/Start/View/StartPresenter';
 import StartDataCollector from 'Application/Start/Controller/DataCollector';
@@ -223,7 +222,7 @@ class Container {
     public startController: StartController = new StartController(
         document,
         renderApplication,
-        Start,
+        this.startAdapter,
         this.startUseCase,
         this.startPresenter,
         [],
@@ -239,10 +238,6 @@ class Container {
         navigator.language,
         this.inputUseCase
     );
-
-    constructor() {
-        ViewInjection(Start, this.startAdapter);
-    }
 
     private createLockManager(): LockManager | undefined {
         try {

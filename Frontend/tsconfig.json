@@ -12,8 +12,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": false,
-    "jsx": "react-jsx",
-    "jsxImportSource": "@enbock/ts-jsx",
     "outDir": "./build/",
     "noImplicitAny": true,
     "moduleResolution": "node",

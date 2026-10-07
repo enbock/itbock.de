@@ -1,5 +1,5 @@
-import start, {Start} from 'Application/Start/View/Start';
-import {ShadowComponentReceiver} from '@enbock/ts-jsx/Component';
+import Adapter from 'Application/Start/Adapter';
+import renderApplication, {Start} from 'Application/Start/View/Start';
 import StartPresenter from 'Application/Start/View/StartPresenter';
 import ModuleController from 'Application/ModuleController';
 import ControllerHandler from 'Application/ControllerHandler';
@@ -8,13 +8,13 @@ import DataCollector from 'Application/Start/Controller/DataCollector';
 import ResponseCollection from 'Application/Start/Controller/Response/ResponseCollection';
 import AudioInputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
 
-export default class Controller implements ShadowComponentReceiver {
+export default class Controller {
     private startView?: Start;
 
     constructor(
         private document: Document,
-        private renderApplication: typeof start,
-        view: typeof Start,
+        private renderApplication: (document: Document, adapter: Adapter) => Start,
+        private adapter: Adapter,
         private startUseCase: StartUseCase,
         private presenter: StartPresenter,
         private moduleControllers: Array<ModuleController>,
@@ -23,19 +23,14 @@ export default class Controller implements ShadowComponentReceiver {
         private defaultLanguage: string,
         private audioInputUseCase: AudioInputUseCase
     ) {
-        view.componentReceiver = this;
-    }
-
-    public setComponent(view: Start): void {
-        this.startView = view;
-        void this.presentData();
     }
 
     public async start(): Promise<void> {
         this.audioInputUseCase.initialize();
         await this.initializeController();
 
-        this.renderApplication(this.document);
+        this.startView = this.renderApplication(this.document, this.adapter);
+        await this.presentData();
     }
 
     private async initializeController(): Promise<void> {
@@ -50,7 +45,6 @@ export default class Controller implements ShadowComponentReceiver {
 
         await Promise.all(handlerInitialization);
 
-        await this.presentData();
         await this.startModules();
     }
 

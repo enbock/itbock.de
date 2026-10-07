@@ -1,5 +1,5 @@
 @import "theme/Element/Button.css";
 
-:host {
+.conversation {
     font-size: 2rem;
 }

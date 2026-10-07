@@ -10,20 +10,18 @@
     "build:swm:tsc": "tsc Application/ServiceWorkerManager.ts --module esnext --target esnext",
     "build:swm:compile": "npm run build:swm:tsc -- --moduleResolution node --outdir build",
     "build:swm:update": "node scripts/buildServiceWorker.js",
-    "test": "node --import tsx --test test/**/*.test.ts"
+    "test": "node --import tsx --test \"**/*.test.ts\""
   },
   "dependencies": {
     "@aws-sdk/client-polly": "*",
-    "@enbock/ts-jsx": "*",
-    "@types/jsdom": "*",
     "@types/node": "*",
     "copy-webpack-plugin": "*",
     "css-loader": "*",
     "dotenv": "*",
     "dotenv-webpack": "*",
     "html-webpack-plugin": "*",
-    "jsdom": "*",
     "npm-run-all": "*",
+    "style-loader": "*",
     "ts-loader": "*",
     "typescript": "*",
     "webpack": "*",
