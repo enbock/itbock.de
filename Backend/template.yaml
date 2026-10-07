@@ -1,0 +1,612 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: itbock.de backend - Lambda functions behind an API Gateway REST API
+
+Parameters:
+  StageName:
+    Type: String
+    Default: dev
+  BucketName:
+    Type: String
+    Description: S3 bucket for tokens, user data and sessions (S3_BUCKET_NAME)
+  TokenPath:
+    Type: String
+    Default: Backend/Token
+  UserDataPath:
+    Type: String
+    Default: Backend/Users
+  SessionPath:
+    Type: String
+    Default: Backend/Session/
+  KnowledgePath:
+    Type: String
+    Default: Backend/Knowledge/
+  SessionRetentionDays:
+    Type: Number
+    Default: 30
+  OpenAiApiKey:
+    Type: String
+    NoEcho: true
+
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: bucket-access
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource:
+                  - !Sub arn:${AWS::Partition}:s3:::${BucketName}/${TokenPath}*
+                  - !Sub arn:${AWS::Partition}:s3:::${BucketName}/${UserDataPath}*
+                  - !Sub arn:${AWS::Partition}:s3:::${BucketName}/${SessionPath}*
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: !Sub arn:${AWS::Partition}:s3:::${BucketName}/${KnowledgePath}*
+              - Effect: Allow
+                Action: s3:ListBucket
+                Resource: !Sub arn:${AWS::Partition}:s3:::${BucketName}
+
+  GenerateTokenLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-generateToken
+      RetentionInDays: 7
+
+  GenerateTokenFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: GenerateTokenLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-generateToken
+      Runtime: nodejs24.x
+      Architectures:
+        - arm64
+      Handler: lambda.generateTokenHandler
+      Code: ./build
+      MemorySize: 1024
+      Timeout: 29
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref BucketName
+          S3_TOKEN_PATH: !Ref TokenPath
+          S3_USER_DATA_PATH: !Ref UserDataPath
+          S3_SESSION_PATH: !Ref SessionPath
+          S3_KNOWLEDGE_PATH: !Ref KnowledgePath
+          OPENAI_API_KEY: !Ref OpenAiApiKey
+
+  GenerateTokenPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref GenerateTokenFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/POST/generate-token
+
+  ValidateTokenLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-validateToken
+      RetentionInDays: 7
+
+  ValidateTokenFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: ValidateTokenLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-validateToken
+      Runtime: nodejs24.x
+      Architectures:
+        - arm64
+      Handler: lambda.validateTokenHandler
+      Code: ./build
+      MemorySize: 1024
+      Timeout: 30
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref BucketName
+          S3_TOKEN_PATH: !Ref TokenPath
+          S3_USER_DATA_PATH: !Ref UserDataPath
+          S3_SESSION_PATH: !Ref SessionPath
+          OPENAI_API_KEY: !Ref OpenAiApiKey
+
+  ValidateTokenPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref ValidateTokenFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/POST/validate-token
+
+  GptLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-generalGpt
+      RetentionInDays: 7
+
+  GptFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: GptLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-generalGpt
+      Runtime: nodejs24.x
+      Architectures:
+        - arm64
+      Handler: lambda.gptHandler
+      Code: ./build
+      MemorySize: 1024
+      Timeout: 30
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref BucketName
+          S3_TOKEN_PATH: !Ref TokenPath
+          S3_USER_DATA_PATH: !Ref UserDataPath
+          S3_SESSION_PATH: !Ref SessionPath
+          S3_KNOWLEDGE_PATH: !Ref KnowledgePath
+          OPENAI_API_KEY: !Ref OpenAiApiKey
+
+  GptPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref GptFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/POST/gpt
+
+  AudioTransformLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-audioTransform
+      RetentionInDays: 7
+
+  AudioTransformFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: AudioTransformLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-audioTransform
+      Runtime: nodejs24.x
+      Architectures:
+        - arm64
+      Handler: lambda.audioTransformHandler
+      Code: ./build
+      MemorySize: 1024
+      Timeout: 30
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref BucketName
+          S3_TOKEN_PATH: !Ref TokenPath
+          S3_USER_DATA_PATH: !Ref UserDataPath
+          S3_SESSION_PATH: !Ref SessionPath
+          OPENAI_API_KEY: !Ref OpenAiApiKey
+
+  AudioTransformPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref AudioTransformFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/POST/audio-transform
+
+  I18nLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-i18n
+      RetentionInDays: 7
+
+  I18nFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: I18nLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-i18n
+      Runtime: nodejs24.x
+      Architectures:
+        - arm64
+      Handler: lambda.i18nHandler
+      Code: ./build
+      MemorySize: 1024
+      Timeout: 30
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref BucketName
+          S3_TOKEN_PATH: !Ref TokenPath
+          S3_USER_DATA_PATH: !Ref UserDataPath
+          S3_SESSION_PATH: !Ref SessionPath
+          OPENAI_API_KEY: !Ref OpenAiApiKey
+
+  I18nPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref I18nFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/POST/i18n
+
+  StartReplicationLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-startReplication
+      RetentionInDays: 7
+
+  StartReplicationFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: StartReplicationLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-startReplication
+      Runtime: nodejs24.x
+      Architectures:
+        - arm64
+      Handler: lambda.startReplicationHandler
+      Code: ./build
+      MemorySize: 1024
+      Timeout: 30
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref BucketName
+          S3_TOKEN_PATH: !Ref TokenPath
+          S3_USER_DATA_PATH: !Ref UserDataPath
+          S3_SESSION_PATH: !Ref SessionPath
+          OPENAI_API_KEY: !Ref OpenAiApiKey
+
+  StartReplicationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref StartReplicationFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/GET/replication/start
+
+  Api:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: !Sub ${StageName}-${AWS::StackName}
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Body:
+        openapi: "3.0.1"
+        info:
+          title: itbock.de backend
+          version: "1.0"
+        paths:
+          /generate-token:
+            post:
+              responses:
+                "200":
+                  description: Lambda proxy response
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GenerateTokenFunction.Arn}/invocations
+            options:
+              responses:
+                "200":
+                  description: CORS preflight
+                  headers:
+                    Access-Control-Allow-Headers:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Methods:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Origin:
+                      schema:
+                        type: string
+              x-amazon-apigateway-integration:
+                type: mock
+                passthroughBehavior: when_no_match
+                requestTemplates:
+                  application/json: "{\"statusCode\": 200}"
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'
+                      method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+                      method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
+                    responseTemplates:
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+          /validate-token:
+            post:
+              responses:
+                "200":
+                  description: Lambda proxy response
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ValidateTokenFunction.Arn}/invocations
+            options:
+              responses:
+                "200":
+                  description: CORS preflight
+                  headers:
+                    Access-Control-Allow-Headers:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Methods:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Origin:
+                      schema:
+                        type: string
+              x-amazon-apigateway-integration:
+                type: mock
+                passthroughBehavior: when_no_match
+                requestTemplates:
+                  application/json: "{\"statusCode\": 200}"
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'
+                      method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+                      method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
+                    responseTemplates:
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+          /gpt:
+            post:
+              parameters:
+                - name: session-id
+                  in: header
+                  required: false
+                  schema:
+                    type: string
+              responses:
+                "200":
+                  description: Lambda proxy response
+                "400":
+                  description: Invalid session id
+                "409":
+                  description: Session is busy
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GptFunction.Arn}/invocations
+            options:
+              responses:
+                "200":
+                  description: CORS preflight
+                  headers:
+                    Access-Control-Allow-Headers:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Methods:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Origin:
+                      schema:
+                        type: string
+              x-amazon-apigateway-integration:
+                type: mock
+                passthroughBehavior: when_no_match
+                requestTemplates:
+                  application/json: "{\"statusCode\": 200}"
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id,session-id'
+                      method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+                      method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
+                    responseTemplates:
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+          /audio-transform:
+            post:
+              responses:
+                "200":
+                  description: Lambda proxy response
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AudioTransformFunction.Arn}/invocations
+            options:
+              responses:
+                "200":
+                  description: CORS preflight
+                  headers:
+                    Access-Control-Allow-Headers:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Methods:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Origin:
+                      schema:
+                        type: string
+              x-amazon-apigateway-integration:
+                type: mock
+                passthroughBehavior: when_no_match
+                requestTemplates:
+                  application/json: "{\"statusCode\": 200}"
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'
+                      method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+                      method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
+                    responseTemplates:
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+          /i18n:
+            post:
+              responses:
+                "200":
+                  description: Lambda proxy response
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${I18nFunction.Arn}/invocations
+            options:
+              responses:
+                "200":
+                  description: CORS preflight
+                  headers:
+                    Access-Control-Allow-Headers:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Methods:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Origin:
+                      schema:
+                        type: string
+              x-amazon-apigateway-integration:
+                type: mock
+                passthroughBehavior: when_no_match
+                requestTemplates:
+                  application/json: "{\"statusCode\": 200}"
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'
+                      method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+                      method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
+                    responseTemplates:
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+          /replication/start:
+            get:
+              parameters:
+                - name: session-id
+                  in: header
+                  required: true
+                  schema:
+                    type: string
+                - name: version
+                  in: query
+                  required: false
+                  schema:
+                    type: integer
+              responses:
+                "200":
+                  description: Lambda proxy response
+                "204":
+                  description: Session unchanged
+                "400":
+                  description: Invalid session id
+                "401":
+                  description: Session id missing
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub >-
+                  arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${StartReplicationFunction.Arn}/invocations
+            options:
+              responses:
+                "200":
+                  description: CORS preflight
+                  headers:
+                    Access-Control-Allow-Headers:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Methods:
+                      schema:
+                        type: string
+                    Access-Control-Allow-Origin:
+                      schema:
+                        type: string
+              x-amazon-apigateway-integration:
+                type: mock
+                passthroughBehavior: when_no_match
+                requestTemplates:
+                  application/json: "{\"statusCode\": 200}"
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Headers: >-
+                        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id,session-id'
+                      method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+                      method.response.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
+                    responseTemplates:
+                      application/json: |-
+                        #set($origin = $input.params("Origin"))
+                        #if($origin == "") #set($origin = $input.params("origin")) #end
+                        #if($origin.matches("http://localhost:3001"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+                        #if($origin.matches("https://www[.]itbock[.]de"))
+                        #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)
+                        #end
+
+  Deployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !Ref Api
+      StageName: !Ref StageName
+
+Outputs:
+  RestApiId:
+    Value: !Ref Api
+  StageName:
+    Value: !Ref StageName
+  InvokeUrl:
+    Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com/${StageName}

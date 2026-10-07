@@ -1,4 +1,4 @@
-import AudioTransformClient from 'Core/Audio/InputUseCase/AudioTransformClient';
+import AudioTransformClient from 'Core/Audio/AudioTransformClient';
 import FetchHelper from 'Infrastructure/ApiHelper/FetchHelper';
 import Method from 'Infrastructure/ApiHelper/Method';
 
@@ -10,7 +10,7 @@ export default class Network implements AudioTransformClient {
     }
 
     public async transcribeAudio(audioBase64: string): Promise<string> {
-        const jsonBody: string = JSON.stringify({ audio: audioBase64 });
+        const jsonBody: string = JSON.stringify({audio: audioBase64});
 
         const response: Response = await fetch(
             this.serviceUrl,
@@ -21,7 +21,7 @@ export default class Network implements AudioTransformClient {
             throw new Error('Transcription failed');
         }
 
-        const data: Json = await response.json();
+        const data: JsonData = await response.json();
         return String(data.transcript || '');
     }
 }

@@ -5,32 +5,31 @@
   "main": "src/lambda.ts",
   "scripts": {
     "dev:ai": "npx ai-code-writer",
-    "start": "npm-run-all --serial build start:offline",
-    "deploy": "npm-run-all --serial build deploy:serverless",
+    "start": "npm-run-all --serial build start:local",
+    "deploy": "npm-run-all --serial build deploy:aws",
     "build:tsc": "tsc",
     "build": "node scripts/build.js",
-    "start:offline": "serverless offline",
-    "deploy:serverless": "serverless deploy"
+    "knowledge:index": "node scripts/knowledge-index.js",
+    "start:local": "node scripts/local-server.js",
+    "deploy:aws": "node scripts/deploy.js",
+    "test": "node --import tsx --test test/**/*.test.ts"
   },
   "author": "Endre Bock",
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-s3": "*",
     "busboy": "*",
-    "openai": "*",
+    "openai": "^7.30.0",
     "otplib": "*"
   },
   "devDependencies": {
     "@types/aws-lambda": "*",
     "@types/busboy": "^1.5.4",
     "@types/crypto-js": "*",
-    "@types/node": "*",
+    "@types/node": "^24.19.1",
     "@types/otplib": "*",
-    "dotenv-expand": "*",
     "npm-run-all": "*",
-    "serverless": "*",
-    "serverless-domain-manager": "*",
-    "serverless-offline": "*",
-    "typescript": "*"
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }

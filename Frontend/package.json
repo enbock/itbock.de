@@ -1,34 +1,34 @@
 {
-  "name": "ai-webpage-itbock.de-2024",
-  "version": "1.0.0",
+  "name": "ai-webpage-itbock.de",
+  "version": "2.0.0",
+  "scripts": {
+    "start": "webpack serve --open --mode development --no-open --no-live-reload --no-hot --stats-error-details",
+    "deploy": "npm-run-all --serial build build:swm:update deploy:clean deploy:copy",
+    "build": "webpack --mode production",
+    "deploy:clean": "aws s3 rm s3://www.itbock.de/ --recursive --exclude \"*\" --include \"bundle.*\"",
+    "deploy:copy": "aws s3 sync build s3://www.itbock.de/",
+    "build:swm:tsc": "tsc --project tsconfig.swm.json --noEmit",
+    "build:swm:compile": "tsc --project tsconfig.swm.json",
+    "build:swm:update": "node scripts/buildServiceWorker.js",
+    "test": "node --import tsx --test \"**/*.test.ts\""
+  },
   "dependencies": {
     "@aws-sdk/client-polly": "*",
-    "@enbock/ts-jsx": "*",
-    "@types/jsdom": "*",
     "@types/node": "*",
     "copy-webpack-plugin": "*",
     "css-loader": "*",
+    "dotenv": "*",
+    "dotenv-webpack": "*",
     "html-webpack-plugin": "*",
-    "jsdom": "*",
+    "npm-run-all": "*",
+    "style-loader": "*",
     "ts-loader": "*",
     "typescript": "*",
     "webpack": "*",
     "webpack-cli": "*",
     "webpack-dev-server": "*"
   },
-  "scripts": {
-    "dev:ai": "npx ai-code-writer",
-    "start": "webpack serve --open --mode development --no-open --no-live-reload --no-hot --stats-error-details",
-    "deploy": "npm-run-all --serial build build:service-worker-manager:update deploy:clean deploy:copy",
-    "build": "webpack --mode production",
-    "deploy:clean": "aws s3 rm s3://www.itbock.de/ --recursive --exclude \"*\" --include \"bundle.*\"",
-    "deploy:copy": "aws s3 sync build s3://www.itbock.de/",
-    "build:service-worker-manager:compile": "tsc Application/ServiceWorkerManager.ts --module esnext --target esnext --moduleResolution node --outdir build",
-    "build:service-worker-manager:update": "node scripts/buildServiceWorker.js"
-  },
   "devDependencies": {
-    "dotenv": "*",
-    "dotenv-webpack": "*",
-    "npm-run-all": "^4.1.5"
+    "tsx": "^4.23.15"
   }
 }

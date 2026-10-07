@@ -2,6 +2,8 @@ import StartController from 'Application/Start/Controller/Controller';
 import DependencyInjectionContainer from 'Application/DependencyInjection/Container';
 import 'UI/Library';
 import './RegisterServiceWorker';
+import './theme/variables.css';
+import './theme/global.css';
 
 console.log(`
   ____             _      _           _                     _             _           
@@ -15,6 +17,6 @@ console.log(`
 `);
 
 
-const RootDependency: StartController = DependencyInjectionContainer.startControllerController;
+const RootDependency: StartController = DependencyInjectionContainer.startController;
 
-RootDependency.start();
+void RootDependency.start();

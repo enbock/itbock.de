@@ -3,26 +3,24 @@ import ResponseCollection from 'Application/Start/Controller/Response/ResponseCo
 import StartScreenPresenter from 'Application/Start/View/StartScreen/StartScreenPresenter';
 import OldPagePresenter from 'Application/Start/View/OldPage/OldPagePresenter';
 import ConversationPresenter from 'Application/Start/View/Conversation/ConversationPresenter';
-import Modules from 'Core/Start/Modules';
 import AudioPresenter from 'Application/Start/View/Audio/AudioPresenter';
+import InfoPresenter from 'Application/Start/View/Info/InfoPresenter';
 
 export default class StartPresenter {
     constructor(
         private startScreenPresenter: StartScreenPresenter,
         private oldPagePresenter: OldPagePresenter,
         private conversationPresenter: ConversationPresenter,
+        private infoPresenter: InfoPresenter,
         private audioPresenter: AudioPresenter
     ) {
     }
 
     public presentData(data: ResponseCollection): StartModel {
-        const model: StartModel = new StartModel();
+        const model: StartModel = new StartModel(data.i18n.start);
 
-        model.i18n.loadingText = data.i18n.start.loadingText;
-        model.i18n.pageTitle = data.i18n.start.pageTitle;
-
-        model.showThinking = data.gptState.isLoading == true;
-        model.showAudioText = data.audioState.isPlaying == true && data.audioState.isLoading == false;
+        model.showThinking = data.replication.busy == true || data.gptState.isLoading == true;
+        model.showAudioText = data.audioState.isAudioPlaying == true;
         model.audioText = data.audioState.audioOutput.text;
         model.languageCode = data.startState.language.slice(0, 2);
         model.language = data.startState.language
@@ -33,13 +31,15 @@ export default class StartPresenter {
             )
             : '';
 
-        model.showStartScreen = data.startState.module == Modules.START_SCREEN;
-        model.showOldPage = data.startState.module == Modules.OLD_PAGE;
-        model.showConversation = data.startState.module == Modules.CONVERSATION;
+        model.showStartScreen = data.replication.module == 'START_SCREEN';
+        model.showOldPage = data.replication.module == 'OLD_PAGE';
+        model.showConversation = data.replication.module == 'CONVERSATION';
+        model.showInfo = data.replication.module == 'INFO';
 
         model.startScreen = this.startScreenPresenter.present(data);
         model.oldPage = this.oldPagePresenter.present(data);
         model.conversation = this.conversationPresenter.present(data);
+        model.info = this.infoPresenter.present(data);
         model.audio = this.audioPresenter.present(data);
 
         return model;

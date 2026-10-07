@@ -1,4 +1,4 @@
 export default interface LanguageTranslationClient {
-    translate(data: Json, language: string): Promise<Json>;
+    translate(data: JsonData, language: string): Promise<JsonData>;
 }
 

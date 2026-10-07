@@ -1,4 +1,6 @@
-import {ChatCompletionRole} from 'openai/src/resources/chat/completions';
+import {ChatCompletionRole} from 'openai/resources/chat/completions';
+import Modules from '../Start/Modules';
+import GptPage from './GptPage';
 
 export type Role = ChatCompletionRole;
 
@@ -10,4 +12,7 @@ export default class GptEntity {
     public language: string = 'de-DE';
     public audio: string = '';
     public data: Json = {};
+    public page: GptPage | null = null;
+    public module: Modules = 'START_SCREEN';
+    public version: number = 0;
 }

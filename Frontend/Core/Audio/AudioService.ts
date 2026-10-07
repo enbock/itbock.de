@@ -16,7 +16,6 @@ export default class AudioService {
         this.audioStorage.setPlaying(true);
         this.audioStorage.setPlayingText(item);
         this.audioStorage.setBuffer(buffer);
-        this.audioStorage.setLoading(true);
 
         return item;
     }
@@ -29,9 +28,5 @@ export default class AudioService {
 
     public continueWithoutText(): void {
         this.audioStorage.setListening(true);
-    }
-
-    public suspend(): void {
-        this.audioStorage.setSuspended(true);
     }
 }

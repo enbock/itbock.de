@@ -20,15 +20,7 @@ export default interface AudioStorage {
 
     setMicrophoneMuted(muted: boolean): void;
 
-    getLoading(): boolean;
-
-    setLoading(isLoading: boolean): void;
-
     getListening(): boolean;
 
     setListening(isListening: boolean): void;
-
-    getSuspended(): boolean;
-
-    setSuspended(suspend: boolean): void;
 }

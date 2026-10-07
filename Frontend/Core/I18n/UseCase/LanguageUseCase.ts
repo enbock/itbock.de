@@ -11,14 +11,14 @@ export default class LanguageUseCase {
         this.cache.setTranslation('de', AllTranslation);
     }
 
-    public async getI18n(request: TranslationRequest): Promise<Json> {
+    public async getI18n(request: TranslationRequest): Promise<JsonData> {
         if (request.language == '') return AllTranslation;
-        
+
         const language: string = request.language.slice(0, 2);
-        const translation: Json = this.cache.getTranslation(language);
+        const translation: JsonData = this.cache.getTranslation(language);
         if (translation) return translation;
 
-        const translated: Json = await this.languageTranslationClient.translate(AllTranslation, language);
+        const translated: JsonData = await this.languageTranslationClient.translate(AllTranslation, language);
         this.cache.setTranslation(language, translated);
 
         return translated;

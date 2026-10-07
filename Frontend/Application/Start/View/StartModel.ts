@@ -1,5 +1,6 @@
-import AudioModel from 'Application/Start/View/Audio/AudioModel';
+import AudioInputModel from 'Application/Start/View/Audio/AudioInputModel';
 import ConversationModel from 'Application/Start/View/Conversation/ConversationModel';
+import InfoModel from 'Application/Start/View/Info/InfoModel';
 import OldPageModel from 'Application/Start/View/OldPage/OldPageModel';
 import StartScreenModel from 'Application/Start/View/StartScreen/StartScreenModel';
 
@@ -17,9 +18,15 @@ export default class StartModel {
     public showStartScreen: boolean = false;
     public showConversation: boolean = false;
     public showOldPage: boolean = false;
-    public audio: AudioModel = new AudioModel();
+    public showInfo: boolean = false;
+    public audio: AudioInputModel = new AudioInputModel();
     public conversation: ConversationModel = new ConversationModel();
+    public info: InfoModel = new InfoModel();
     public oldPage: OldPageModel = new OldPageModel();
     public startScreen: StartScreenModel = new StartScreenModel();
-    public i18n: I18n = new I18n();
+
+    constructor(
+        public i18n: I18n
+    ) {
+    }
 }

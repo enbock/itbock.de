@@ -9,7 +9,7 @@ export default class Rest implements LanguageTranslationClient {
     ) {
     }
 
-    public async translate(data: Json, language: string): Promise<Json> {
+    public async translate(data: JsonData, language: string): Promise<JsonData> {
         const body: string = JSON.stringify({data: data, language: language});
         const response: Response = await fetch(
             this.serviceUrl,

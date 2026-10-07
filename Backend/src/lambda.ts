@@ -6,3 +6,4 @@ export const validateTokenHandler = Container.validateTokenController.handle.bin
 export const gptHandler = Container.gptController.main.bind(Container.gptController);
 export const audioTransformHandler = Container.audioTransformController.handle.bind(Container.audioTransformController);
 export const i18nHandler = Container.i18nController.handle.bind(Container.i18nController);
+export const startReplicationHandler = Container.startReplicationController.handle.bind(Container.startReplicationController);

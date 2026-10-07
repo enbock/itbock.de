@@ -1,0 +1,28 @@
+{
+  "actionRunner.actions": [
+    {
+      "name": "Backend Start",
+      "command": "npm run start",
+      "cwd": "${workspaceFolder}/Backend",
+      "icon": "server"
+    },
+    {
+      "name": "Backend Deploy",
+      "command": "npm run deploy",
+      "cwd": "${workspaceFolder}/Backend",
+      "icon": "cloud-upload"
+    },
+    {
+      "name": "Frontend Start",
+      "command": "npm run start",
+      "cwd": "${workspaceFolder}/Frontend",
+      "icon": "browser"
+    },
+    {
+      "name": "Frontend Deploy",
+      "command": "npm run deploy",
+      "cwd": "${workspaceFolder}/Frontend",
+      "icon": "cloud-upload"
+    }
+  ]
+}

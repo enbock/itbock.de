@@ -5,9 +5,7 @@ export default class Memory implements AudioStorage {
     private playBuffer: AudioBuffer = {text: '', audio: ''};
     private playing: boolean = false;
     private microphoneMuted: boolean = false;
-    private loading: boolean = false;
     private listening: boolean = false;
-    private suspended: boolean = false;
 
     public getBuffer(): Array<AudioBuffer> {
         return this.buffer;
@@ -41,27 +39,11 @@ export default class Memory implements AudioStorage {
         this.microphoneMuted = muted;
     }
 
-    public getLoading(): boolean {
-        return this.loading;
-    }
-
-    public setLoading(isLoading: boolean): void {
-        this.loading = isLoading;
-    }
-
     public getListening(): boolean {
         return this.listening;
     }
 
     public setListening(isListening: boolean): void {
         this.listening = isListening;
-    }
-
-    public getSuspended(): boolean {
-        return this.suspended;
-    }
-
-    public setSuspended(suspend: boolean): void {
-        this.suspended = suspend;
     }
 }

@@ -1,27 +1,35 @@
 import StartStorage from 'Core/Start/StartStorage';
 import Response from 'Core/Start/StartUseCase/Response';
-import Modules from 'Core/Start/Modules';
-import AudioFeedbackClient, {FEEDBACK} from 'Core/Audio/AudioFeedbackClient';
+import AudioFeedbackClient, {AudioFeedback} from 'Core/Audio/AudioFeedbackClient';
 
 export default class StartUseCase {
+    private sessionStarted: boolean = false;
+
     constructor(
         private startStorage: StartStorage,
         private audioFeedbackClient: AudioFeedbackClient
     ) {
     }
 
+    public startSession(): void {
+        this.sessionStarted = true;
+    }
+
+    public async endSession(): Promise<void> {
+        this.sessionStarted = false;
+        void this.audioFeedbackClient.play(AudioFeedback.SCREEN_OFF);
+    }
+
     public async startApplication(): Promise<void> {
-        void this.audioFeedbackClient.play(FEEDBACK.SCREEN_ON);
-        this.startStorage.setModuleName(Modules.CONVERSATION);
+        void this.audioFeedbackClient.play(AudioFeedback.SCREEN_ON);
     }
 
     public getState(response: Response): void {
-        response.module = this.startStorage.getModuleName();
         response.language = this.startStorage.getLanguage();
+        response.sessionStarted = this.sessionStarted;
     }
 
     public initialize(defaultLanguage: string): void {
-        this.startStorage.setModuleName(Modules.START_SCREEN);
         this.startStorage.setLanguage(defaultLanguage);
     }
 }

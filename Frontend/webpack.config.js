@@ -12,21 +12,17 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
-                    test: /\.tsx?$/,
+                    test: /\.ts$/,
                     use: 'ts-loader',
                     exclude: /node_modules/,
                     resolve: {
-                        extensions: ['.tsx', '.ts', '.js'],
+                        extensions: ['.ts', '.js'],
                         alias: {}
                     }
                 },
                 {
                     test: /\.css$/i,
-                    loader: 'css-loader',
-                    options: {
-                        exportType: 'string',
-                        import: false
-                    }
+                    use: ['style-loader', 'css-loader']
                 },
                 {
                     test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -85,7 +81,8 @@ module.exports = (env, argv) => {
                 Application: path.resolve(__dirname, 'Application'),
                 Core: path.resolve(__dirname, 'Core'),
                 Infrastructure: path.resolve(__dirname, 'Infrastructure'),
-                UI: path.resolve(__dirname, 'UI')
+                UI: path.resolve(__dirname, 'UI'),
+                theme: path.resolve(__dirname, 'Application/theme')
             }
         },
         devServer: {
