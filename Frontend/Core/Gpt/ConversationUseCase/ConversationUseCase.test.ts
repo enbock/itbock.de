@@ -13,6 +13,9 @@ import StartReplicationEntity from 'Core/Start/ReplicationUseCase/StartReplicati
 import SessionService from 'Core/Replication/SessionService';
 import SessionStorage from 'Core/Replication/SessionStorage';
 import StateResponse from 'Core/Gpt/ConversationUseCase/Response/StateResponse';
+import InputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
+import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
+import AudioFeedbackClient, {AudioFeedback} from 'Core/Audio/AudioFeedbackClient';
 
 class MemoryAudioStorage implements AudioStorage {
     private buffer: Array<AudioBuffer> = [];
@@ -89,6 +92,14 @@ class FixedSessionStorage implements SessionStorage {
 
     public setId(id: string): void {
         this.id = id;
+    }
+}
+
+class FakeAudioFeedbackClient implements AudioFeedbackClient {
+    public played: Array<AudioFeedback> = [];
+
+    public async play(feedback: AudioFeedback): Promise<void> {
+        this.played.push(feedback);
     }
 }
 
@@ -180,7 +191,9 @@ test('ConversationUseCase sends only the new user message and refreshes replicat
         gptClient,
         audioService,
         startStorage,
-        replicationUseCase
+        replicationUseCase,
+        new InputUseCase(audioStorage),
+        new StartUseCase(startStorage, new FakeAudioFeedbackClient())
     );
     const loadingTransitions: Array<boolean> = [];
 
@@ -221,11 +234,15 @@ test('ConversationUseCase uses the current language for start conversations', as
     response.audio = 'audio-base64';
     response.language = 'it-IT';
     const gptClient: FakeGptClient = new FakeGptClient(response);
+    const audioStorage: MemoryAudioStorage = new MemoryAudioStorage();
+    const startStorage: MemoryStartStorage = new MemoryStartStorage('de-DE');
     const useCase: ConversationUseCase = new ConversationUseCase(
         gptClient,
-        new AudioService(new MemoryAudioStorage()),
-        new MemoryStartStorage('de-DE'),
-        replicationUseCase
+        new AudioService(audioStorage),
+        startStorage,
+        replicationUseCase,
+        new InputUseCase(audioStorage),
+        new StartUseCase(startStorage, new FakeAudioFeedbackClient())
     );
 
     await useCase.startConversation({
@@ -236,4 +253,44 @@ test('ConversationUseCase uses the current language for start conversations', as
     assert.equal(gptClient.calls[0][0].role, 'assistant');
     assert.equal(gptClient.calls[0][0].language, 'it-IT');
     assert.equal(client.calls.length, 1);
+});
+
+test('ConversationUseCase mutes the microphone and ends the session on shutdown command', async () => {
+    const currentReplicationState: StartReplicationEntity = new StartReplicationEntity();
+    currentReplicationState.version = 1;
+    currentReplicationState.language = 'de-DE';
+    const {replicationUseCase} = createReplicationUseCase(currentReplicationState, null);
+    const response: ConversationEntity = new ConversationEntity();
+    response.role = 'assistant';
+    response.text = 'Terminal wird ausgeschalten.';
+    response.audio = 'audio-base64';
+    response.language = 'de-DE';
+    response.commands = ['shutdown'];
+    const gptClient: FakeGptClient = new FakeGptClient(response);
+    const audioStorage: MemoryAudioStorage = new MemoryAudioStorage();
+    const startStorage: MemoryStartStorage = new MemoryStartStorage('de-DE');
+    const feedback: FakeAudioFeedbackClient = new FakeAudioFeedbackClient();
+    const inputUseCase: InputUseCase = new InputUseCase(audioStorage);
+    const startUseCase: StartUseCase = new StartUseCase(startStorage, feedback);
+    startUseCase.startSession();
+    const useCase: ConversationUseCase = new ConversationUseCase(
+        gptClient,
+        new AudioService(audioStorage),
+        startStorage,
+        replicationUseCase,
+        inputUseCase,
+        startUseCase
+    );
+
+    await useCase.runConversation({
+        conversation: 'Terminal beenden',
+        onStateChange: async () => undefined
+    });
+
+    assert.equal(audioStorage.getMicrophoneMuted(), true);
+
+    const state: {language: string; sessionStarted: boolean} = {language: '', sessionStarted: true};
+    startUseCase.getState(state);
+    assert.equal(state.sessionStarted, false);
+    assert.deepEqual(feedback.played, [AudioFeedback.SCREEN_OFF]);
 });

@@ -45,3 +45,20 @@ test('StartUseCase marks the session as started after the start button is presse
     await useCase.startApplication();
     assert.deepEqual(feedback.played, [AudioFeedback.SCREEN_ON]);
 });
+
+test('StartUseCase ends the session and plays the screen-off sound', async () => {
+    const feedback: FakeAudioFeedbackClient = new FakeAudioFeedbackClient();
+    const useCase: StartUseCase = new StartUseCase(new MemoryStartStorage(), feedback);
+    const response: Response = {language: '', sessionStarted: false};
+
+    useCase.startSession();
+    useCase.getState(response);
+
+    assert.equal(response.sessionStarted, true);
+
+    await useCase.endSession();
+    useCase.getState(response);
+
+    assert.equal(response.sessionStarted, false);
+    assert.deepEqual(feedback.played, [AudioFeedback.SCREEN_OFF]);
+});

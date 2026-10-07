@@ -6,6 +6,8 @@ import AudioService from 'Core/Audio/AudioService';
 import StartStorage from 'Core/Start/StartStorage';
 import StateResponse from 'Core/Gpt/ConversationUseCase/Response/StateResponse';
 import ReplicationUseCase from 'Core/Start/ReplicationUseCase/ReplicationUseCase';
+import InputUseCase from 'Core/Audio/InputUseCase/InputUseCase';
+import StartUseCase from 'Core/Start/StartUseCase/StartUseCase';
 
 export default class ConversationUseCase {
     private isLoading: boolean = false;
@@ -14,7 +16,9 @@ export default class ConversationUseCase {
         private gptClient: GptClient,
         private audioService: AudioService,
         private startStorage: StartStorage,
-        private replicationUseCase: ReplicationUseCase
+        private replicationUseCase: ReplicationUseCase,
+        private inputUseCase: InputUseCase,
+        private startUseCase: StartUseCase
     ) {
     }
 
@@ -66,6 +70,12 @@ export default class ConversationUseCase {
         }
 
         if (record.language.trim() != '') this.startStorage.setLanguage(record.language);
+
+        if (record.commands.includes('shutdown')) {
+            this.inputUseCase.mute();
+            await this.startUseCase.endSession();
+        }
+
         await this.replicationUseCase.refresh();
     }
 

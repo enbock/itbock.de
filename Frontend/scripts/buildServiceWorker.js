@@ -12,7 +12,7 @@ try {
 }
 
 console.log('Build ServiceWorkerManager...');
-execSync('npm run build:service-worker-manager:compile');
+execSync('npm run build:swm:compile');
 
 process.chdir(buildDir);
 

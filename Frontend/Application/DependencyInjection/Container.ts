@@ -141,15 +141,17 @@ class Container {
         ),
         this.replicationSessionService
     );
+    private startUseCase: StartUseCase = new StartUseCase(
+        this.startStorage,
+        this.audioFeedbackClientBrowser
+    );
     private conversationUseCase: ConversationUseCase = new ConversationUseCase(
         this.gptClient,
         this.audioService,
         this.startStorage,
-        this.startReplicationUseCase
-    );
-    private startUseCase: StartUseCase = new StartUseCase(
-        this.startStorage,
-        this.audioFeedbackClientBrowser
+        this.startReplicationUseCase,
+        this.inputUseCase,
+        this.startUseCase
     );
     private audioOutputDevice: AudioOutputDevice = new AudioOutputDevice(
         this.startAdapter

@@ -15,6 +15,11 @@ export default class StartUseCase {
         this.sessionStarted = true;
     }
 
+    public async endSession(): Promise<void> {
+        this.sessionStarted = false;
+        void this.audioFeedbackClient.play(AudioFeedback.SCREEN_OFF);
+    }
+
     public async startApplication(): Promise<void> {
         void this.audioFeedbackClient.play(AudioFeedback.SCREEN_ON);
     }

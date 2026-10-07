@@ -19,6 +19,9 @@ It offers a variety of functionalities such as:
   (leader election and replication polling) starts only after the start button on the start page is pressed; the start
   page itself is shown immediately on load. Browser tabs elect a single leader for microphone/audio via Web Locks;
   follower tabs stay display-only and take over automatically when the leader closes.
+- **Terminal Shutdown**: When the user asks to end the terminal (e.g. "Terminal beenden") or gives repeatedly
+  unclear input, the backend returns a `shutdown` command. The frontend then ends the session, mutes the microphone and
+  returns to the start page. The terminal can only be restarted by clicking the start button.
 - **Knowledge-driven Info Pages**: The frontend can render replicated document collections in a dedicated info
   view. The backend resolves the shown documents from a Markdown knowledge base indexed into S3.
 

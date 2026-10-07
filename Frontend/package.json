@@ -7,8 +7,8 @@
     "build": "webpack --mode production",
     "deploy:clean": "aws s3 rm s3://www.itbock.de/ --recursive --exclude \"*\" --include \"bundle.*\"",
     "deploy:copy": "aws s3 sync build s3://www.itbock.de/",
-    "build:swm:tsc": "tsc Application/ServiceWorkerManager.ts --module esnext --target esnext",
-    "build:swm:compile": "npm run build:swm:tsc -- --moduleResolution node --outdir build",
+    "build:swm:tsc": "tsc --project tsconfig.swm.json --noEmit",
+    "build:swm:compile": "tsc --project tsconfig.swm.json",
     "build:swm:update": "node scripts/buildServiceWorker.js",
     "test": "node --import tsx --test \"**/*.test.ts\""
   },
