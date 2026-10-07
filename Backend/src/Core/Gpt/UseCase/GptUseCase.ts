@@ -1,4 +1,4 @@
-import {ChatCompletionMessageParam} from 'openai/src/resources/chat/completions';
+import {ChatCompletionMessageParam} from 'openai/resources/chat/completions';
 import GeneralGptSceneSetup from './GeneralGptSceneSetup';
 import GptEntity from '../GptEntity';
 import GptBackend from '../GptBackend';

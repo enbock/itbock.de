@@ -1,4 +1,4 @@
-import {ChatCompletionRole} from 'openai/src/resources/chat/completions';
+import {ChatCompletionRole} from 'openai/resources/chat/completions';
 
 export type Role = ChatCompletionRole;
 

@@ -1,13 +1,13 @@
 # MFA-Backend
 
 Ein einfaches MFA-Backend, das TOTP-Tokens generiert und validiert. Dieses Projekt verwendet TypeScript und läuft auf
-AWS Lambda. Es verwendet die Serverless Framework für einfaches Deployment.
+AWS Lambda. Das Deployment erfolgt direkt über AWS CloudFormation (ohne Serverless Framework).
 
 ## Voraussetzungen
 
-- Node.js (empfohlen: v20.x)
+- Node.js (empfohlen: v24.x, entspricht der Lambda-Runtime `nodejs24.x`)
 - npm (Node Package Manager)
-- Serverless Framework (`npm install -g serverless`)
+- AWS CLI v2 mit konfigurierten Zugangsdaten (`aws configure`)
 
 ## Installation
 
@@ -25,8 +25,17 @@ AWS Lambda. Es verwendet die Serverless Framework für einfaches Deployment.
 
 ## Konfiguration
 
-Serverless Framework ist bereits konfiguriert, um die Lambda-Funktionen zu deployen. Die `serverless.yml` Datei enthält
-die Konfiguration.
+Die Infrastruktur (Lambda-Funktionen, IAM-Rolle, Log-Gruppen, API Gateway) ist in `template.yaml` (AWS
+CloudFormation) beschrieben.
+
+### Umgebungsvariablen
+
+Die benötigten Variablen stehen in `.env` (Vorlage: `.env.dist`):
+
+- `OPENAI_API_KEY`: OpenAI API-Key. Projekt- und Service-Account-Keys (`sk-proj-…`, `sk-svcacct-…`) werden
+  unterstützt. Ein `OpenAI-Organization`-Header wird bewusst nicht gesendet, da dieser bei den neuen projektbasierten
+  Keys zu `401`-Fehlern führt.
+- `S3_BUCKET_NAME`, `S3_TOKEN_PATH`, `S3_USER_DATA_PATH`, `S3_SESSION_PATH`: Ablageorte im S3-Bucket.
 
 ## Projektstruktur
 
@@ -36,21 +45,37 @@ die Konfiguration.
 
 ## Lokales Testen
 
-Du kannst die Lambda-Funktionen lokal mit dem Serverless Framework testen:
+Ein kleiner lokaler Server (`scripts/local-server.js`) ruft die gebauten Lambda-Handler auf und ist unter denselben
+URLs wie bisher erreichbar (`http://localhost:3000/dev/...`):
 
 ```bash
-serverless offline
+npm run start
 ```
 
 ## Deployment
 
-Um das Service zu AWS zu deployen, benutze:
+Einmalig in `.env` einen S3-Bucket für die Code-Artefakte angeben (`DEPLOY_ARTIFACT_BUCKET`, bewusst nicht der
+Daten-Bucket). Danach:
 
 ```bash
-serverless deploy
+npm run deploy
 ```
 
-Nach dem Deployment erhältst du eine URL, über die deine API-Endpunkte erreichbar sind.
+Das Skript `scripts/deploy.js` erledigt alles in einem Lauf:
+
+1. Code bauen und per `aws cloudformation package` hochladen
+2. Stack per `aws cloudformation deploy` ausrollen (`STACK_NAME`, Standard `itbock-backend`)
+3. Neue API-Gateway-Deployment-Version für die Stage erstellen (`STAGE_NAME`, Standard `dev`)
+4. **Scharf schalten:** die Custom Domain (`DOMAIN_NAME`, Standard `api.itbock.de`) wird auf diese API und Stage
+   umgestellt. Mit `DOMAIN_NAME=` (leer) wird dieser Schritt übersprungen.
+
+Ist die Domain bereits auf die API gemappt, passiert nichts. Die Domain und das ACM-Zertifikat selbst liegen außerhalb
+des Stacks. Beim ersten Lauf gibt das Skript die vorherige REST-API-ID aus. Ein Rollback ist der Befehl:
+
+```bash
+aws apigateway update-base-path-mapping --domain-name api.itbock.de --base-path "(none)" \
+  --patch-operations op=replace,path=/restapiId,value=<alteRestApiId>
+```
 
 ## Lizenz
 

@@ -1,6 +1,6 @@
 bode_modules
 build
 *diff
-.serverless
 .env
 logs
+template.packaged.yaml

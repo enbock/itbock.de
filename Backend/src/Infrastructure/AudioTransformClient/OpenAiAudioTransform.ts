@@ -1,7 +1,6 @@
 import AudioTransformClient from '../../Core/Audio/AudioTransformClient';
-import {Audio} from 'openai/resources';
+import type {Audio} from 'openai/resources';
 import OpenAI from 'openai';
-import Transcription = Audio.Transcription;
 
 export default class OpenAiAudioTransform implements AudioTransformClient {
     constructor(
@@ -10,10 +9,10 @@ export default class OpenAiAudioTransform implements AudioTransformClient {
     }
 
     public async transcribe(audioBuffer: Buffer): Promise<string> {
-        const file: File = new File([audioBuffer], 'audio.wav', {type: 'audio/wav'});
+        const file: File = new File([new Uint8Array(audioBuffer)], 'audio.wav', {type: 'audio/wav'});
 
         try {
-            const response: Transcription = await this.openAi.audio.transcriptions.create({
+            const response: Audio.Transcription = await this.openAi.audio.transcriptions.create({
                 file: file,
                 model: 'whisper-1',
                 response_format: 'json',

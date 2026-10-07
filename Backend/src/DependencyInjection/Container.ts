@@ -58,7 +58,6 @@ export class Container {
     public generateTokenController: GenerateTokenController = new GenerateTokenController(this.mfaService, this.tokenPresenter);
 
     private openAi: OpenAI = new OpenAI({
-        organization: process.env.OPENAI_API_ORG || '',
         apiKey: process.env.OPENAI_API_KEY || ''
     });
     private gptBackend: GptBackend = new OpenAi(this.openAi);
